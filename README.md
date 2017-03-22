@@ -25,5 +25,6 @@ Enjoy!
 Dr. Mehlhase
 
 # Tomas wuz here.
-#Andrew Steinmetz was also here!
+# Andrew Steinmetz was also here!
 # Joseph was here too!
+# Terry Turner - are we suppose to do a simple update?
