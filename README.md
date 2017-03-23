@@ -25,10 +25,11 @@ Enjoy!
 Dr. Mehlhase
 
 <<<<<<< HEAD
-Nathan Waitman was here.
+
 =======
 # Tomas wuz here.
 # Andrew Steinmetz was also here!
 # Joseph was here too!
 # Terry Turner - are we suppose to do a simple update?
+# Nathan Waitman was here.
 >>>>>>> branch 'master' of https://github.com/ser316asu/Wedding_SER316.git
