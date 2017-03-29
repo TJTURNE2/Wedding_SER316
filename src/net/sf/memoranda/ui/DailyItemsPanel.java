@@ -22,9 +22,8 @@ import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
-import net.sf.memoranda.CurrentProject;
 import net.sf.memoranda.CurrentNote;
-import net.sf.memoranda.NoteListener;
+import net.sf.memoranda.CurrentProject;
 import net.sf.memoranda.EventNotificationListener;
 import net.sf.memoranda.EventsScheduler;
 import net.sf.memoranda.History;
@@ -32,6 +31,7 @@ import net.sf.memoranda.HistoryItem;
 import net.sf.memoranda.HistoryListener;
 import net.sf.memoranda.Note;
 import net.sf.memoranda.NoteList;
+import net.sf.memoranda.NoteListener;
 import net.sf.memoranda.Project;
 import net.sf.memoranda.ProjectListener;
 import net.sf.memoranda.ResourcesList;
@@ -93,7 +93,7 @@ public class DailyItemsPanel extends JPanel {
     NotesControlPanel notesControlPane = new NotesControlPanel();
     CardLayout cardLayout2 = new CardLayout();
         
-    JTabbedPane tasksTabbedPane = new JTabbedPane();
+    TasksControlPanel tasksControlPane = new TasksControlPanel();
     JTabbedPane eventsTabbedPane = new JTabbedPane();
 	JTabbedPane agendaTabbedPane = new JTabbedPane();
     Border border2;
@@ -298,7 +298,7 @@ public class DailyItemsPanel extends JPanel {
         History.add(new HistoryItem(CurrentDate.get(), CurrentProject.get()));
         cmainPanel.add(mainTabsPanel, BorderLayout.CENTER);
         mainTabsPanel.add(eventsTabbedPane, "EVENTSTAB");
-        mainTabsPanel.add(tasksTabbedPane, "TASKSTAB");
+        mainTabsPanel.add(tasksControlPane, "TASKSTAB");
         mainTabsPanel.add(notesControlPane, "NOTESTAB");
 		mainTabsPanel.add(agendaTabbedPane, "AGENDATAB");
         updateIndicators(CurrentDate.get(), CurrentProject.getTaskList());
