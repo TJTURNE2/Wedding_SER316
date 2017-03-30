@@ -665,8 +665,8 @@ public class AppFrame extends JFrame {
     }
 
     public void doMinimize() {
-        exitNotify();
-        App.closeWindow();
+        
+        setState(ICONIFIED);
     }
 
     //Help | About action performed
@@ -685,11 +685,10 @@ public class AppFrame extends JFrame {
             if (Configuration.get("ON_CLOSE").equals("exit"))
                 doExit();
             else
-                doMinimize();
+                App.closeWindow();
+
         }
         else if ((e.getID() == WindowEvent.WINDOW_ICONIFIED)) {
-            super.processWindowEvent(new WindowEvent(this,
-                    WindowEvent.WINDOW_CLOSING));
             doMinimize();
         }
         else
