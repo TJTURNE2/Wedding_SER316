@@ -1,8 +1,5 @@
 package net.sf.memoranda.ui;
 
-import java.awt.*;
-import java.awt.event.*;
-
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Toolkit;
@@ -131,8 +128,6 @@ public class App {
 		} else {
 			frame.setExtendedState(Frame.NORMAL);
 		}
-		
-		
 		/* --------------------------------------------------------------- */
 		/* Added By Jeremy Whitlock (jcscoobyrs) 07-Nov-2003 at 15:54:24 */
 
@@ -141,17 +136,14 @@ public class App {
 		frame.toFront();
 		frame.requestFocus();
 
-
 	}
 
 	public static void closeWindow() {
 		if (frame == null)
-				return;
-		//frame.dispose();
-		System.exit(0);
+			return;
+		frame.dispose();
 	}
 
-	
 	/**
 	 * Method showSplash.
 	 */
