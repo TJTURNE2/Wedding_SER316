@@ -115,5 +115,16 @@ public class TimeRecordingDialog extends JDialog {
 		pack();
 	}
 	
+	public TimeRecordingDialog(Frame frame, String title, String[] initValues) {
+		this(frame, title);
+		
+		date.setText(initValues[0]);
+		startTime.setText(initValues[1]);
+		endTime.setText(initValues[2]);
+		interrupts.setText(initValues[3]);
+		phase.setText(initValues[4]);
+		comments.setText(initValues[5]);
+	}
+	
 	
 }
