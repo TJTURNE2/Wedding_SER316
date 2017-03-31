@@ -342,6 +342,18 @@ public class StickerDialog extends JDialog {
 	int getPriority(){
 		return priorityList.getSelectedIndex();
 	}
+	// EDIT #4
+	String getPriorityName() {
+		return "Priority: " + priorities[getPriority()];
+	}
+	// EDIT #4
+	String getPriorityName(int priorityIndex) {
+		return "Priority: " + priorities[priorityIndex];
+	}
+	// EDIT #4
+	String getFullText() {
+		return "" + getPriorityName() + "\n" + getStickerText();
+	}
 
 	void cancelButton_actionPerformed(ActionEvent e) {
 		this.dispose();

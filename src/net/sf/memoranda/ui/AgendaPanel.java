@@ -48,8 +48,9 @@ public class AgendaPanel extends JPanel {
 	JButton historyForwardB = new JButton();
 	JButton export = new JButton();
 	JEditorPane viewer = new JEditorPane("text/html", "");
-	String[] priorities = {"Muy Alta","Alta","Media","Baja","Muy Baja"};
+	String[] priorities = {"Highest","High","Normal","Low","Lowest"}; // EDIT #4 changed from Spanish to English
 	JScrollPane scrollPane = new JScrollPane();
+	int sP_BeforeEdit; // EDIT #4: saves old priority before edit
 
 	DailyItemsPanel parentPanel = null;
 
@@ -115,8 +116,8 @@ public class AgendaPanel extends JPanel {
 								(frmSize.height - dlg.getSize().height) / 2
 								+ loc.y);
 						dlg.setVisible(true);
-						if (!dlg.CANCELLED) {
-							String txt = dlg.getStickerText();
+						if (!dlg.CANCELLED) {  // Sticker creation
+							String txt = dlg.getFullText(); //EDIT #4 USED TO BE getStickerText
 							int sP = dlg.getPriority();
 							txt = txt.replaceAll("\\n", "<br>");
                             txt = "<div style=\"background-color:"+dlg.getStickerColor()+";font-size:"+dlg.getStickerTextSize()+";color:"+dlg.getStickerTextColor()+"; \">"+txt+"</div>";
@@ -170,8 +171,9 @@ public class AgendaPanel extends JPanel {
 						int size=Integer.parseInt(sticker.substring(sizeposition,sizeposition+2));
 						System.out.println(size+" "+sizeposition);
 						int sP=Integer.parseInt(pre_sticker.getAttributeValue("priority"));
+						sP_BeforeEdit = sP;  // EDIT #4: sticker priority display
 						String backGroundColor=sticker.substring(backcolor, sticker.indexOf(';',backcolor));
-						String foreGroundColor=sticker.substring(fontcolor, sticker.indexOf(';',fontcolor));
+						String foreGroundColor=sticker.substring(fontcolor, sticker.indexOf(';',fontcolor));   
 						StickerDialog dlg = new StickerDialog(App.getFrame(), sticker.substring(first+1, last), backGroundColor, foreGroundColor, sP, size);
 						Dimension frmSize = App.getFrame().getSize();
 						dlg.setSize(new Dimension(300,380));
@@ -180,10 +182,11 @@ public class AgendaPanel extends JPanel {
 							 		(frmSize.height - dlg.getSize().height) / 2 + loc.y);
 						dlg.setVisible(true);
 						if (!dlg.CANCELLED) {
-							String txt = dlg.getStickerText();
+							String txt = dlg.getStickerText(); // Testing 1 getstickertext
 							sP = dlg.getPriority();
-							txt = txt.replaceAll("\\n", "<br>");
-							txt = "<div style=\"background-color:"+dlg.getStickerColor()+";font-size:"+dlg.getStickerTextSize()+";color:"+dlg.getStickerTextColor()+";\">"+txt+"</div>";
+							txt = txt.replaceAll("\\n", "<br>"); 
+							txt	= txt.replace(dlg.getPriorityName(sP_BeforeEdit),dlg.getPriorityName(sP));// EDIT #4: Replace old priority with new priority
+							txt = "<div style=\"background-color:"+dlg.getStickerColor()+";font-size:"+dlg.getStickerTextSize()+";color:"+dlg.getStickerTextColor()+";\">"+ txt+"</div>";
 							EventsManager.removeSticker(id);
 							EventsManager.createSticker(txt, sP);
 							CurrentStorage.get().storeEventsManager();
@@ -192,18 +195,18 @@ public class AgendaPanel extends JPanel {
 					}else if (d.startsWith("memoranda:exportstickerst")) {
 						 /*  Falta agregar el exportar sticker mientras tanto..*/
 						 final JFrame parent = new JFrame();
-						 String name = JOptionPane.showInputDialog(parent,Local.getString("Ingrese nombre de archivo a exportar"),null);
+						 String name = JOptionPane.showInputDialog(parent,Local.getString("Enter file name to export"),null);
 						 new ExportSticker(name).export("txt");
 						 //JOptionPane.showMessageDialog(null,name);
 					}else if (d.startsWith("memoranda:exportstickersh")) {
 						 /*  Falta agregar el exportar sticker mientras tanto..*/
 						 final JFrame parent = new JFrame();
-						 String name = JOptionPane.showInputDialog(parent,Local.getString("Ingrese nombre de archivo a exportar"),null);
+						 String name = JOptionPane.showInputDialog(parent,Local.getString("Enter file name to export"),null);
 						 new ExportSticker(name).export("html");
 						 //JOptionPane.showMessageDialog(null,name);
 					}else if (d.startsWith("memoranda:importstickers")) {
 						final JFrame parent = new JFrame();
-						String name = JOptionPane.showInputDialog(parent,Local.getString("Ingrese nombre de archivo a importar"),null);
+						String name = JOptionPane.showInputDialog(parent,Local.getString("Enter file name to export"),null);
 						new ImportSticker(name).import_file();
 					}
 				}
