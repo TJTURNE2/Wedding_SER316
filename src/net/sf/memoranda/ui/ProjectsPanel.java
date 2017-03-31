@@ -292,6 +292,11 @@ public class ProjectsPanel extends JPanel implements ExpandablePanel {
 	class PopupListener extends MouseAdapter {
 
 		public void mouseClicked(MouseEvent e) {
+	        int col = prjTablePanel.projectsTable.columnAtPoint(e.getPoint());
+	        if (col == 4) {
+	        	ppDeleteProject_actionPerformed(null);
+	        }
+	        
 			if (e.getClickCount() == 2)
 				ppOpenProject_actionPerformed(null);
 		}
@@ -399,6 +404,11 @@ public class ProjectsPanel extends JPanel implements ExpandablePanel {
 		prjTablePanel.projectsTable.clearSelection();
 		prjTablePanel.updateUI();
 		setMenuEnabled(false);
+		
+		CurrentProject.set((Project) prjTablePanel.projectsTable.getModel().getValueAt(0,101));
+		prjTablePanel.updateUI();
+		ppDeleteProject.setEnabled(false);
+		ppOpenProject.setEnabled(false);
 	}
 
 	void ppProperties_actionPerformed(ActionEvent e) {
