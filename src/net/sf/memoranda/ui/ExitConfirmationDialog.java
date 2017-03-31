@@ -6,9 +6,10 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -32,6 +33,7 @@ public class ExitConfirmationDialog extends JDialog implements WindowListener {
     JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
     JButton okB = new JButton();
     JButton cancelB = new JButton();
+    JButton hideB = new JButton();
 	
 	public JCheckBox donotaskCB = new JCheckBox();
 	
@@ -100,6 +102,17 @@ public class ExitConfirmationDialog extends JDialog implements WindowListener {
 		
 		this.getRootPane().setDefaultButton(okB);
 		
+		hideB.setText(Local.getString("Hide"));
+		hideB.setPreferredSize(new Dimension(100, 26));
+        hideB.setMinimumSize(new Dimension(100, 26));
+        hideB.setMaximumSize(new Dimension(100, 26));
+        buttonsPanel.add(hideB);
+        hideB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                hideB_actionPerformed(e);
+            }
+        });
+		
 		// Build dialog
 		this.getContentPane().add(mainPanel, BorderLayout.CENTER);
 		this.getContentPane().add(headerPanel, BorderLayout.NORTH);
@@ -124,13 +137,23 @@ public class ExitConfirmationDialog extends JDialog implements WindowListener {
     void cancelB_actionPerformed(ActionEvent e) {
         CANCELLED = true;
 		checkDoNotAsk();
-        this.dispose();
+		this.dispose();
+
+    }
+    
+    //hide button action
+    void hideB_actionPerformed(ActionEvent e) {
+    	checkDoNotAsk();
+    	CANCELLED = true;
+    	App.closeWindow();
     }
 	
     public void windowClosing( WindowEvent e ) {
-        CANCELLED = true;
-        this.dispose();
+        	CANCELLED = true;
+        	this.dispose();
     }
+    
+   // static Vector exitListeners = new Vector();
     
 	public void windowOpened( WindowEvent e ) {}
     public void windowClosed( WindowEvent e ) {}
@@ -138,4 +161,9 @@ public class ExitConfirmationDialog extends JDialog implements WindowListener {
 	public void windowDeiconified( WindowEvent e ) {}
 	public void windowActivated( WindowEvent e ) {}
 	public void windowDeactivated( WindowEvent e ) {}
-}
+    
+	//private static void exitNotify() {
+    //    for (int i = 0; i < exitListeners.size(); i++)
+    //        ((ActionListener) exitListeners.get(i)).actionPerformed(null);
+	//}
+	}
