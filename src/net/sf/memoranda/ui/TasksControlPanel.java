@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JList;
@@ -15,18 +14,24 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
+import net.sf.memoranda.CurrentProject;
 import net.sf.memoranda.TimeLog;
+import net.sf.memoranda.TimeLogList;
 
 public class TasksControlPanel extends JPanel {
 	BorderLayout borderLayout = new BorderLayout();
 	JButton newTime = new JButton("Add New Time");
 
-	Vector<TimeLog> timeLogs = new Vector<TimeLog>();
-	JList logs = new JList(timeLogs);
-	JScrollPane scrollPane = new JScrollPane(logs);
+	static TimeLogList timeLogList = null;
+	static JList logs = null;
+	static JScrollPane scrollPane = null;
 
 	public TasksControlPanel() {
 		this.setLayout(borderLayout);
+		
+		timeLogList = CurrentProject.getTimeLogList();
+		logs = new JList(timeLogList.getList());
+		scrollPane = new JScrollPane(logs);
 
 		logs.setFont(new java.awt.Font("Dialog", 0, 11));
 		logs.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -34,21 +39,21 @@ public class TasksControlPanel extends JPanel {
 
 		newTime.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				addNewTimeRecording();
+				addNewTimeLog();
 			}
 		});
 
 		this.add(newTime, BorderLayout.PAGE_START);
 		this.add(scrollPane, BorderLayout.CENTER);
 	}
-
-	TimeRecordingDialog createNewTimeRecordingDialog(String title, String[] initValues) {
-		TimeRecordingDialog dialog;
+	
+	TimeLogDialog createNewTimeLogDialog(String title, String[] initValues) {
+		TimeLogDialog dialog;
 
 		if (initValues == null)
-			dialog = new TimeRecordingDialog(App.getFrame(), title);
+			dialog = new TimeLogDialog(App.getFrame(), title);
 		else
-			dialog = new TimeRecordingDialog(App.getFrame(), title, initValues);
+			dialog = new TimeLogDialog(App.getFrame(), title, initValues);
 
 		Dimension frameSize = App.getFrame().getSize();
 		Point location = App.getFrame().getLocation();
@@ -62,12 +67,12 @@ public class TasksControlPanel extends JPanel {
 	class LogEditListener extends MouseAdapter {
 		public void mouseClicked(MouseEvent e) {
 			if (e.getClickCount() == 2)
-				editExistingTimeRecording();
+				editExistingTimeLog();
 		}
 	}
 
-	private void addNewTimeRecording() {
-		TimeRecordingDialog dialog = createNewTimeRecordingDialog("New Time Recording", null);
+	private void addNewTimeLog() {
+		TimeLogDialog dialog = createNewTimeLogDialog("New Time Log", null);
 		if (!dialog.isCancelled) {
 			TimeLog newLog = new TimeLog(
 					dialog.date.getText(),
@@ -77,17 +82,17 @@ public class TasksControlPanel extends JPanel {
 					dialog.phase.getText(),
 					dialog.comments.getText());
 
-			timeLogs.addElement(newLog);
+			timeLogList.addLog(newLog);
 
 			logs.updateUI();
 		}
 	}
 
-	private void editExistingTimeRecording() {
-		TimeLog log = timeLogs.elementAt(logs.getSelectedIndex());
+	private void editExistingTimeLog() {
+		TimeLog log = timeLogList.getLog(logs.getSelectedIndex());
 		String[] initValues = log.getValuesArray();
 
-		TimeRecordingDialog dialog = createNewTimeRecordingDialog("Edit Time Recording", initValues);
+		TimeLogDialog dialog = createNewTimeLogDialog("Edit Time Log", initValues);
 
 		if (!dialog.isCancelled) {
 			log.setDate(dialog.date.getText());

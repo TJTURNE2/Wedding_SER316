@@ -71,6 +71,15 @@ public class TimeLog {
 	}
 	
 	public String toString() {
-		return date + " " + startTime + " " + endTime + " " + phase;
+		return date + " " + phase + " " + startTime + " - " + endTime;
+	}
+
+	public String toFile() {
+		return ("date*^*" + (date.equals("") ? "null" : date) +
+				"*^*start*^*" + (startTime.equals("") ? "null" : startTime) +
+				"*^*end*^*" + (endTime.equals("") ? "null" : endTime) +
+				"*^*interrupt*^*" + (interruptTime.equals("") ? "null" : interruptTime) +
+				"*^*phase*^*" + (phase.equals("") ? "null" : phase) +
+				"*^*comments*^*" + (comments.equals("") ? "null" : comments));
 	}
 }

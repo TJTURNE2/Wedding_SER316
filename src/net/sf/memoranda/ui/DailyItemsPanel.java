@@ -235,8 +235,12 @@ public class DailyItemsPanel extends JPanel {
             	// cannot save note here, changing to new project
             	currentNote = CurrentProject.getNoteList().getNoteForDate(CurrentDate.get());
         		CurrentNote.set(currentNote,false);
-                editorPanel.setDocument(currentNote);        
+                editorPanel.setDocument(currentNote);
                 
+                mainTabsPanel.remove(tasksControlPane);
+                tasksControlPane = new TasksControlPanel();
+                mainTabsPanel.add(tasksControlPane, "TASKSTAB");
+
 //                // DEBUG
 //                if (currentNote != null) {
 //                    Util.debug("currentNote has been set to " + currentNote.getTitle());        	
@@ -373,6 +377,7 @@ public class DailyItemsPanel extends JPanel {
             saveNote();
         /*if ((currentNote != null) && !changedByHistory && !addedToHistory)
                     History.add(new HistoryItem(currentNote));*/
+
         CurrentProject.save();        
         
         /*addedToHistory = false;
@@ -382,7 +387,6 @@ public class DailyItemsPanel extends JPanel {
                 addedToHistory = true;
             }
         }*/
-        
         updateIndicators(CurrentDate.get(), tl);
         App.getFrame().setCursor(cur);
     }
