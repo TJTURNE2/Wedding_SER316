@@ -41,10 +41,15 @@ import java.util.Hashtable;
  */
 public class TaskTableModel extends AbstractTreeTableModel implements TreeTableModel {
 
-    String[] columnNames = {"", Local.getString("To-do"),
-            Local.getString("Start date"), Local.getString("End date"),
-            Local.getString("Priority"), Local.getString("Status"),
-            "% " + Local.getString("done") };
+    String[] columnNames = {"", 			//0
+    		Local.getString("To-do"), 		//1
+    		Local.getString("Description"),	//2
+            Local.getString("Start date"), 	//3
+            Local.getString("End date"),	//4
+            Local.getString("Priority"), 	//5
+            Local.getString("Status"),		//6
+            "% " + Local.getString("done")	//7 	
+            };
 
     protected EventListenerList listenerList = new EventListenerList();
 
@@ -82,22 +87,24 @@ public class TaskTableModel extends AbstractTreeTableModel implements TreeTableM
             return null;
         Task t = (Task) node;
         switch (column) {
-        case 0:
+        case 0:	
             return "";
         case 1:
             return t;
         case 2:
-            return t.getStartDate().getDate();
+        	return t.getDescription();
         case 3:
+            return t.getStartDate().getDate();
+        case 4:
             if (t.getEndDate() == null)
                 return null;
             else
                 return t.getEndDate().getDate();        
-        case 4:
-            return getPriorityString(t.getPriority());
         case 5:
+            return getPriorityString(t.getPriority());
+        case 6:
             return getStatusString(t.getStatus(CurrentDate.get()));
-        case 6:            
+        case 7:            
             //return new Integer(t.getProgress());
 			return t;
         case TaskTable.TASK_ID:
@@ -177,17 +184,19 @@ public class TaskTableModel extends AbstractTreeTableModel implements TreeTableM
     public Class getColumnClass(int column) {
         try {
             switch (column) {
-            case 1:
+            case 1:	//to-do
                 return TreeTableModel.class;
+            case 2: //description
+            	return Class.forName("java.lang.String");
             case 0:
                 return TaskTable.class;
-            case 4:
-            case 5:
+            case 5:	//priority
+            case 6:	//status
                 return Class.forName("java.lang.String");
-            case 2:
-            case 3:
+            case 3: 	//start date
+            case 4:		//end date
                 return Class.forName("java.util.Date");
-            case 6:
+            case 7:
                 return Class.forName("java.lang.Integer");
             }
         } catch (Exception ex) {
