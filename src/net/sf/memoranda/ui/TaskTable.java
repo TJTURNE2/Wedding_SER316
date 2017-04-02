@@ -181,10 +181,10 @@ public class TaskTable extends JTable {
             if (i == 0) {
                 column.setPreferredWidth(8);
             } else if (i == 1) {
-            	column.setPreferredWidth(5000);
-            } else if(i ==2){
             	column.setPreferredWidth(10000);
-            } else if( i == 6 ){
+            } else if(i ==2){
+            	column.setPreferredWidth(22767);
+            } else if( i == 7 ){
 		    column.setPreferredWidth(100);
 		    column.setMinWidth(100);
             } else {
