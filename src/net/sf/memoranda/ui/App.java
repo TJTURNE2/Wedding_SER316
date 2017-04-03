@@ -142,6 +142,7 @@ public class App {
 		if (frame == null)
 			return;
 		frame.dispose();
+		System.exit(0); //    Add to kill appplication
 	}
 
 	/**

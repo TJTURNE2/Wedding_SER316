@@ -139,7 +139,6 @@ public class ProjectsPanel extends JPanel implements ExpandablePanel {
 		curProjectTitle.setForeground(new Color(64, 70, 128));
 		curProjectTitle.setMaximumSize(new Dimension(32767, 22));
 		curProjectTitle.setPreferredSize(new Dimension(32767, 22));
-		curProjectTitle.setText(CurrentProject.get().getTitle());
 		curProjectTitle.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				toggleButton_actionPerformed(null);

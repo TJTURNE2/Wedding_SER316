@@ -16,8 +16,12 @@ import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 
+import net.sf.memoranda.psp.gui.PSPProjectOverviewPanel;
+import net.sf.memoranda.psp.gui.PSPProjectsPanel;
 import net.sf.memoranda.util.Context;
 import net.sf.memoranda.util.Local;
+import java.awt.Font;
+import java.awt.event.ActionListener;
 
 /**
  * 
@@ -34,10 +38,13 @@ public class WorkPanel extends JPanel {
 	public JButton notesB = new JButton();
 	public DailyItemsPanel dailyItemsPanel = new DailyItemsPanel(this);
 	public ResourcesPanel filesPanel = new ResourcesPanel();
+	public PSPProjectOverviewPanel PSPPanel = new PSPProjectOverviewPanel();
 	public JButton agendaB = new JButton();
 	public JButton tasksB = new JButton();
 	public JButton eventsB = new JButton();
 	public JButton filesB = new JButton();
+	public JButton pspB = new JButton();  //add pspButton
+	
 	JButton currentB = null;
 	Border border1;
 
@@ -200,20 +207,49 @@ public class WorkPanel extends JPanel {
 		this.add(panel, BorderLayout.CENTER);
 		panel.add(dailyItemsPanel, "DAILYITEMS");
 		panel.add(filesPanel, "FILES");
+		panel.add(PSPPanel,"PSPPROJECT");
 		toolBar.add(agendaB, null);
 		toolBar.add(eventsB, null);
 		toolBar.add(tasksB, null);
 		toolBar.add(notesB, null);
 		toolBar.add(filesB, null);
+		
+		pspB.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pspB_actionPerformed(e);
+			}
+		});
+		
+		toolBar.add(pspB, null);        //add to toolbar
+		
 		currentB = agendaB;
 		// Default blue color
 		currentB.setBackground(new Color(215, 225, 250));
 		currentB.setOpaque(true);
 
 		toolBar.setBorder(null);
+		pspB.setIcon(new ImageIcon(WorkPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/notes.png")));
+		pspB.setVerticalTextPosition(SwingConstants.BOTTOM);
+		pspB.setVerticalAlignment(SwingConstants.TOP);
+		pspB.setText("PSP Project");
+		pspB.setSelected(true);
+		pspB.setPreferredSize(new Dimension(50, 50));
+		pspB.setOpaque(false);
+		pspB.setMinimumSize(new Dimension(50, 50));
+		pspB.setMaximumSize(new Dimension(60, 80));
+		pspB.setMargin(new Insets(0, 0, 0, 0));
+		pspB.setHorizontalTextPosition(SwingConstants.CENTER);
+		pspB.setFont(new Font("Dialog", Font.BOLD, 10));
+		pspB.setFocusPainted(false);
+		pspB.setContentAreaFilled(false);
+		pspB.setBorderPainted(false);
+		pspB.setBackground(Color.WHITE);
+		
+		
 		panel.setBorder(null);
 		dailyItemsPanel.setBorder(null);
 		filesPanel.setBorder(null);
+		PSPPanel.setBorder(null);
 
 	}
 
@@ -262,6 +298,13 @@ public class WorkPanel extends JPanel {
 		cardLayout1.show(panel, "FILES");
 		setCurrentButton(filesB);
 		Context.put("CURRENT_PANEL", "FILES");
+	}
+	
+	//edit change to add PSP buttoon action
+	public void pspB_actionPerformed(ActionEvent e) {
+		cardLayout1.show(panel, "PSPPROJECT");
+		setCurrentButton(pspB);
+		Context.put("CURRENT_PANEL", "PSPPROJECT");
 	}
 
 	void setCurrentButton(JButton cb) {

@@ -247,6 +247,7 @@ public class AppFrame extends JFrame {
     //Construct the frame
     public AppFrame() {
         enableEvents(AWTEvent.WINDOW_EVENT_MASK);
+       
         try {
             jbInit();
         }
@@ -667,6 +668,7 @@ public class AppFrame extends JFrame {
     public void doMinimize() {
         exitNotify();
         App.closeWindow();
+        
     }
 
     //Help | About action performed
@@ -707,6 +709,7 @@ public class AppFrame extends JFrame {
     private static void exitNotify() {
         for (int i = 0; i < exitListeners.size(); i++)
             ((ActionListener) exitListeners.get(i)).actionPerformed(null);
+            //System.exit(0);///    Add to kill appplication
     }
 
     public void setEnabledEditorMenus(boolean enabled) {
@@ -1103,5 +1106,5 @@ public class AppFrame extends JFrame {
                     exc.printStackTrace();
             }
         }
-
+      
 }
