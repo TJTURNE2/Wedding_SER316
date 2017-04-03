@@ -237,9 +237,6 @@ public class DailyItemsPanel extends JPanel {
         		CurrentNote.set(currentNote,false);
                 editorPanel.setDocument(currentNote);
                 
-                //mainTabsPanel.remove(tasksControlPane);
-                //tasksControlPane = new TasksControlPanel();
-                //mainTabsPanel.add(tasksControlPane, "TASKSTAB");
                 tasksControlPane.refresh();
                 
 //                // DEBUG
