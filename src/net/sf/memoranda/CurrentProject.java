@@ -26,6 +26,7 @@ public class CurrentProject {
 
     private static Project _project = null;
     private static TaskList _tasklist = null;
+    private static TimeLogList timeLogList = null;
     private static NoteList _notelist = null;
     private static ResourcesList _resources = null;
     private static Vector projectListeners = new Vector();
@@ -51,6 +52,7 @@ public class CurrentProject {
 		}		
 		
         _tasklist = CurrentStorage.get().openTaskList(_project);
+        timeLogList = CurrentStorage.get().openTimeLogList(_project);
         _notelist = CurrentStorage.get().openNoteList(_project);
         _resources = CurrentStorage.get().openResourcesList(_project);
         AppFrame.addExitListener(new ActionListener() {
@@ -68,6 +70,10 @@ public class CurrentProject {
     public static TaskList getTaskList() {
             return _tasklist;
     }
+    
+	public static TimeLogList getTimeLogList() {
+		return timeLogList;
+	}
 
     public static NoteList getNoteList() {
             return _notelist;
@@ -80,11 +86,13 @@ public class CurrentProject {
     public static void set(Project project) {
         if (project.getID().equals(_project.getID())) return;
         TaskList newtasklist = CurrentStorage.get().openTaskList(project);
+        TimeLogList newtimeloglist = CurrentStorage.get().openTimeLogList(project);
         NoteList newnotelist = CurrentStorage.get().openNoteList(project);
         ResourcesList newresources = CurrentStorage.get().openResourcesList(project);
         notifyListenersBefore(project, newnotelist, newtasklist, newresources);
         _project = project;
         _tasklist = newtasklist;
+        timeLogList = newtimeloglist;
         _notelist = newnotelist;
         _resources = newresources;
         notifyListenersAfter();
@@ -116,7 +124,8 @@ public class CurrentProject {
         Storage storage = CurrentStorage.get();
 
         storage.storeNoteList(_notelist, _project);
-        storage.storeTaskList(_tasklist, _project); 
+        storage.storeTaskList(_tasklist, _project);
+        storage.storeTimeLogList(timeLogList, _project);
         storage.storeResourcesList(_resources, _project);
         storage.storeProjectManager();
     }
@@ -124,7 +133,9 @@ public class CurrentProject {
     public static void free() {
         _project = null;
         _tasklist = null;
+        timeLogList = null;
         _notelist = null;
         _resources = null;
     }
+
 }

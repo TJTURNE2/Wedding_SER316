@@ -13,6 +13,7 @@ import net.sf.memoranda.NoteList;
 import net.sf.memoranda.Project;
 import net.sf.memoranda.ResourcesList;
 import net.sf.memoranda.TaskList;
+import net.sf.memoranda.TimeLogList;
 /**
  * 
  */
@@ -21,6 +22,9 @@ public interface Storage {
             
     TaskList openTaskList(Project prj);    
     void storeTaskList(TaskList tl, Project prj);
+    
+	TimeLogList openTimeLogList(Project _project);
+	void storeTimeLogList(TimeLogList tll, Project prj);
     
     NoteList openNoteList(Project prj);
     void storeNoteList(NoteList nl, Project prj);
@@ -47,6 +51,5 @@ public interface Storage {
     void storeResourcesList(ResourcesList rl, Project prj);
     
     void restoreContext();
-    void storeContext(); 
-       
+    void storeContext();
 }
