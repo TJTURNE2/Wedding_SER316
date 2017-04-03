@@ -57,7 +57,7 @@ public class TaskDialog extends JDialog {
     Border border4;
 //    Border border5;
 //    Border border6;
-    JPanel jPanel2 = new JPanel(new GridLayout(3, 2));
+    JPanel jPanel2 = new JPanel(new GridLayout(4, 2));
     JTextField todoField = new JTextField();
     
     // added by rawsushi
@@ -100,6 +100,10 @@ public class TaskDialog extends JDialog {
 	JPanel jPanelProgress = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 	JLabel jLabelProgress = new JLabel();
 	JSpinner progress = new JSpinner(new SpinnerNumberModel(0, 0, 100, 5));
+	
+	JPanel jPanelLoc = new JPanel(new FlowLayout(FlowLayout.LEFT));
+	JLabel jLabelLoc = new JLabel();
+	JSpinner loc = new JSpinner(new SpinnerNumberModel(0,0,1000,5));
 	
 	//Forbid to set dates outside the bounds
 	CalendarDate startDateMin = CurrentProject.get().getStartDate();
@@ -352,15 +356,24 @@ public class TaskDialog extends JDialog {
 
         jPanel2.add(jPanel4, null);
         jPanel4.add(priorityCB, null);
-        jPanel2.add(jPanel3, null);
         
-        jPanel3.add(setNotifB, null);
         
         jLabelProgress.setText(Local.getString("Progress"));
         jPanelProgress.add(jLabelProgress, null);
         jPanelProgress.add(progress, null);
+          
+        jLabelLoc.setText(Local.getString("LOC"));
+        jPanelLoc.add(jLabelLoc, null);
+        jPanelLoc.add(loc, null);
+        
+        jPanel2.add(jPanelLoc);
         jPanel2.add(jPanelProgress);
         
+        
+        
+        jPanel3.add(setNotifB, null);
+        jPanel2.add(jPanel3, null);
+
         priorityCB.setSelectedItem(Local.getString("Normal"));
         startCalFrame.cal.addSelectionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
