@@ -55,6 +55,9 @@ public interface Task {
     
     int getPriority();
     void setPriority(int p);
+
+    int getLOC();
+    void setLOC(int p);
     
     String getID();
     

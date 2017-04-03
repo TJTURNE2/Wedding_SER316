@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -23,6 +24,15 @@ public class ProjectsTablePanel extends JPanel {
     BorderLayout borderLayout1 = new BorderLayout();
     JScrollPane scrollPane = new JScrollPane();
     public JTable projectsTable = new JTable() {
+       //  Returning the Class of each column will allow different
+       //  renderers to be used based on Class
+       @Override
+       public Class getColumnClass(int column)
+       {
+           if (column == 4) return ImageIcon.class; 
+           return Object.class;
+       }
+       
         public TableCellRenderer getCellRenderer(int row, int column) {
             if (((String) getModel().getValueAt(row, PROJECT_ID)).equals(CurrentProject.get().getID())) {
                 return new javax.swing.table.DefaultTableCellRenderer() {
@@ -36,6 +46,13 @@ public class ProjectsTablePanel extends JPanel {
                         Component comp =
                             super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                         comp.setFont(new java.awt.Font("Dialog", 1, 11));
+                        if(column == 4){
+                        	setValue("");
+                        	setIcon(new ImageIcon(
+                    				net.sf.memoranda.ui.AppFrame.class.getResource(
+                    						"resources/icons/removeproject.png")));
+                        	setHorizontalAlignment(CENTER);
+                        }
                         if (((row % 2) > 0) && (!isSelected))
                             comp.setBackground(new Color(230, 240, 255));
                         return comp;
@@ -53,6 +70,13 @@ public class ProjectsTablePanel extends JPanel {
                         int column) {
                         Component comp =
                             super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                        if(column == 4){
+                        	setValue("");
+                        	setIcon(new ImageIcon(
+                    				net.sf.memoranda.ui.AppFrame.class.getResource(
+                    						"resources/icons/removeproject.png")));
+                        	setHorizontalAlignment(CENTER);
+                        }
                         if (isSelected)
                             return comp;
                         comp.setBackground(new Color(230, 240, 255));
@@ -98,7 +122,7 @@ public class ProjectsTablePanel extends JPanel {
 
     void initProjectsTable() {
         projectsTable.setModel(new PrjTableModel());
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 5; i++) {
             TableColumn column = projectsTable.getColumnModel().getColumn(i);
             if (i == 0) {
                 column.setPreferredWidth(32767);
@@ -135,14 +159,15 @@ public class ProjectsTablePanel extends JPanel {
                 Local.getString("Start date"),
                 Local.getString("End date"),
                 //Local.getString("Execution"),
-                Local.getString("Status")};
+                Local.getString("Status"),
+                Local.getString("Delete?")};
 
         PrjTableModel() {
             super();
         }
 
         public int getColumnCount() {
-            return 4;
+            return 5;
         }
 
         public Object getValueAt(int row, int col) {
@@ -166,6 +191,10 @@ public class ProjectsTablePanel extends JPanel {
                 //case 3 :   return pr.getProgress() + "%";
                 case 3 :
                     return getStatusString(pr.getStatus());
+                case 4 :
+                	return new ImageIcon(
+            				net.sf.memoranda.ui.AppFrame.class.getResource(
+            						"resources/icons/removeproject.png"));
                 case 100 :
                     return pr.getID();
                 case 101 :
