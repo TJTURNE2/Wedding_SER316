@@ -32,4 +32,5 @@ Dr. Mehlhase
 # Joseph was here too!
 # Terry Turner - are we suppose to do a simple update?
 # Nathan Waitman was here.
+# Alexander Winchester checking in
 >>>>>>> branch 'master' of https://github.com/ser316asu/Wedding_SER316.git

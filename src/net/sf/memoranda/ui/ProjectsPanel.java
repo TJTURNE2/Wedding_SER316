@@ -397,6 +397,21 @@ public class ProjectsPanel extends JPanel implements ExpandablePanel {
 					ProjectsTablePanel.PROJECT);
 			toremove.add(prj.getID());
 		}
+		
+		if (prjTablePanel.projectsTable.getModel().getRowCount() == 1) {
+			String title = "Default Project";
+	        CalendarDate startD = new CalendarDate();
+	        CalendarDate endD = startD;
+	        Project newProject = ProjectManager.createProject(title, startD, endD);
+		}
+		
+		if (((Project) prjTablePanel.projectsTable.getModel().getValueAt(0, 101)).getID().equals(CurrentProject.get().getID())) {
+			CurrentProject.set((Project) prjTablePanel.projectsTable.getModel().getValueAt(1,101));
+		} else {
+			CurrentProject.set((Project) prjTablePanel.projectsTable.getModel().getValueAt(0,101));
+		}
+		
+		
 		for (int i = 0; i < toremove.size(); i++) {
 			ProjectManager.removeProject((String) toremove.get(i));
 		}
@@ -405,7 +420,6 @@ public class ProjectsPanel extends JPanel implements ExpandablePanel {
 		prjTablePanel.updateUI();
 		setMenuEnabled(false);
 		
-		CurrentProject.set((Project) prjTablePanel.projectsTable.getModel().getValueAt(0,101));
 		prjTablePanel.updateUI();
 		ppDeleteProject.setEnabled(false);
 		ppOpenProject.setEnabled(false);
