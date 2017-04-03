@@ -13,10 +13,12 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 
 import net.sf.memoranda.CurrentProject;
 import net.sf.memoranda.TimeLog;
 import net.sf.memoranda.TimeLogList;
+import net.sf.memoranda.util.Util;
 
 public class TasksControlPanel extends JPanel {
 	BorderLayout borderLayout = new BorderLayout();
@@ -27,6 +29,16 @@ public class TasksControlPanel extends JPanel {
 	static JScrollPane scrollPane = null;
 
 	public TasksControlPanel() {
+		newTime.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				addNewTimeLog();
+			}
+		});
+
+		buildGUI();
+	}
+	
+	public void buildGUI() {
 		this.setLayout(borderLayout);
 		
 		timeLogList = CurrentProject.getTimeLogList();
@@ -37,14 +49,18 @@ public class TasksControlPanel extends JPanel {
 		logs.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		logs.addMouseListener(new LogEditListener());
 
-		newTime.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				addNewTimeLog();
-			}
-		});
-
 		this.add(newTime, BorderLayout.PAGE_START);
 		this.add(scrollPane, BorderLayout.CENTER);
+	}
+	
+	public void refresh() {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				removeAll();
+				revalidate();
+				buildGUI();
+			}
+		});
 	}
 	
 	TimeLogDialog createNewTimeLogDialog(String title, String[] initValues) {
