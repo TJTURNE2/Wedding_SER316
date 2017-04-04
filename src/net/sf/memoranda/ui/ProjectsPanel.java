@@ -139,6 +139,7 @@ public class ProjectsPanel extends JPanel implements ExpandablePanel {
 		curProjectTitle.setForeground(new Color(64, 70, 128));
 		curProjectTitle.setMaximumSize(new Dimension(32767, 22));
 		curProjectTitle.setPreferredSize(new Dimension(32767, 22));
+		curProjectTitle.setText(CurrentProject.get().getTitle());
 		curProjectTitle.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				toggleButton_actionPerformed(null);
@@ -291,6 +292,11 @@ public class ProjectsPanel extends JPanel implements ExpandablePanel {
 	class PopupListener extends MouseAdapter {
 
 		public void mouseClicked(MouseEvent e) {
+	        int col = prjTablePanel.projectsTable.columnAtPoint(e.getPoint());
+	        if (col == 4) {
+	        	ppDeleteProject_actionPerformed(null);
+	        }
+	        
 			if (e.getClickCount() == 2)
 				ppOpenProject_actionPerformed(null);
 		}
@@ -391,6 +397,21 @@ public class ProjectsPanel extends JPanel implements ExpandablePanel {
 					ProjectsTablePanel.PROJECT);
 			toremove.add(prj.getID());
 		}
+		
+		if (prjTablePanel.projectsTable.getModel().getRowCount() == 1) {
+			String title = "Default Project";
+	        CalendarDate startD = new CalendarDate();
+	        CalendarDate endD = startD;
+	        Project newProject = ProjectManager.createProject(title, startD, endD);
+		}
+		
+		if (((Project) prjTablePanel.projectsTable.getModel().getValueAt(0, 101)).getID().equals(CurrentProject.get().getID())) {
+			CurrentProject.set((Project) prjTablePanel.projectsTable.getModel().getValueAt(1,101));
+		} else {
+			CurrentProject.set((Project) prjTablePanel.projectsTable.getModel().getValueAt(0,101));
+		}
+		
+		
 		for (int i = 0; i < toremove.size(); i++) {
 			ProjectManager.removeProject((String) toremove.get(i));
 		}
@@ -398,6 +419,10 @@ public class ProjectsPanel extends JPanel implements ExpandablePanel {
 		prjTablePanel.projectsTable.clearSelection();
 		prjTablePanel.updateUI();
 		setMenuEnabled(false);
+		
+		prjTablePanel.updateUI();
+		ppDeleteProject.setEnabled(false);
+		ppOpenProject.setEnabled(false);
 	}
 
 	void ppProperties_actionPerformed(ActionEvent e) {

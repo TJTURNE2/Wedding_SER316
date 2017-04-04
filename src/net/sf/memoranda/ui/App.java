@@ -140,9 +140,10 @@ public class App {
 
 	public static void closeWindow() {
 		if (frame == null)
-			return;
+				return;
 		frame.dispose();
-		System.exit(0); //    Add to kill appplication
+		//frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+		//System.exit(0);
 	}
 
 	/**

@@ -127,7 +127,7 @@ public class PSPProjectOverviewPanel extends JPanel {
 		projectsPanelScrollPane.setBorder(null);
 		projectsPanelScrollPane.setViewportBorder(null);
 		projectsPanelScrollPane.setBackground(new Color(175, 238, 238));
-		projectsPanelScrollPane.add(projectsTable, BorderLayout.CENTER);
+		projectsPanelScrollPane.add(projectsTable);
 		
 		PSPProjectsPanel.add(projectsPanelScrollPane, BorderLayout.CENTER);
 		projectsTable.setBackground(new Color(0, 100, 0));

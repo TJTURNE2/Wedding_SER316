@@ -10,6 +10,7 @@ package net.sf.memoranda;
 
 import java.util.Vector;
 
+import net.sf.memoranda.CurrentProject;
 import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.util.CurrentStorage;
 import net.sf.memoranda.util.Local;
@@ -107,6 +108,7 @@ public class ProjectManager {
         prj.setStartDate(startDate);
         prj.setEndDate(endDate);
         CurrentStorage.get().createProjectStorage(prj);
+        CurrentProject.set(prj);
         return prj;
     }
 
