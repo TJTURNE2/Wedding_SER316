@@ -3,41 +3,42 @@
  */
 package net.sf.memoranda.psp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Terry Turner
  *
  */
 @SuppressWarnings("serial")
 public class PSPProject implements java.io.Serializable {
-	/**
-	 * 
-	 */
+
 	
-	private static int counter = 0;
-			
+	private static int counter = 0;		
 	private int ID;
 	private String ProjectName;
 	private String Description;
 	private PSPType PSP;
-	private PSPPhase Phase;
+	private PSPProjectPhase Phase;
 	
 	protected PSPPlanSummary Summary;
-	protected PSPTimeLog TimeLog;
-	protected PSPDefectLog DefectLog;
-	protected PSPRequirements Requirements;
+	protected List<PSPProjectTimeLogEntry> TimeLog;
+	protected List<PSPProjectDefectEntry> DefectLog;
+	protected List<PSPProjectRequirement> Requirements;
 
 	
 	public PSPProject(){
+		
 		ID = counter;
 		counter = counter +1;
 		PSP = PSPType.PSP0;
-		Phase = PSPPhase.PLANNING;
+		Phase = PSPProjectPhase.PLANNING;
 		ProjectName = "Project " + ID;
 		Description = "New Project";
 		Summary = new PSPPlanSummary();
-		TimeLog = new PSPTimeLog();
-		DefectLog = new PSPDefectLog();
-		Requirements = new PSPRequirements();
+		TimeLog = new ArrayList<PSPProjectTimeLogEntry>();
+		DefectLog = new ArrayList<PSPProjectDefectEntry>();
+		Requirements = new ArrayList<PSPProjectRequirement>();
 		
 	}
 	
@@ -82,7 +83,7 @@ public class PSPProject implements java.io.Serializable {
 	/**
 	 * @return the phase
 	 */
-	public PSPPhase getPhase() {
+	public PSPProjectPhase getPhase() {
 		return Phase;
 	}
 	/**
@@ -112,7 +113,7 @@ public class PSPProject implements java.io.Serializable {
 	/**
 	 * @param phase the phase to set
 	 */
-	public void setPhase(PSPPhase phase) {
+	public void setPhase(PSPProjectPhase phase) {
 		Phase = phase;
 	}
 
@@ -130,47 +131,6 @@ public class PSPProject implements java.io.Serializable {
 		Summary = summary;
 	}
 
-	/**
-	 * @return the timeLog
-	 */
-	public PSPTimeLog getTimeLog() {
-		return TimeLog;
-	}
-
-	/**
-	 * @param timeLog the timeLog to set
-	 */
-	public void setTimeLog(PSPTimeLog timeLog) {
-		TimeLog = timeLog;
-	}
-
-	/**
-	 * @return the defectLog
-	 */
-	public PSPDefectLog getDefectLog() {
-		return DefectLog;
-	}
-
-	/**
-	 * @param defectLog the defectLog to set
-	 */
-	public void setDefectLog(PSPDefectLog defectLog) {
-		DefectLog = defectLog;
-	}
-
-	/**
-	 * @return the requirments
-	 */
-	public PSPRequirements getRequirments() {
-		return Requirements;
-	}
-
-	/**
-	 * @param requirments the requirements to set
-	 */
-	public void setRequirments(PSPRequirements requirments) {
-		Requirements = requirments;
-	}
 
 	/**
 	 * Class for PSP Type
