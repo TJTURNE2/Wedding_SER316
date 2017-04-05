@@ -3,8 +3,9 @@
  */
 package net.sf.memoranda.psp;
 
-public class PhaseDefectsInjected implements java.io.Serializable{
-	private static final long serialVersionUID = 1L;
+@SuppressWarnings("serial")
+public class PSPProjectLogPhase implements java.io.Serializable{
+
 	private PSPLogEntry Planning;
 	private PSPLogEntry Design;
 	private PSPLogEntry Code;
@@ -13,7 +14,7 @@ public class PhaseDefectsInjected implements java.io.Serializable{
 	private PSPLogEntry Postmortem;
 	private int totalAcutal, totalTodate;
 
-	public PhaseDefectsInjected() {
+	public PSPProjectLogPhase() {
 		Planning = new PSPLogEntry();
 		Design = new PSPLogEntry();
 		Code = new PSPLogEntry();
@@ -23,7 +24,7 @@ public class PhaseDefectsInjected implements java.io.Serializable{
 		totalAcutal = 0;
 		totalTodate = 0;
 	}
-
+	
 	/**
 	 * @param planning
 	 * @param design
@@ -34,7 +35,8 @@ public class PhaseDefectsInjected implements java.io.Serializable{
 	 * @param totalAcutal
 	 * @param totalTodate
 	 */
-	public PhaseDefectsInjected(PSPLogEntry planning, PSPLogEntry design, PSPLogEntry code, PSPLogEntry compile,
+	
+	public PSPProjectLogPhase(PSPLogEntry planning, PSPLogEntry design, PSPLogEntry code, PSPLogEntry compile,
 			PSPLogEntry testing, PSPLogEntry postmortem, int totalAcutal, int totalTodate) {
 		super();
 		Planning = planning;

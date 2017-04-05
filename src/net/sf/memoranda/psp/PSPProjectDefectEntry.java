@@ -3,30 +3,29 @@ package net.sf.memoranda.psp;
 import java.sql.Time;
 import java.util.Date;
 
-import net.sf.memoranda.psp.PSPDefectLog.PSPDefectType;
-
-
 @SuppressWarnings("serial")
-public class DefectEntry implements java.io.Serializable{
+public class PSPProjectDefectEntry implements java.io.Serializable {
 
+	private static int count = 0;
 	private int ID;
 	private Date dateFound;
 	private PSPDefectType defectType;
-	private PSPPhase phaseInjected;
-	private PSPPhase phaseRemoved;
+	private PSPProjectPhase phaseInjected;
+	private PSPProjectPhase phaseRemoved;
 	private Time lengthFixing;
 	private String description;
-	
-	public DefectEntry() {
+
+	public PSPProjectDefectEntry() {
+		count +=1;
 		ID = 0;
 		dateFound = null;
 		defectType = PSPDefectType.TYPE10;
-		phaseInjected = PSPPhase.PLANNING;
-		phaseRemoved = PSPPhase.PLANNING;
+		phaseInjected = PSPProjectPhase.PLANNING;
+		phaseRemoved = PSPProjectPhase.PLANNING;
 		lengthFixing = null;
 		description = "";
 	}
-	
+
 	/**
 	 * @param iD
 	 * @param dateFound
@@ -36,8 +35,8 @@ public class DefectEntry implements java.io.Serializable{
 	 * @param lengthFixing
 	 * @param description
 	 */
-	public DefectEntry(int iD, Date dateFound, PSPDefectType defectType, PSPPhase phaseInjected,
-			PSPPhase phaseRemoved, Time lengthFixing, String description) {
+	public PSPProjectDefectEntry(int iD, Date dateFound, PSPDefectType defectType, PSPProjectPhase phaseInjected,
+			PSPProjectPhase phaseRemoved, Time lengthFixing, String description) {
 		super();
 		ID = iD;
 		this.dateFound = dateFound;
@@ -96,7 +95,7 @@ public class DefectEntry implements java.io.Serializable{
 	/**
 	 * @return the phaseInjected
 	 */
-	public PSPPhase getPhaseInjected() {
+	public PSPProjectPhase getPhaseInjected() {
 		return phaseInjected;
 	}
 
@@ -104,14 +103,14 @@ public class DefectEntry implements java.io.Serializable{
 	 * @param phaseInjected
 	 *            the phaseInjected to set
 	 */
-	public void setPhaseInjected(PSPPhase phaseInjected) {
+	public void setPhaseInjected(PSPProjectPhase phaseInjected) {
 		this.phaseInjected = phaseInjected;
 	}
 
 	/**
 	 * @return the phaseRemoved
 	 */
-	public PSPPhase getPhaseRemoved() {
+	public PSPProjectPhase getPhaseRemoved() {
 		return phaseRemoved;
 	}
 
@@ -119,7 +118,7 @@ public class DefectEntry implements java.io.Serializable{
 	 * @param phaseRemoved
 	 *            the phaseRemoved to set
 	 */
-	public void setPhaseRemoved(PSPPhase phaseRemoved) {
+	public void setPhaseRemoved(PSPProjectPhase phaseRemoved) {
 		this.phaseRemoved = phaseRemoved;
 	}
 
@@ -151,6 +150,57 @@ public class DefectEntry implements java.io.Serializable{
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	
+	public enum PSPDefectType implements java.io.Serializable {
+
+		TYPE10("Documentation"), TYPE20("Syntax"), TYPE30("Build, Package"), TYPE40("Assignment"), TYPE50(
+				"Interface"), TYPE60(
+						"Checking"), TYPE70("Data"), TYPE80("Function"), TYPE90("System"), TYPE100("Environment");
+
+		private String name;
+		private String description;
+
+		PSPDefectType(String name) {
+			this.name = name;
+		}
+
+		@Override
+		public String toString() {
+			return name;
+		}
+
+		/**
+		 * @return the name
+		 */
+		public String getName() {
+			return name;
+		}
+
+		/**
+		 * @param name
+		 *            the name to set
+		 */
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		/**
+		 * @return the description
+		 */
+		public String getDescription() {
+			return description;
+		}
+
+		/**
+		 * @param description
+		 *            the description to set
+		 */
+		public void setDescription(String description) {
+			this.description = description;
+		}
+
 	}
 
 }

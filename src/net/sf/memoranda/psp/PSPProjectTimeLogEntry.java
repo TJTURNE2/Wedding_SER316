@@ -5,21 +5,23 @@ import java.util.Calendar;
 import java.util.Date;
 
 @SuppressWarnings("serial")
-public class TimeEntry implements java.io.Serializable{
+public class PSPProjectTimeLogEntry implements java.io.Serializable{
 
+	private static int count = 0;
 	private int ID;
 	private Date entryDate;
 	private Time StartingTime, stoppingTime, interruptionTime;
-	private PSPPhase Phase;
+	private PSPProjectPhase Phase;
 	private String comments;
 
-	public TimeEntry() {
+	public PSPProjectTimeLogEntry() {
+		count +=1;
 		ID = 0;
 		entryDate = Calendar.getInstance().getTime();
 		StartingTime = null;
 		stoppingTime = null;
 		interruptionTime = null;
-		Phase = PSPPhase.DESIGN;
+		Phase = PSPProjectPhase.DESIGN;
 		comments = "";
 
 	}
@@ -33,8 +35,8 @@ public class TimeEntry implements java.io.Serializable{
 	 * @param phase
 	 * @param comments
 	 */
-	public TimeEntry(int iD, Date entryDate, Time startingTime, Time stoppingTime, Time interruptionTime,
-			PSPPhase phase, String comments) {
+	public PSPProjectTimeLogEntry(int iD, Date entryDate, Time startingTime, Time stoppingTime, Time interruptionTime,
+			PSPProjectPhase phase, String comments) {
 		super();
 		ID = iD;
 		this.entryDate = entryDate;
@@ -123,7 +125,7 @@ public class TimeEntry implements java.io.Serializable{
 	/**
 	 * @return the phase
 	 */
-	public PSPPhase getPhase() {
+	public PSPProjectPhase getPhase() {
 		return Phase;
 	}
 
@@ -131,7 +133,7 @@ public class TimeEntry implements java.io.Serializable{
 	 * @param phase
 	 *            the phase to set
 	 */
-	public void setPhase(PSPPhase phase) {
+	public void setPhase(PSPProjectPhase phase) {
 		Phase = phase;
 	}
 

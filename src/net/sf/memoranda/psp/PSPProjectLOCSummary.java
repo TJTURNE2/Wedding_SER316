@@ -3,9 +3,9 @@
  */
 package net.sf.memoranda.psp;
 
-public class ProgramSizeSummary implements java.io.Serializable{
+@SuppressWarnings("serial")
+public class PSPProjectLOCSummary implements java.io.Serializable{
 
-	private static final long serialVersionUID = 1L;
 	private PSPLogEntry Base;
 	private PSPLogEntry Deleted;
 	private PSPLogEntry Modified;
@@ -15,7 +15,7 @@ public class ProgramSizeSummary implements java.io.Serializable{
 	private PSPLogEntry Total;
 	private PSPLogEntry NewReused;
 
-	public ProgramSizeSummary() {
+	public PSPProjectLOCSummary() {
 		Base = new PSPLogEntry();
 		Deleted = new PSPLogEntry();
 		Modified = new PSPLogEntry();
@@ -36,7 +36,7 @@ public class ProgramSizeSummary implements java.io.Serializable{
 	 * @param total
 	 * @param newReused
 	 */
-	public ProgramSizeSummary(PSPLogEntry base, PSPLogEntry deleted, PSPLogEntry modified, PSPLogEntry added,
+	public PSPProjectLOCSummary(PSPLogEntry base, PSPLogEntry deleted, PSPLogEntry modified, PSPLogEntry added,
 			PSPLogEntry reused, PSPLogEntry addedModified, PSPLogEntry total, PSPLogEntry newReused) {
 		super();
 		Base = base;
