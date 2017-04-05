@@ -2,9 +2,7 @@
  * 
  */
 package net.sf.memoranda.psp;
-
 import java.util.Date;
-
 
 @SuppressWarnings("serial")
 public class PSPPlanSummary implements java.io.Serializable {
@@ -16,7 +14,8 @@ public class PSPPlanSummary implements java.io.Serializable {
 	private Date endDate;
 	private String language;
 
-	protected ProgramSizeSummary ProgramSize;
+
+	protected PSPProjectLOCSummary ProgramSize;
 	protected PSPProjectLogPhase PhaseTime;
 	protected PSPProjectLogPhase PhaseDefects;
 	protected PSPProjectLogPhase DefectsRemoved;
@@ -28,7 +27,8 @@ public class PSPPlanSummary implements java.io.Serializable {
 		startDate = null;
 		endDate = null;
 		language = "null";
-		ProgramSize = new ProgramSizeSummary();
+
+		ProgramSize = new PSPProjectLOCSummary();
 		PhaseTime = new PSPProjectLogPhase();
 		PhaseDefects = new PSPProjectLogPhase();
 		DefectsRemoved = new PSPProjectLogPhase();
@@ -47,7 +47,7 @@ public class PSPPlanSummary implements java.io.Serializable {
 	 * @param defectsRemoved
 	 */
 	public PSPPlanSummary(String student, String program, String instructor, Date startDate, Date endDate,
-			String language, ProgramSizeSummary programSize, PSPProjectLogPhase phaseTime, PSPProjectLogPhase phaseDefects,
+			String language, PSPProjectLOCSummary programSize, PSPProjectLogPhase phaseTime, PSPProjectLogPhase phaseDefects,
 			PSPProjectLogPhase defectsRemoved) {
 		super();
 		Student = student;
@@ -155,7 +155,7 @@ public class PSPPlanSummary implements java.io.Serializable {
 	/**
 	 * @return the programSize
 	 */
-	public ProgramSizeSummary getProgramSize() {
+	public PSPProjectLOCSummary getProgramSize() {
 		return ProgramSize;
 	}
 
@@ -163,7 +163,7 @@ public class PSPPlanSummary implements java.io.Serializable {
 	 * @param programSize
 	 *            the programSize to set
 	 */
-	public void setProgramSize(ProgramSizeSummary programSize) {
+	public void setProgramSize(PSPProjectLOCSummary programSize) {
 		ProgramSize = programSize;
 	}
 

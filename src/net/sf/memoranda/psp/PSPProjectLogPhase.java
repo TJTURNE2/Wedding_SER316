@@ -24,7 +24,7 @@ public class PSPProjectLogPhase implements java.io.Serializable{
 		totalAcutal = 0;
 		totalTodate = 0;
 	}
-
+	
 	/**
 	 * @param planning
 	 * @param design
@@ -35,6 +35,7 @@ public class PSPProjectLogPhase implements java.io.Serializable{
 	 * @param totalAcutal
 	 * @param totalTodate
 	 */
+
 	public PSPProjectLogPhase(PSPLogEntry planning, PSPLogEntry design, PSPLogEntry code, PSPLogEntry compile,
 			PSPLogEntry testing, PSPLogEntry postmortem, int totalAcutal, int totalTodate) {
 		super();
