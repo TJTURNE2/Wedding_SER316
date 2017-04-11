@@ -2,28 +2,51 @@ package net.sf.memoranda.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JList;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
+import net.sf.memoranda.CurrentNote;
 import net.sf.memoranda.CurrentProject;
+import net.sf.memoranda.Note;
 import net.sf.memoranda.TimeLog;
 import net.sf.memoranda.TimeLogList;
+import net.sf.memoranda.date.CurrentDate;
+import net.sf.memoranda.ui.NotesControlPanel.PopupListener;
+import net.sf.memoranda.util.Configuration;
+import net.sf.memoranda.util.CurrentStorage;
+import net.sf.memoranda.util.Local;
 import net.sf.memoranda.util.Util;
 
 public class TasksControlPanel extends JPanel {
 	BorderLayout borderLayout = new BorderLayout();
 	JButton newTime = new JButton("Add New Time");
 
+
+	
 	static TimeLogList timeLogList = null;
 	static JList logs = null;
 	static JScrollPane scrollPane = null;
@@ -36,7 +59,12 @@ public class TasksControlPanel extends JPanel {
 		});
 
 		buildGUI();
-	}
+	
+ 
+    }
+
+ 
+
 	
 	public void buildGUI() {
 		this.setLayout(borderLayout);
@@ -59,6 +87,7 @@ public class TasksControlPanel extends JPanel {
 				removeAll();
 				revalidate();
 				buildGUI();
+
 			}
 		});
 	}
