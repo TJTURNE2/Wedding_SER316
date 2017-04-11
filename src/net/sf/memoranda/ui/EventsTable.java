@@ -98,7 +98,10 @@ public class EventsTable extends JTable {
         String[] columnNames = {
             //Local.getString("Task name"),
             Local.getString("Time"),
-                Local.getString("Text")
+                Local.getString("Event Title"),
+                Local.getString("Where"),
+                Local.getString("Attendees"),
+                Local.getString("Description")
         };
 
         EventsTableModel() {
@@ -106,7 +109,7 @@ public class EventsTable extends JTable {
         }
 
         public int getColumnCount() {
-            return 2;
+            return 5;
         }
 
         public int getRowCount() {
@@ -127,6 +130,12 @@ public class EventsTable extends JTable {
                 return ev.getTimeString();
            else if (col == 1)
                 return ev.getText();
+           else if(col == 2)
+        	   return ev.getWhere();
+           else if(col == 3)
+        	   return ev.getAttendees();
+           else if(col == 4)
+        	   return ev.getDescription();
            else if (col == EVENT_ID)
                 return ev.getId();
            else return ev;
