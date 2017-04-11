@@ -123,10 +123,6 @@ public class PSPProjectsPanel extends JPanel {
 						btnEditProject.setHorizontalAlignment(SwingConstants.LEFT);
 						toolBar.add(btnEditProject);
 						
-						Component horizontalStrut_1 = Box.createHorizontalStrut(20);
-						horizontalStrut_1.setMaximumSize(new Dimension(3, 32767));
-						toolBar.add(horizontalStrut_1);
-						
 								JButton btnNewProject = new JButton("");
 								btnNewProject.setBorder(null);
 								toolBar.add(btnNewProject);
@@ -151,10 +147,6 @@ public class PSPProjectsPanel extends JPanel {
 								btnNewProject.setIcon(new ImageIcon(
 										PSPProjectsPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/newproject.png")));
 								btnNewProject.setHorizontalAlignment(SwingConstants.LEFT);
-								
-								Component horizontalStrut_2 = Box.createHorizontalStrut(20);
-								horizontalStrut_2.setMaximumSize(new Dimension(3, 32767));
-								toolBar.add(horizontalStrut_2);
 								
 										JButton btnDeleteproject = new JButton("");
 										btnDeleteproject.setAlignmentX(0.5f);

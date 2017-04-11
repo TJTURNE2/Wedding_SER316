@@ -13,7 +13,17 @@ public class PSPProjectDefectEntry implements java.io.Serializable {
 	private PSPProjectPhase phaseInjected;
 	private PSPProjectPhase phaseRemoved;
 	private Time lengthFixing;
+	private String fileName;
 	private String description;
+	private int severity;
+
+	public static int getCount() {
+		return count;
+	}
+
+	public static void setCount(int count) {
+		PSPProjectDefectEntry.count = count;
+	}
 
 	public PSPProjectDefectEntry() {
 		count +=1;
@@ -137,6 +147,14 @@ public class PSPProjectDefectEntry implements java.io.Serializable {
 		this.lengthFixing = lengthFixing;
 	}
 
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
 	/**
 	 * @return the description
 	 */
@@ -153,6 +171,15 @@ public class PSPProjectDefectEntry implements java.io.Serializable {
 	}
 
 	
+	public int getSeverity() {
+		return severity;
+	}
+
+	public void setSeverity(int severity) {
+		this.severity = severity;
+	}
+
+
 	public enum PSPDefectType implements java.io.Serializable {
 
 		TYPE10("Documentation"), TYPE20("Syntax"), TYPE30("Build, Package"), TYPE40("Assignment"), TYPE50(
