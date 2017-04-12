@@ -16,8 +16,11 @@ import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 
+import net.sf.memoranda.psp.gui.PSPProjectsOverviewPanel;
 import net.sf.memoranda.util.Context;
 import net.sf.memoranda.util.Local;
+import java.awt.event.ActionListener;
+import java.awt.Font;
 
 /**
  * 
@@ -34,6 +37,8 @@ public class WorkPanel extends JPanel {
 	public JButton notesB = new JButton();
 	public DailyItemsPanel dailyItemsPanel = new DailyItemsPanel(this);
 	public ResourcesPanel filesPanel = new ResourcesPanel();
+	public PSPProjectsOverviewPanel PSPProjects = new PSPProjectsOverviewPanel(); //Terry Turner - PSP Project Add
+	public JButton projects = new JButton();		//Terry Turner - Adding project button
 	public JButton agendaB = new JButton();
 	public JButton tasksB = new JButton();
 	public JButton eventsB = new JButton();
@@ -93,31 +98,6 @@ public class WorkPanel extends JPanel {
 		agendaB.setOpaque(false);
 		agendaB.setMargin(new Insets(0, 0, 0, 0));
 		agendaB.setSelected(true);
-
-		eventsB.setBackground(Color.white);
-		eventsB.setMaximumSize(new Dimension(60, 80));
-		eventsB.setMinimumSize(new Dimension(30, 30));
-
-		eventsB.setFont(new java.awt.Font("Dialog", 1, 10));
-		eventsB.setPreferredSize(new Dimension(50, 50));
-		eventsB.setBorderPainted(false);
-		eventsB.setContentAreaFilled(false);
-		eventsB.setFocusPainted(false);
-		eventsB.setHorizontalTextPosition(SwingConstants.CENTER);
-		eventsB.setText(Local.getString("Events"));
-		eventsB.setVerticalAlignment(SwingConstants.TOP);
-		eventsB.setVerticalTextPosition(SwingConstants.BOTTOM);
-		eventsB.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				eventsB_actionPerformed(e);
-			}
-		});
-		eventsB.setIcon(
-			new ImageIcon(
-				net.sf.memoranda.ui.AppFrame.class.getResource(
-					"resources/icons/events.png")));
-		eventsB.setOpaque(false);
-		eventsB.setMargin(new Insets(0, 0, 0, 0));
 		//eventsB.setSelected(true);
 
 		tasksB.setSelected(true);
@@ -200,11 +180,58 @@ public class WorkPanel extends JPanel {
 		this.add(panel, BorderLayout.CENTER);
 		panel.add(dailyItemsPanel, "DAILYITEMS");
 		panel.add(filesPanel, "FILES");
+		panel.add(PSPProjects,"PROJECTS");		//Terry Turner Adding projects Panel to main panel area
 		toolBar.add(agendaB, null);
-		toolBar.add(eventsB, null);
+		
+				eventsB.setBackground(Color.white);
+				eventsB.setMaximumSize(new Dimension(60, 80));
+				eventsB.setMinimumSize(new Dimension(30, 30));
+				
+						eventsB.setFont(new java.awt.Font("Dialog", 1, 10));
+						eventsB.setPreferredSize(new Dimension(50, 50));
+						eventsB.setBorderPainted(false);
+						eventsB.setContentAreaFilled(false);
+						eventsB.setFocusPainted(false);
+						eventsB.setHorizontalTextPosition(SwingConstants.CENTER);
+						eventsB.setText(Local.getString("Events"));
+						eventsB.setVerticalAlignment(SwingConstants.TOP);
+						eventsB.setVerticalTextPosition(SwingConstants.BOTTOM);
+						eventsB.addActionListener(new java.awt.event.ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								eventsB_actionPerformed(e);
+							}
+						});
+						eventsB.setIcon(
+							new ImageIcon(
+								net.sf.memoranda.ui.AppFrame.class.getResource(
+									"resources/icons/events.png")));
+						eventsB.setOpaque(false);
+						eventsB.setMargin(new Insets(0, 0, 0, 0));
+						toolBar.add(eventsB, null);
 		toolBar.add(tasksB, null);
 		toolBar.add(notesB, null);
 		toolBar.add(filesB, null);
+		projects.setContentAreaFilled(false);
+		projects.setBorderPainted(false);
+		projects.setFocusPainted(false);
+		projects.setFont(new Font("Dialog", Font.PLAIN, 10));
+		projects.setVerticalTextPosition(SwingConstants.BOTTOM);
+		projects.setVerticalAlignment(SwingConstants.TOP);
+		projects.setMargin(new Insets(0, 0, 0, 0));
+		projects.setMinimumSize(new Dimension(30, 30));
+		projects.setHorizontalTextPosition(SwingConstants.CENTER);
+		projects.setOpaque(false);
+		projects.setText("PSP");
+		projects.setMaximumSize(new Dimension(60, 80));
+		projects.setPreferredSize(new Dimension(50, 50));
+		projects.setBackground(Color.WHITE);
+		projects.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				projects_actionPerformed(e);
+			}
+		});
+		projects.setIcon(new ImageIcon(WorkPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/project48.png")));
+		toolBar.add(projects, null);  	//Terry Turner - Adding Projects Button
 		currentB = agendaB;
 		// Default blue color
 		currentB.setBackground(new Color(215, 225, 250));
@@ -227,6 +254,9 @@ public class WorkPanel extends JPanel {
 				eventsB_actionPerformed(null);
 			else if (pan.equals("FILES"))
 				filesB_actionPerformed(null);
+			else if(pan.equals("PROJECTS"))		//Terry Turner adding Select Panel for Projects 
+				projects_actionPerformed(null);
+				
 		}
 	}
 
@@ -264,6 +294,13 @@ public class WorkPanel extends JPanel {
 		Context.put("CURRENT_PANEL", "FILES");
 	}
 
+	public void projects_actionPerformed(ActionEvent e){  //Terry Turner - adding Action call for Projects Panel
+		cardLayout1.show(panel, "PROJECTS");
+		setCurrentButton(projects);
+		Context.put("CURRENT_PANEL", "PROJECTS");
+		
+	}
+	
 	void setCurrentButton(JButton cb) {
 		currentB.setBackground(Color.white);
 		currentB.setOpaque(false);
@@ -271,5 +308,6 @@ public class WorkPanel extends JPanel {
 		// Default color blue
 		currentB.setBackground(new Color(215, 225, 250));
 		currentB.setOpaque(true);
-	}
+	} 
+	
 }
