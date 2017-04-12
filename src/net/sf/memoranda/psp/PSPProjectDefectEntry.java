@@ -27,7 +27,7 @@ public class PSPProjectDefectEntry implements java.io.Serializable {
 
 	public PSPProjectDefectEntry() {
 		count +=1;
-		ID = 0;
+		ID = count;
 		dateFound = null;
 		defectType = PSPDefectType.TYPE10;
 		phaseInjected = PSPProjectPhase.PLANNING;

@@ -16,7 +16,7 @@ public class PSPProjectTimeLogEntry implements java.io.Serializable{
 
 	public PSPProjectTimeLogEntry() {
 		count +=1;
-		ID = 0;
+		ID = count;
 		entryDate = Calendar.getInstance().getTime();
 		StartingTime = null;
 		stoppingTime = null;

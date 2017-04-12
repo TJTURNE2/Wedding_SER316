@@ -18,27 +18,41 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Component;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.ImageIcon;
+import javax.swing.border.BevelBorder;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
 public class PSPProjectsOverviewPanel extends JPanel {
 
 	private PSPProjectManager Manager = new PSPProjectManager();
-	//static JFrame pFrame;
+	private int ProjectID =0;
+	// static JFrame pFrame;
 	private JTable projectsTable;
 	private JTable requirementTable;
 	private JTable designTable;
 	private JTable timeLogTable;
 	private JTable defectLogTable;
 	private ProjectTableModel pModel;
-	
+	private DefectTableModel dModel;
+	private TimeLogTableModel tModel;
+	private RequirementTableModel rModel;
+	private JDialog newProject;
+
 	/**
 	 * Create the panel.
 	 */
 	public PSPProjectsOverviewPanel() {
-		
+
 		setMinimumSize(new Dimension(500, 300));
 		setSize(new Dimension(500, 300));
 		pModel = new ProjectTableModel();
+		dModel = new DefectTableModel();
+		tModel = new TimeLogTableModel();
+		rModel = new RequirementTableModel();
 		
 		setLayout(new BorderLayout(0, 0));
 
@@ -57,16 +71,43 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		projectsToolBar.setFloatable(false);
 		projectsPanel.add(projectsToolBar, BorderLayout.NORTH);
 
+		JButton btnNewProject = new JButton("");
+		btnNewProject.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				newProject = new PSPNewProjectDialog();
+				newProject.setVisible(true);
+			}
+		});
+		btnNewProject.setMaximumSize(new Dimension(25, 25));
+		btnNewProject.setBorder(null);
+		btnNewProject.setIcon(new ImageIcon(
+				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/filenew.png")));
+		projectsToolBar.add(btnNewProject);
+
+		JButton btnEditProject = new JButton("");
+		btnEditProject.setBorder(null);
+		btnEditProject.setMaximumSize(new Dimension(25, 25));
+		btnEditProject.setIcon(new ImageIcon(
+				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editproject.png")));
+		projectsToolBar.add(btnEditProject);
+
+		JButton btnDeleteProject = new JButton("");
+		btnDeleteProject.setBorder(null);
+		btnDeleteProject.setMaximumSize(new Dimension(25, 25));
+		btnDeleteProject.setIcon(new ImageIcon(
+				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editdelete.png")));
+		projectsToolBar.add(btnDeleteProject);
+
 		projectsTable = new JTable(pModel);
 		projectsTable.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		projectsTable.setFillsViewportHeight(true);
-		projectsTable.setBorder(null);		
-		
+		projectsTable.setBorder(null);
+
 		JScrollPane projectsScrollPane = new JScrollPane(projectsTable);
 		projectsScrollPane.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		projectsScrollPane.setBackground(Color.WHITE);
 		projectsPanel.add(projectsScrollPane, BorderLayout.CENTER);
-		
 
 		JPanel summaryPanel = new JPanel();
 		projectsTabbedPane.addTab("Summary", null, summaryPanel, null);
@@ -88,10 +129,10 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		requirementToolBar.setPreferredSize(new Dimension(13, 25));
 		requirementToolBar.setFloatable(false);
 		requirementPanel.add(requirementToolBar, BorderLayout.NORTH);
-		
-		requirementTable = new JTable();
+
+		requirementTable = new JTable(rModel);
 		requirementTable.setFillsViewportHeight(true);
-		
+
 		JScrollPane requirementScrollPane = new JScrollPane(requirementTable);
 		requirementPanel.add(requirementScrollPane, BorderLayout.CENTER);
 
@@ -106,7 +147,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 
 		designTable = new JTable();
 		designTable.setFillsViewportHeight(true);
-		
+
 		JScrollPane designScrollPane = new JScrollPane(designTable);
 		designPanel.add(designScrollPane);
 
@@ -119,9 +160,9 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		timeLogToolBar.setFloatable(false);
 		timeLogPanel.add(timeLogToolBar, BorderLayout.NORTH);
 
-		timeLogTable = new JTable();
+		timeLogTable = new JTable(tModel);
 		timeLogTable.setFillsViewportHeight(true);
-		
+
 		JScrollPane timeLogScrollPane = new JScrollPane(timeLogTable);
 		timeLogPanel.add(timeLogScrollPane, BorderLayout.CENTER);
 
@@ -146,9 +187,9 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		defectLogToolBar.setPreferredSize(new Dimension(13, 25));
 		defectLogPanel.add(defectLogToolBar, BorderLayout.NORTH);
 
-		defectLogTable = new JTable();
+		defectLogTable = new JTable(dModel);
 		defectLogTable.setFillsViewportHeight(true);
-		
+
 		JScrollPane defectLogScrollPane = new JScrollPane(defectLogTable);
 		defectLogPanel.add(defectLogScrollPane);
 
@@ -163,20 +204,18 @@ public class PSPProjectsOverviewPanel extends JPanel {
 
 		JScrollPane postMortemScrollPane = new JScrollPane();
 		postMortemPanel.add(postMortemScrollPane);
-		
 
 	}
 
 	protected class ProjectTableModel extends AbstractTableModel {
 		protected String[] columnNames = new String[] { "Project ID", " Project Name", "Description", "Type", "Phase" };
-		
 
 		@Override
-		public String getColumnName(int col){
-			
+		public String getColumnName(int col) {
+
 			return columnNames[col];
 		}
-		
+
 		@Override
 		public int getColumnCount() {
 			// TODO Auto-generated method stub
@@ -194,7 +233,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 
 			if (col == 0) {
 				return Manager.Projects.get(row).getID();
-			}  
+			}
 			if (col == 1) {
 				return Manager.Projects.get(row).getProjectName();
 			}
@@ -203,13 +242,143 @@ public class PSPProjectsOverviewPanel extends JPanel {
 			}
 			if (col == 3) {
 				return Manager.Projects.get(row).getPSP();
-			} 
-		
-				return Manager.Projects.get(row).getPhase();
-			
+			}
 
+			return Manager.Projects.get(row).getPhase();
+		}
+	}
+	
+	protected class RequirementTableModel extends AbstractTableModel {
+		protected String[] columnNames = new String[] { "ID", "Type", "Description", "Priority" };
+
+		@Override
+		public String getColumnName(int col) {
+
+			return columnNames[col];
 		}
 
+		@Override
+		public int getColumnCount() {
+			// TODO Auto-generated method stub
+			return 4;
+		}
+
+		@Override
+		public int getRowCount() {
+			// TODO Auto-generated method stub
+//			if(Manager.Projects.get(ProjectID).getRequirements().isEmpty()){
+			return 0;
+//			}		
+//			return Manager.Projects.get(ProjectID).getRequirements().size();
+		}
+
+		@Override
+		public Object getValueAt(int row, int col) {
+			if (col == 0) {
+				return Manager.Projects.get(ProjectID).getRequirements().get(row).getID();
+			}
+			if (col == 1) {
+				return Manager.Projects.get(ProjectID).getRequirements().get(row).getRequirmentType();
+			}
+			if (col == 2) {
+				return Manager.Projects.get(ProjectID).getRequirements().get(row).getDescription();
+			}
+			{
+				return Manager.Projects.get(ProjectID).getRequirements().get(row).getPriority();
+			}
+
+		}
+	}
+	
+	protected class TimeLogTableModel extends AbstractTableModel {
+		protected String[] columnNames = new String[] { "ID", "Entry Date","Comments","Phase", "Start Time", "Stopping Time"};
+
+		@Override
+		public String getColumnName(int col) {
+
+			return columnNames[col];
+		}
+
+		@Override
+		public int getColumnCount() {
+			// TODO Auto-generated method stub
+			return 6;
+		}
+
+		@Override
+		public int getRowCount() {
+			// TODO Auto-generated method stub
+			return Manager.Projects.get(ProjectID).getTimeLog().size();
+		}
+
+		@Override
+		public Object getValueAt(int row, int col) {
+
+			if (col == 0) {
+				return Manager.Projects.get(ProjectID).getTimeLog().get(row).getID();
+			}
+			if (col == 1) {
+				return Manager.Projects.get(ProjectID).getTimeLog().get(row).getEntryDate();
+			}
+			if (col == 2) {
+				return Manager.Projects.get(ProjectID).getTimeLog().get(row).getComments();
+			}
+			if (col == 3) {
+				return Manager.Projects.get(ProjectID).getTimeLog().get(row).getPhase();
+			}
+			if (col == 4) {
+				return Manager.Projects.get(ProjectID).getTimeLog().get(row).getStartingTime();
+			}
+			{
+				return Manager.Projects.get(ProjectID).getTimeLog().get(row).getStoppingTime();
+			}
+		}
+	}
+	
+	protected class DefectTableModel extends AbstractTableModel {
+		protected String[] columnNames = new String[] { "Defect ID", "Date Found", "Type", "Phase Injected",
+				"Description", "Severity" };
+
+		@Override
+		public String getColumnName(int col) {
+
+			return columnNames[col];
+		}
+
+		@Override
+		public int getColumnCount() {
+			// TODO Auto-generated method stub
+			return 6;
+		}
+
+		@Override
+		public int getRowCount() {
+			// TODO Auto-generated method stub
+			return Manager.Projects.get(ProjectID).getDefectLog().size();
+		}
+
+		@Override
+		public Object getValueAt(int row, int col) {
+
+			if (col == 0) {
+				return Manager.Projects.get(ProjectID).getDefectLog().get(row).getID();
+			}
+			if (col == 1) {
+				return Manager.Projects.get(ProjectID).getDefectLog().get(row).getDateFound();
+			}
+			if (col == 2) {
+				return Manager.Projects.get(ProjectID).getDefectLog().get(row).getDefectType();
+			}
+			if (col == 3) {
+				return Manager.Projects.get(ProjectID).getDefectLog().get(row).getPhaseInjected();
+			}
+			if (col == 4) {
+				return Manager.Projects.get(ProjectID).getDefectLog().get(row).getDescription();
+			}
+			{
+				return Manager.Projects.get(ProjectID).getDefectLog().get(row).getSeverity();
+			}
+		}
 	}
 
 	public static void main(String[] args) {

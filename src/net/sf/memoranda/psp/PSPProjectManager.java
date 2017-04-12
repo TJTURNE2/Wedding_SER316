@@ -67,6 +67,7 @@ public class PSPProjectManager {
 		Project.setPhase(PSPProjectPhase.PLANNING);
 		try {
 			Projects.add(Project);
+			this.saveProjects();
 		} catch (Exception exc) {
 			return false;
 		}
@@ -79,6 +80,7 @@ public class PSPProjectManager {
 	public boolean deleteProject(int ID) {
 		try {
 			Projects.remove(Projects.get(ID));
+			this.saveProjects();
 		} catch (Exception e) {
 			return false;
 		}

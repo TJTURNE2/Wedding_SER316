@@ -10,19 +10,22 @@ public class PSPProjectRequirement implements java.io.Serializable{
 	private int ID;
 	private PSPRequirementType RequirmentType;
 	private String Description;
+	private int Priority;
 
 	protected PSPProjectRequirement() {
 		count +=1;
-		ID = 0;
+		ID = count;
 		RequirmentType = PSPRequirementType.FUNCTIONAL;
 		Description = "None";
+		Priority = 1;
 	}
 	
-	public PSPProjectRequirement(int iD, PSPRequirementType requirmentType, String description) {
+	public PSPProjectRequirement(int iD, PSPRequirementType requirmentType, String description, int priority) {
 		super();
 		ID = iD;
 		RequirmentType = requirmentType;
 		Description = description;
+		Priority = priority;
 	}
 
 	public int getID() {
@@ -47,6 +50,34 @@ public class PSPProjectRequirement implements java.io.Serializable{
 
 	public void setDescription(String description) {
 		Description = description;
+	}
+
+	/**
+	 * @return the count
+	 */
+	public static int getCount() {
+		return count;
+	}
+
+	/**
+	 * @param count the count to set
+	 */
+	public static void setCount(int count) {
+		PSPProjectRequirement.count = count;
+	}
+
+	/**
+	 * @return the priority
+	 */
+	public int getPriority() {
+		return Priority;
+	}
+
+	/**
+	 * @param priority the priority to set
+	 */
+	public void setPriority(int priority) {
+		Priority = priority;
 	}
 
 	public enum PSPRequirementType implements java.io.Serializable{

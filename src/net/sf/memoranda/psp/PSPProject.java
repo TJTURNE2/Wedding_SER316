@@ -133,6 +133,62 @@ public class PSPProject implements java.io.Serializable {
 
 
 	/**
+	 * @return the timeLog
+	 */
+	public List<PSPProjectTimeLogEntry> getTimeLog() {
+		return TimeLog;
+	}
+
+	/**
+	 * @param timeLog the timeLog to set
+	 */
+	public void setTimeLog(List<PSPProjectTimeLogEntry> timeLog) {
+		TimeLog = timeLog;
+	}
+	
+	public void addTimeEntry(PSPProjectTimeLogEntry entry){
+		
+		TimeLog.add(entry);
+	}
+
+	/**
+	 * @return the defectLog
+	 */
+	public List<PSPProjectDefectEntry> getDefectLog() {
+		return DefectLog;
+	}
+
+	/**
+	 * @param defectLog the defectLog to set
+	 */
+	public void setDefectLog(List<PSPProjectDefectEntry> defectLog) {
+		DefectLog = defectLog;
+	}
+	
+	public void addDefectEntry(PSPProjectDefectEntry entry){
+		DefectLog.add(entry);
+	}
+
+	/**
+	 * @return the requirements
+	 */
+	public List<PSPProjectRequirement> getRequirements() {
+		return Requirements;
+	}
+
+	/**
+	 * @param requirements the requirements to set
+	 */
+	public void setRequirements(List<PSPProjectRequirement> requirements) {
+		Requirements = requirements;
+	}
+	
+	public void addRequirementEntry(PSPProjectRequirement entry){
+		Requirements.add(entry);
+	}
+
+
+	/**
 	 * Class for PSP Type
 	 */
 	public enum PSPType implements java.io.Serializable{

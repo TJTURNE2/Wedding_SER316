@@ -32,6 +32,10 @@ import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.ImageIcon;
+import java.awt.event.WindowFocusListener;
+import java.awt.event.WindowEvent;
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+import javax.swing.border.LineBorder;
 
 @SuppressWarnings("serial")
 public class PSPNewProjectDialog extends JDialog {
@@ -43,31 +47,44 @@ public class PSPNewProjectDialog extends JDialog {
 		// TODO Auto-generated method stub
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				
 				PSPNewProjectDialog nd = new PSPNewProjectDialog();
+				nd.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+				nd.setAlwaysOnTop(true);
 				nd.setVisible(true);
 			}
 		});
-		// PSPProjectsPanel paneltest = new PSPProjectsPanel();
 	}
-	
+
 	public PSPNewProjectDialog() {
+		setAlwaysOnTop(true);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		addWindowFocusListener(new WindowFocusListener() {
+			public void windowGainedFocus(WindowEvent arg0) {
+
+			}
+
+			public void windowLostFocus(WindowEvent arg0) {
+				dispose();
+			}
+		});
+
 		setMinimumSize(new Dimension(500, 250));
 		getContentPane().setMinimumSize(new Dimension(500, 500));
 		setResizable(false);
-		getContentPane().setLayout(new BorderLayout(0, 0));
+		getContentPane().setLayout(new BorderLayout(5, 5));
 		JPanel TopPanel = new JPanel();
-		TopPanel.setPreferredSize(new Dimension(500, 50));
-		TopPanel.setBackground(Color.WHITE);
+		TopPanel.setBorder(null);
 		getContentPane().add(TopPanel, BorderLayout.NORTH);
-		TopPanel.setLayout(new MigLayout("", "[]", "[]"));
+		TopPanel.setBackground(Color.WHITE);
+		TopPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 
 		JLabel lblNewProject = new JLabel("New Project");
+		lblNewProject.setPreferredSize(new Dimension(120, 35));
 		lblNewProject.setIcon(new ImageIcon(
 				PSPNewProjectDialog.class.getResource("/net/sf/memoranda/ui/htmleditor/resources/icons/filenew.png")));
 		lblNewProject.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblNewProject.setHorizontalAlignment(SwingConstants.RIGHT);
-		TopPanel.add(lblNewProject, "cell 0 0,growx");
+		lblNewProject.setHorizontalAlignment(SwingConstants.LEFT);
+		TopPanel.add(lblNewProject);
 
 		JPanel ContentPanel = new JPanel();
 		ContentPanel.setBorder(new CompoundBorder());
@@ -118,7 +135,7 @@ public class PSPNewProjectDialog extends JDialog {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 					dispose();
-				} 
+				}
 			}
 		});
 
@@ -136,6 +153,7 @@ public class PSPNewProjectDialog extends JDialog {
 		});
 		btnCancel.setHorizontalAlignment(SwingConstants.LEFT);
 		BottomPanel.add(btnCancel, "cell 16 0,alignx left,aligny top");
+		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{getContentPane(), TopPanel, lblNewProject, ContentPanel, lblProjectName, textFieldProjectName, lblDescription, textFieldDescription, lblPSPType, comboBoxPSPType, BottomPanel, btnOK, btnCancel}));
 
 	}
 
