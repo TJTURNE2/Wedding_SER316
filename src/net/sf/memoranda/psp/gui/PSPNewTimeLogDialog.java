@@ -13,6 +13,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import java.awt.ComponentOrientation;
 import java.awt.Font;
+import java.io.IOException;
 import java.awt.Color;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
@@ -25,14 +26,16 @@ public class PSPNewTimeLogDialog extends JDialog {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		try {
-			PSPNewTimeLogDialog dialog = new PSPNewTimeLogDialog();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public static void NewDialog() throws IOException {
+		// TODO Auto-generated method stub
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				PSPNewTimeLogDialog nd = new PSPNewTimeLogDialog();
+				nd.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+				nd.setAlwaysOnTop(true);
+				nd.setVisible(true);
+			}
+		});
 	}
 
 	/**

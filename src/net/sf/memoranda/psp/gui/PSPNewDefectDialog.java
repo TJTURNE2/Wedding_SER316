@@ -12,6 +12,8 @@ import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 
 import net.sf.memoranda.psp.PSPProjectPhase;
+import net.sf.memoranda.psp.PSPProjectTimeLogEntry;
+import net.sf.memoranda.psp.PSPProjectDefectEntry;
 import net.sf.memoranda.psp.PSPProjectDefectEntry.PSPDefectType;
 import net.sf.memoranda.psp.PSPProjectManager;
 
@@ -30,21 +32,29 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.ComponentOrientation;
 import javax.swing.SpringLayout;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
 public class PSPNewDefectDialog extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	PSPProjectManager Manager;
-	private static int count = 0;
-	private JTextField textField;
+	private static int ProjectID = 0;
+	private JTextField descriptionTextField;
 	private JTextField txtPlaceForTime;
-	private SpringLayout sl_contentPanel;
 	private JLabel lblTimeFixing;
 	private JComboBox phaseInjectedComboBox;
 	private JComboBox defectTypeComboBox;
 	private JLabel lblDefectType;
 	private JLabel lblPhaseRemoved;
+	private JTextField fileNameTextField;
+	private JComboBox phaseRemovedComboBox;
+	private JSpinner serveritySpinner;
+	private JDateChooser dateFound;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -52,7 +62,7 @@ public class PSPNewDefectDialog extends JDialog {
 		// TODO Auto-generated method stub
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				PSPNewDefectDialog nd = new PSPNewDefectDialog();
+				PSPNewDefectDialog nd = new PSPNewDefectDialog(ProjectID);
 				nd.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 				nd.setAlwaysOnTop(true);
 				nd.setVisible(true);
@@ -63,8 +73,9 @@ public class PSPNewDefectDialog extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public PSPNewDefectDialog() {
-		setBounds(100, 100, 450, 300);
+	public PSPNewDefectDialog(int pID) {
+		ProjectID = pID;
+		setBounds(100, 100, 500, 300);
 		getContentPane().setLayout(new BorderLayout());
 		{
 			JPanel topPanel = new JPanel();
@@ -83,62 +94,55 @@ public class PSPNewDefectDialog extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		{
-			JDateChooser dateFound= new JDateChooser();
+			dateFound= new JDateChooser();
 
 			
 			JLabel lblDateFound = new JLabel("Date Found");
+			lblDateFound.setFont(new Font("Tahoma", Font.PLAIN, 15));
 			lblDefectType = new JLabel("Defect Type");
+			lblDefectType.setFont(new Font("Tahoma", Font.PLAIN, 15));
 			JLabel lblPhaseInjected = new JLabel("Phase Injected");
+			lblPhaseInjected.setFont(new Font("Tahoma", Font.PLAIN, 15));
 			lblPhaseRemoved = new JLabel("Phase Removed");
+			lblPhaseRemoved.setFont(new Font("Tahoma", Font.PLAIN, 15));
 			lblTimeFixing = new JLabel("Fixing Time");
-			sl_contentPanel = new SpringLayout();
-			sl_contentPanel.putConstraint(SpringLayout.EAST, lblTimeFixing, 0, SpringLayout.EAST, dateFound);
-			sl_contentPanel.putConstraint(SpringLayout.NORTH, lblDefectType, 0, SpringLayout.NORTH, lblDateFound);
-			sl_contentPanel.putConstraint(SpringLayout.WEST, lblDefectType, 0, SpringLayout.WEST, lblPhaseRemoved);
-			sl_contentPanel.putConstraint(SpringLayout.SOUTH, lblDateFound, -7, SpringLayout.NORTH, lblPhaseInjected);
-			sl_contentPanel.putConstraint(SpringLayout.NORTH, lblPhaseRemoved, 0, SpringLayout.NORTH, lblPhaseInjected);
-			contentPanel.setLayout(sl_contentPanel);
+			lblTimeFixing.setFont(new Font("Tahoma", Font.PLAIN, 15));
+			contentPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 			JLabel lblDescription = new JLabel("Description");
-			sl_contentPanel.putConstraint(SpringLayout.NORTH, lblDescription, 10, SpringLayout.NORTH, contentPanel);
-			sl_contentPanel.putConstraint(SpringLayout.WEST, lblDescription, 190, SpringLayout.WEST, contentPanel);
+			lblDescription.setFont(new Font("Tahoma", Font.PLAIN, 15));
 			contentPanel.add(lblDescription);
 			{
-				textField = new JTextField();
-				sl_contentPanel.putConstraint(SpringLayout.NORTH, dateFound, 6, SpringLayout.SOUTH, textField);
-				sl_contentPanel.putConstraint(SpringLayout.WEST, lblDateFound, 0, SpringLayout.WEST, textField);
-				sl_contentPanel.putConstraint(SpringLayout.WEST, lblPhaseInjected, 0, SpringLayout.WEST, textField);
-				sl_contentPanel.putConstraint(SpringLayout.NORTH, textField, 29, SpringLayout.NORTH, contentPanel);
-				sl_contentPanel.putConstraint(SpringLayout.WEST, textField, 14, SpringLayout.WEST, contentPanel);
-				contentPanel.add(textField);
-				textField.setColumns(50);
+				descriptionTextField = new JTextField();
+				contentPanel.add(descriptionTextField);
+				descriptionTextField.setColumns(40);
+			}
+			{
+				JLabel lblFileName = new JLabel("File Name");
+				lblFileName.setFont(new Font("Tahoma", Font.PLAIN, 15));
+				contentPanel.add(lblFileName);
+			}
+			{
+				fileNameTextField = new JTextField();
+				contentPanel.add(fileNameTextField);
+				fileNameTextField.setColumns(33);
 			}
 			contentPanel.add(lblDateFound);
 			contentPanel.add(dateFound);
 			contentPanel.add(lblDefectType);
 			{
 				defectTypeComboBox = new JComboBox();
-				sl_contentPanel.putConstraint(SpringLayout.NORTH, defectTypeComboBox, 6, SpringLayout.SOUTH, textField);
-				sl_contentPanel.putConstraint(SpringLayout.EAST, defectTypeComboBox, 0, SpringLayout.EAST, textField);
 				defectTypeComboBox.setModel(new DefaultComboBoxModel(PSPDefectType.values()));
 				contentPanel.add(defectTypeComboBox);
 			}
 			contentPanel.add(lblPhaseInjected);
 			{
 				phaseInjectedComboBox = new JComboBox();
-				sl_contentPanel.putConstraint(SpringLayout.NORTH, lblTimeFixing, 11, SpringLayout.SOUTH, phaseInjectedComboBox);
-				sl_contentPanel.putConstraint(SpringLayout.NORTH, phaseInjectedComboBox, 4, SpringLayout.SOUTH, dateFound);
-				sl_contentPanel.putConstraint(SpringLayout.EAST, dateFound, 0, SpringLayout.EAST, phaseInjectedComboBox);
-				sl_contentPanel.putConstraint(SpringLayout.WEST, lblPhaseRemoved, 46, SpringLayout.EAST, phaseInjectedComboBox);
-				sl_contentPanel.putConstraint(SpringLayout.WEST, phaseInjectedComboBox, 13, SpringLayout.EAST, lblPhaseInjected);
-				sl_contentPanel.putConstraint(SpringLayout.NORTH, lblPhaseInjected, 3, SpringLayout.NORTH, phaseInjectedComboBox);
 				phaseInjectedComboBox.setModel(new DefaultComboBoxModel(PSPProjectPhase.values()));
 				contentPanel.add(phaseInjectedComboBox);
 			}
 			contentPanel.add(lblPhaseRemoved);
 			{
-				JComboBox phaseRemovedComboBox = new JComboBox();
-				sl_contentPanel.putConstraint(SpringLayout.NORTH, phaseRemovedComboBox, 5, SpringLayout.SOUTH, defectTypeComboBox);
-				sl_contentPanel.putConstraint(SpringLayout.EAST, phaseRemovedComboBox, 0, SpringLayout.EAST, textField);
+				phaseRemovedComboBox = new JComboBox();
 				phaseRemovedComboBox.setModel(new DefaultComboBoxModel(PSPProjectPhase.values()));
 				contentPanel.add(phaseRemovedComboBox);
 			}
@@ -146,12 +150,20 @@ public class PSPNewDefectDialog extends JDialog {
 		}
 		{
 			txtPlaceForTime = new JTextField();
-			sl_contentPanel.putConstraint(SpringLayout.NORTH, txtPlaceForTime, 11, SpringLayout.SOUTH, lblPhaseRemoved);
-			sl_contentPanel.putConstraint(SpringLayout.WEST, txtPlaceForTime, -86, SpringLayout.EAST, lblDefectType);
-			sl_contentPanel.putConstraint(SpringLayout.EAST, txtPlaceForTime, 34, SpringLayout.EAST, lblDefectType);
 			txtPlaceForTime.setText("Place for time picker");
 			contentPanel.add(txtPlaceForTime);
 			txtPlaceForTime.setColumns(10);
+		}
+		{
+			JLabel lblSeverity = new JLabel("Severity");
+			lblSeverity.setFont(new Font("Tahoma", Font.PLAIN, 15));
+			contentPanel.add(lblSeverity);
+		}
+		{
+			serveritySpinner = new JSpinner();
+			serveritySpinner.setModel(new SpinnerNumberModel(1, 1, 10, 1));
+			serveritySpinner.setFont(new Font("Tahoma", Font.PLAIN, 15));
+			contentPanel.add(serveritySpinner);
 		}
 		{
 			JPanel buttonPane = new JPanel();
@@ -159,12 +171,41 @@ public class PSPNewDefectDialog extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
+				okButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						PSPProjectDefectEntry entry = new PSPProjectDefectEntry();
+						entry.setDefectType((PSPDefectType)defectTypeComboBox.getSelectedItem());
+						entry.setDescription(descriptionTextField.getText());
+						entry.setPhaseInjected((PSPProjectPhase)phaseInjectedComboBox.getSelectedItem());
+						entry.setPhaseRemoved((PSPProjectPhase)phaseRemovedComboBox.getSelectedItem());
+						entry.setFileName(fileNameTextField.getText());
+						entry.setSeverity((int)serveritySpinner.getValue());
+						entry.setDateFound(dateFound.getDate());
+						try {
+							Manager = new PSPProjectManager();
+							Manager.getAllProjects().get(ProjectID).addDefectEntry(entry);
+							Manager.saveProjects();
+							dispose();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+							dispose();
+						}
+						
+					}
+				});
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						
+						dispose();
+					}
+				});
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}

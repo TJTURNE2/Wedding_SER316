@@ -43,10 +43,10 @@ public class PSPProjectsOverviewPanel extends JPanel {
 	private DefectTableModel dModel;
 	private TimeLogTableModel tModel;
 	private RequirementTableModel rModel;
-	private JDialog newProject;
-	private JDialog newTimeLog;
-	private JDialog newDefect;
+	private PSPNewProjectDialog newProject;
+	private PSPNewTimeEntryDialog newTimeLog;
 	private PSPNewRequirementDialog newRequirement;
+	private PSPNewDefectDialog newDefect;
 	private JTabbedPane projectsTabbedPane;
 	private JPanel projectsPanel;
 	private JPanel summaryPanel;
@@ -265,8 +265,8 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		JButton btnNewTimeEntry = new JButton("");
 		btnNewTimeEntry.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//newTimeLog = new PSPNewTimeLogEntryDialog(ProjectID);
-				//newTimeLog.setVisible(true);
+				newTimeLog = new PSPNewTimeEntryDialog(ProjectID);
+				newTimeLog.setVisible(true);
 			}
 		});
 		btnNewTimeEntry.setBorder(null);
@@ -319,6 +319,12 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		defectLogPanel.add(defectLogToolBar, BorderLayout.NORTH);
 
 		JButton btnNewDefect = new JButton("");
+		btnNewDefect.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				newDefect = new PSPNewDefectDialog(ProjectID);
+				newDefect.setVisible(true);
+			}
+		});
 		btnNewDefect.setMaximumSize(new Dimension(25, 25));
 		btnNewDefect.setBorder(null);
 		btnNewDefect.setIcon(new ImageIcon(
