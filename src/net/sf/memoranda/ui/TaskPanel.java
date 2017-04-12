@@ -1,4 +1,5 @@
 package net.sf.memoranda.ui;
+ 
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -25,6 +26,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import net.sf.memoranda.CurrentProject;
+import net.sf.memoranda.DefectLog;   // EDIT #51
 import net.sf.memoranda.History;
 import net.sf.memoranda.NoteList;
 import net.sf.memoranda.Project;
@@ -51,6 +53,7 @@ public class TaskPanel extends JPanel {
     JButton editTaskB = new JButton();
     JButton removeTaskB = new JButton();
     JButton completeTaskB = new JButton();
+    JButton newDefectLogB = new JButton(); // EDIT #51 
     
 	JCheckBoxMenuItem ppShowActiveOnlyChB = new JCheckBoxMenuItem();
 		
@@ -65,6 +68,7 @@ public class TaskPanel extends JPanel {
 	//JMenuItem ppParentTask = new JMenuItem();
 	JMenuItem ppAddSubTask = new JMenuItem();
 	JMenuItem ppCalcTask = new JMenuItem();
+	JMenuItem ppNewDefectLog = new JMenuItem(); // EDIT #51
 	DailyItemsPanel parentPanel = null;
 
     public TaskPanel(DailyItemsPanel _parentPanel) {
@@ -176,7 +180,24 @@ public class TaskPanel extends JPanel {
         completeTaskB.setMaximumSize(new Dimension(24, 24));
         completeTaskB.setIcon(
             new ImageIcon(net.sf.memoranda.ui.AppFrame.class.getResource("resources/icons/todo_complete.png")));
-
+        
+        // EDIT #51 \/
+        newDefectLogB.setBorderPainted(false);
+        newDefectLogB.setFocusable(false);
+        newDefectLogB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ppNewDefectLog_actionPerformed(e);
+            }
+        });
+        newDefectLogB.setPreferredSize(new Dimension(24, 24));
+        newDefectLogB.setRequestFocusEnabled(false);
+        newDefectLogB.setToolTipText(Local.getString("New defect log"));
+        newDefectLogB.setMinimumSize(new Dimension(24, 24));
+        newDefectLogB.setMaximumSize(new Dimension(24, 24));
+        newDefectLogB.setIcon(
+            new ImageIcon(net.sf.memoranda.ui.AppFrame.class.getResource("resources/icons/newDefect.png")));
+        // EDIT #51 /\
+        
 		// added by rawsushi
 //		showActiveOnly.setBorderPainted(false);
 //		showActiveOnly.setFocusable(false);
@@ -309,6 +330,18 @@ public class TaskPanel extends JPanel {
 		});
 	ppCalcTask.setIcon(new ImageIcon(net.sf.memoranda.ui.AppFrame.class.getResource("resources/icons/todo_complete.png")));
 	ppCalcTask.setEnabled(false);
+	
+	// EDIT #51 \/
+	ppNewDefectLog.setFont(new java.awt.Font("Dialog", 1, 11));
+	ppNewDefectLog.setText(Local.getString("New defect log"));
+	ppNewDefectLog.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ppNewDefectLog_actionPerformed(e);
+			}
+		});
+	ppNewDefectLog.setIcon(new ImageIcon(net.sf.memoranda.ui.AppFrame.class.getResource("resources/icons/newDefect.png")));
+	ppNewDefectLog.setEnabled(false);
+	// EDIT #51 /\
 
     scrollPane.getViewport().add(taskTable, null);
         this.add(scrollPane, BorderLayout.CENTER);
@@ -322,7 +355,7 @@ public class TaskPanel extends JPanel {
         tasksToolBar.addSeparator(new Dimension(8, 24));
         tasksToolBar.add(editTaskB, null);
         tasksToolBar.add(completeTaskB, null);
-
+        tasksToolBar.add(newDefectLogB,null); // EDIT #51
 		//tasksToolBar.add(showActiveOnly, null);
         
 
@@ -360,6 +393,9 @@ public class TaskPanel extends JPanel {
 				//ppSubTasks.setEnabled(enbl); // default value to be over-written later depending on whether it has sub tasks
 				ppCalcTask.setEnabled(enbl); // default value to be over-written later depending on whether it has sub tasks
 				
+				newDefectLogB.setEnabled(enbl); //  EDIT #51
+				ppNewDefectLog.setEnabled(enbl); // EDIT #51
+				
 				/*if (taskTable.getCurrentRootTask() == null) {
 					ppParentTask.setEnabled(false);
 				}
@@ -387,6 +423,7 @@ public class TaskPanel extends JPanel {
         removeTaskB.setEnabled(false);
 		completeTaskB.setEnabled(false);
 		ppAddSubTask.setEnabled(false);
+		newDefectLogB.setEnabled(false); // EDIT #51
 		//ppSubTasks.setEnabled(false);
 		//ppParentTask.setEnabled(false);
     taskPPMenu.add(ppEditTask);
@@ -490,7 +527,50 @@ public class TaskPanel extends JPanel {
         //taskTable.updateUI();
     }
 
-    void newTaskB_actionPerformed(ActionEvent e) {
+    void newDefectLogB_actionPerformed(ActionEvent e) {  // EDIT #51
+    	Task t = CurrentProject.getTaskList().getTask(
+    		        taskTable.getModel().getValueAt(taskTable.getSelectedRow(), TaskTable.TASK_ID).toString());
+    	DefectLog l = new DefectLog();
+    	DefectLogDialog dlg = new DefectLogDialog(App.getFrame(), Local.getString("New Defect Log"));
+    	Dimension frmSize = App.getFrame().getSize();
+    	Point loc = App.getFrame().getLocation();	    
+    	dlg.setLocation((frmSize.width - dlg.getSize().width) / 2 + loc.x, (frmSize.height - dlg.getSize().height) / 2 + loc.y);
+    	
+    	
+    	
+        // dlg.descriptionField.setText(l.getDescription());
+        dlg.date.getModel().setValue(t.getStartDate().getDate());
+        dlg.typeCB.setSelectedItem(Local.getString("None")); 
+        dlg.severityCB.setSelectedItem(Local.getString("Low"));
+        dlg.injectCB.setSelectedItem(Local.getString("--"));
+        dlg.removeCB.setSelectedItem(Local.getString("--"));
+		
+		dlg.chkActive_actionPerformed(null);	
+        dlg.setVisible(true);
+        if (dlg.CANCELLED)
+            return;
+        CalendarDate d = new CalendarDate((Date) dlg.date.getModel().getValue());
+
+ 		if(dlg.chkActive.isSelected())
+ 			l.setIsActive(true);
+ 		else
+ 			l.setIsActive(false);
+        l.setDate(d.toString());
+        l.setDescription(dlg.descriptionField.getText());
+        l.setType(dlg.typeCB.getSelectedItem().toString());
+        l.setSeverity(dlg.severityCB.getSelectedItem().toString());
+        l.setInject(dlg.injectCB.getSelectedItem().toString());
+        l.setRemove(dlg.removeCB.getSelectedItem().toString());
+        
+//		CurrentProject.getTaskList().adjustParentTasks(t);
+
+        CurrentStorage.get().storeTaskList(CurrentProject.getTaskList(), CurrentProject.get());
+        taskTable.tableChanged();
+        parentPanel.updateIndicators();
+        //taskTable.updateUI();
+		
+	}
+	void newTaskB_actionPerformed(ActionEvent e) {
         TaskDialog dlg = new TaskDialog(App.getFrame(), Local.getString("New task"));
         
         //XXX String parentTaskId = taskTable.getCurrentRootTask();
@@ -679,8 +759,8 @@ public class TaskPanel extends JPanel {
         //taskTable.updateUI();
 
     }
-
-	void ppCompleteTask_actionPerformed(ActionEvent e) {
+    
+    void ppCompleteTask_actionPerformed(ActionEvent e) {
 		String msg;
 		Vector tocomplete = new Vector();
 		for (int i = 0; i < taskTable.getSelectedRows().length; i++) {
@@ -760,5 +840,9 @@ public class TaskPanel extends JPanel {
   void ppCalcTask_actionPerformed(ActionEvent e) {
       calcTask_actionPerformed(e);
   }
+  
+  void ppNewDefectLog_actionPerformed(ActionEvent e) {
+	    newDefectLogB_actionPerformed(e);
+	  }
 
 }
