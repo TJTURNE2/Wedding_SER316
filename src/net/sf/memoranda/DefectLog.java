@@ -53,12 +53,11 @@ public class DefectLog {
 	private String _remove;
 	private int _fixTime;
 	private int _refNum;
-	private String _description;
 	private boolean _isActive;
-	private static final String _DELIMITER = "*^*";
+	private String _description;
 
 	public DefectLog(String date, int defectNum, String type, String inject, String remove,
-			int fixTime, int refNum, String description, boolean isActive) {
+			int fixTime, int refNum, boolean isActive, String description) {
 		_date = date;
 		_defectNum = defectNum;
 		_type = Type.valueOf(type.toUpperCase(Locale.ENGLISH));
@@ -66,8 +65,8 @@ public class DefectLog {
 		_remove = remove;
 		_fixTime = fixTime;
 		_refNum = refNum;
-		_description = description;
 		_isActive = isActive;
+		_description = description;
 	}
 
 	public String getDate() {
@@ -174,14 +173,8 @@ public class DefectLog {
 	 * cannot be used since the description may contain spaces.
 	*/
 	public String toFile() {
-		return ("date" + (_date.equals("") ? "null" : _date) +
-				_DELIMITER + "defectNum" + _DELIMITER + (_defectNum < 1 ? "null" : _defectNum) +
-				_DELIMITER + "type" + _DELIMITER + _type +
-				_DELIMITER + "inject" + _DELIMITER + (_inject.equals("") ? "null" : _inject) +
-				_DELIMITER + "remove" + _DELIMITER + (_remove.equals("") ? "null" : _remove) +
-				_DELIMITER + "fixTime" + _DELIMITER + _fixTime +
-				_DELIMITER + "refNum" + _DELIMITER + _refNum +
-				_DELIMITER + "description" + _DELIMITER + (_description.equals("") ? "null" : _description) +
-				_DELIMITER + "isActive" + _DELIMITER + _isActive);
+		return (_date + " " + _defectNum + " " + _type + " " + _inject + " " +
+				_remove + " " + _fixTime + " " + _refNum + " " + _isActive + " " +
+				_description);
 	}	
 }
