@@ -15,10 +15,12 @@ import java.awt.ComponentOrientation;
 import java.awt.Font;
 import java.awt.Color;
 import javax.swing.ImageIcon;
+import javax.swing.JTextField;
 
 public class PSPNewTimeLogDialog extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
+	private JTextField textField;
 
 	/**
 	 * Launch the application.
@@ -37,7 +39,8 @@ public class PSPNewTimeLogDialog extends JDialog {
 	 * Create the dialog.
 	 */
 	public PSPNewTimeLogDialog() {
-		setBounds(100, 100, 450, 300);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 500, 250);
 		getContentPane().setLayout(new BorderLayout());
 		{
 			JPanel topPanel = new JPanel();
@@ -45,11 +48,10 @@ public class PSPNewTimeLogDialog extends JDialog {
 			topPanel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 			FlowLayout flowLayout = (FlowLayout) topPanel.getLayout();
 			flowLayout.setAlignment(FlowLayout.LEFT);
-			topPanel.setPreferredSize(new Dimension(10, 50));
 			getContentPane().add(topPanel, BorderLayout.NORTH);
 			{
-				JLabel lblLogTitle = new JLabel("Log Entry");
-				lblLogTitle.setPreferredSize(new Dimension(100, 50));
+				JLabel lblLogTitle = new JLabel("Time Log Entry");
+				lblLogTitle.setPreferredSize(new Dimension(120, 30));
 				lblLogTitle.setIcon(new ImageIcon(PSPNewTimeLogDialog.class.getResource("/net/sf/memoranda/ui/htmleditor/resources/icons/filenew.png")));
 				topPanel.add(lblLogTitle);
 			}
@@ -57,6 +59,15 @@ public class PSPNewTimeLogDialog extends JDialog {
 		contentPanel.setLayout(new FlowLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		{
+			JLabel lblComments = new JLabel("Comments");
+			contentPanel.add(lblComments);
+		}
+		{
+			textField = new JTextField();
+			contentPanel.add(textField);
+			textField.setColumns(40);
+		}
 		{
 			JLabel lblPlanSize = new JLabel("Plan Size");
 			lblPlanSize.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -97,12 +108,14 @@ public class PSPNewTimeLogDialog extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
+				okButton.setPreferredSize(new Dimension(70, 25));
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
+				cancelButton.setPreferredSize(new Dimension(70, 25));
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}

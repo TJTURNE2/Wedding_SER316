@@ -6,7 +6,6 @@ import java.util.Date;
 @SuppressWarnings("serial")
 public class PSPProjectDefectEntry implements java.io.Serializable {
 
-	private static int count = 0;
 	private int ID;
 	private Date dateFound;
 	private PSPDefectType defectType;
@@ -17,17 +16,10 @@ public class PSPProjectDefectEntry implements java.io.Serializable {
 	private String description;
 	private int severity;
 
-	public static int getCount() {
-		return count;
-	}
-
-	public static void setCount(int count) {
-		PSPProjectDefectEntry.count = count;
-	}
 
 	public PSPProjectDefectEntry() {
-		count +=1;
-		ID = count;
+
+		ID = 1;
 		dateFound = null;
 		defectType = PSPDefectType.TYPE10;
 		phaseInjected = PSPProjectPhase.PLANNING;

@@ -25,6 +25,7 @@ public class main {
 		for (PSPProject P : Manager.getAllProjects()) {
 			System.out.print(P.getID() + " ");
 			System.out.println(P.getProjectName());
+			P.setPhase(PSPProjectPhase.POSTMORTEM);
 		}
 		
 		Manager.saveProjects();
@@ -42,7 +43,8 @@ public class main {
 			entry.setPhaseInjected(PSPProjectPhase.DESIGN);
 			entry.setPhaseRemoved(PSPProjectPhase.TEST);
 			entry.setSeverity(1);
-			P.DefectLog.add(entry);
+			//entry.setCount(P.getDefectLog().size());
+			P.addDefectEntry(entry);
 			}
 		}
 		Manager.saveProjects();
@@ -61,7 +63,7 @@ public class main {
 			entry.setPriority(1);
 			entry.setDescription("Requirment "+ i1 +" for project" + P.getID());
 			entry.setRequirmentType(PSPRequirementType.QUALITY);
-			P.Requirements.add(entry);
+			P.addRequirementEntry(entry);
 			}
 		}
 		Manager.saveProjects();
@@ -83,7 +85,7 @@ public class main {
 			entry.setStartingTime(new Time(1, 5, 0));
 			entry.setStoppingTime(new Time(5, 3, 0));
 			entry.setInterruptionTime(new Time(1, 6, 48));
-			P.TimeLog.add(entry);
+			P.addTimeEntry(entry);
 			}
 		}
 		Manager.saveProjects();
@@ -96,7 +98,7 @@ public class main {
 		}
 		
 		
-		Manager.clearAllProjects();
+		//Manager.clearAllProjects();
 	}
 
 }

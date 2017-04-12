@@ -6,8 +6,7 @@ import java.util.Date;
 
 @SuppressWarnings("serial")
 public class PSPProjectTimeLogEntry implements java.io.Serializable{
-
-	private static int count = 0;
+	
 	private int ID;
 	private Date entryDate;
 	private Time StartingTime, stoppingTime, interruptionTime;
@@ -15,8 +14,7 @@ public class PSPProjectTimeLogEntry implements java.io.Serializable{
 	private String comments;
 
 	public PSPProjectTimeLogEntry() {
-		count +=1;
-		ID = count;
+		ID = 1;
 		entryDate = Calendar.getInstance().getTime();
 		StartingTime = null;
 		stoppingTime = null;
@@ -151,5 +149,10 @@ public class PSPProjectTimeLogEntry implements java.io.Serializable{
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
+
+	/**
+	 * @return the count
+	 */
+	
 
 }

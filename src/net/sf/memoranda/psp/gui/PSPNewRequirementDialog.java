@@ -27,31 +27,35 @@ import java.awt.Dimension;
 import javax.swing.DefaultComboBoxModel;
 import net.sf.memoranda.psp.PSPProject.PSPType;
 import net.sf.memoranda.psp.PSPProjectManager;
+import net.sf.memoranda.psp.PSPProjectRequirement;
 
 import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.ImageIcon;
 import net.sf.memoranda.psp.PSPProjectRequirement.PSPRequirementType;
+import javax.swing.JSlider;
+import javax.swing.SpinnerNumberModel;
 
 @SuppressWarnings("serial")
 public class PSPNewRequirementDialog extends JDialog {
 	private JTextField textDescription;
-	PSPProjectManager Manager;
-
+	private PSPProjectManager Manager;
+	private static int ProjectID = 0;
+	
 	public static void NewDialog() throws IOException {
 		// TODO Auto-generated method stub
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-
-				PSPNewRequirementDialog nd = new PSPNewRequirementDialog();
+				PSPNewRequirementDialog nd = new PSPNewRequirementDialog(ProjectID);
 				nd.setVisible(true);
 			}
 		});
-		// PSPProjectsPanel paneltest = new PSPProjectsPanel();
 	}
 
-	public PSPNewRequirementDialog() {
+	public PSPNewRequirementDialog(int pID) {
+		ProjectID =pID;
+		
 		setMinimumSize(new Dimension(500, 250));
 		getContentPane().setMinimumSize(new Dimension(500, 500));
 		setResizable(false);
@@ -91,6 +95,16 @@ public class PSPNewRequirementDialog extends JDialog {
 		comboBoxRequirementType.setModel(new DefaultComboBoxModel(PSPRequirementType.values()));
 		comboBoxRequirementType.setMaximumRowCount(6);
 		ContentPanel.add(comboBoxRequirementType, "cell 2 1,alignx left");
+		
+		JLabel lblPriorityLabel = new JLabel("Priority");
+		lblPriorityLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPriorityLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		ContentPanel.add(lblPriorityLabel, "cell 0 2,alignx right");
+		
+		JSpinner prioritySpinner = new JSpinner();
+		prioritySpinner.setModel(new SpinnerNumberModel(1, 1, 10, 1));
+		prioritySpinner.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		ContentPanel.add(prioritySpinner, "cell 2 2");
 
 		JPanel BottomPanel = new JPanel();
 		BottomPanel.setBackground(UIManager.getColor("CheckBox.interiorBackground"));
@@ -100,11 +114,22 @@ public class PSPNewRequirementDialog extends JDialog {
 		JButton btnOK = new JButton("OK");
 		btnOK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				// Manager.addRequirementLog(ID, entry)
-
+				Manager = new PSPProjectManager();
+				PSPProjectRequirement entry = new PSPProjectRequirement();
+				entry.setDescription(textDescription.getText());
+				entry.setRequirmentType((PSPRequirementType)comboBoxRequirementType.getSelectedItem());
+				entry.setPriority((int) prioritySpinner.getValue());
+				Manager.getProject(pID).addRequirementEntry(entry);
+				try {
+					Manager.saveProjects();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				dispose();
 			}
 		});
+		
 
 		btnOK.setMinimumSize(new Dimension(65, 23));
 		btnOK.setMaximumSize(new Dimension(65, 23));
@@ -121,6 +146,10 @@ public class PSPNewRequirementDialog extends JDialog {
 		btnCancel.setHorizontalAlignment(SwingConstants.LEFT);
 		BottomPanel.add(btnCancel, "cell 16 0,alignx left,aligny top");
 
+	}
+	
+	public void setProjectID(int pID){
+		ProjectID = pID;
 	}
 
 }

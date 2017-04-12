@@ -13,6 +13,7 @@ import javax.swing.UIManager;
 import javax.swing.table.AbstractTableModel;
 
 import net.sf.memoranda.psp.PSPProjectManager;
+import net.sf.memoranda.psp.PSPProjectPhase;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -22,6 +23,9 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.ImageIcon;
 import javax.swing.border.BevelBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -29,8 +33,7 @@ import java.awt.event.ActionEvent;
 public class PSPProjectsOverviewPanel extends JPanel {
 
 	private PSPProjectManager Manager = new PSPProjectManager();
-	private int ProjectID =0;
-	// static JFrame pFrame;
+	private static int ProjectID = -1;
 	private JTable projectsTable;
 	private JTable requirementTable;
 	private JTable designTable;
@@ -41,6 +44,17 @@ public class PSPProjectsOverviewPanel extends JPanel {
 	private TimeLogTableModel tModel;
 	private RequirementTableModel rModel;
 	private JDialog newProject;
+	private JDialog newTimeLog;
+	private JDialog newDefect;
+	private PSPNewRequirementDialog newRequirement;
+	private JTabbedPane projectsTabbedPane;
+	private JPanel projectsPanel;
+	private JPanel summaryPanel;
+	private JPanel designPanel;
+	private JPanel timeLogPanel;
+	private JPanel codePanel;
+	private JPanel defectLogPanel;
+	private JPanel postMortemPanel;
 
 	/**
 	 * Create the panel.
@@ -53,15 +67,15 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		dModel = new DefectTableModel();
 		tModel = new TimeLogTableModel();
 		rModel = new RequirementTableModel();
-		
+
 		setLayout(new BorderLayout(0, 0));
 
-		JTabbedPane projectsTabbedPane = new JTabbedPane(JTabbedPane.LEFT);
+		projectsTabbedPane = new JTabbedPane(JTabbedPane.LEFT);
 		projectsTabbedPane.setSize(new Dimension(600, 500));
 		projectsTabbedPane.setBackground(Color.WHITE);
 		add(projectsTabbedPane, BorderLayout.CENTER);
 
-		JPanel projectsPanel = new JPanel();
+		projectsPanel = new JPanel();
 		projectsTabbedPane.addTab("Projects", null, projectsPanel, null);
 		projectsPanel.setLayout(new BorderLayout(0, 0));
 
@@ -74,7 +88,6 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		JButton btnNewProject = new JButton("");
 		btnNewProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				newProject = new PSPNewProjectDialog();
 				newProject.setVisible(true);
 			}
@@ -93,6 +106,17 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		projectsToolBar.add(btnEditProject);
 
 		JButton btnDeleteProject = new JButton("");
+		btnDeleteProject.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				projectsTabbedPane.setEnabledAt(7, !isEnabled());
+				projectsTabbedPane.setEnabledAt(6, !isEnabled());
+				projectsTabbedPane.setEnabledAt(5, !isEnabled());
+				projectsTabbedPane.setEnabledAt(4, !isEnabled());
+				projectsTabbedPane.setEnabledAt(3, !isEnabled());
+				projectsTabbedPane.setEnabledAt(2, !isEnabled());
+				projectsTabbedPane.setEnabledAt(1, !isEnabled());
+			}
+		});
 		btnDeleteProject.setBorder(null);
 		btnDeleteProject.setMaximumSize(new Dimension(25, 25));
 		btnDeleteProject.setIcon(new ImageIcon(
@@ -103,14 +127,48 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		projectsTable.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		projectsTable.setFillsViewportHeight(true);
 		projectsTable.setBorder(null);
+		projectsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent event) {
+
+				projectsTabbedPane.setEnabledAt(7, !isEnabled());
+				projectsTabbedPane.setEnabledAt(6, !isEnabled());
+				projectsTabbedPane.setEnabledAt(5, !isEnabled());
+				projectsTabbedPane.setEnabledAt(4, !isEnabled());
+				projectsTabbedPane.setEnabledAt(3, !isEnabled());
+				projectsTabbedPane.setEnabledAt(2, !isEnabled());
+				projectsTabbedPane.setEnabledAt(1, !isEnabled());
+				
+				ProjectID = (int) projectsTable.getValueAt(projectsTable.getSelectedRow(), 0);
+				
+				switch((PSPProjectPhase)Manager.getProject(ProjectID).getPhase()){
+				case POSTMORTEM:
+					projectsTabbedPane.setEnabledAt(7, isEnabled());
+				case TEST:
+				case COMPILE:
+				case CODEREVIEW:
+				case CODE:
+					projectsTabbedPane.setEnabledAt(5, isEnabled());
+				case DESIGNREVIEW:
+					projectsTabbedPane.setEnabledAt(6, isEnabled());
+				case DESIGN:
+					projectsTabbedPane.setEnabledAt(4, isEnabled());
+					projectsTabbedPane.setEnabledAt(3, isEnabled());
+					projectsTabbedPane.setEnabledAt(2, isEnabled());
+				case PLANNING:
+					projectsTabbedPane.setEnabledAt(1, isEnabled());
+				}
+				
+			}
+		});
 
 		JScrollPane projectsScrollPane = new JScrollPane(projectsTable);
 		projectsScrollPane.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		projectsScrollPane.setBackground(Color.WHITE);
 		projectsPanel.add(projectsScrollPane, BorderLayout.CENTER);
 
-		JPanel summaryPanel = new JPanel();
+		summaryPanel = new JPanel();
 		projectsTabbedPane.addTab("Summary", null, summaryPanel, null);
+		projectsTabbedPane.setEnabledAt(1, false);
 		summaryPanel.setLayout(new BorderLayout(0, 0));
 
 		JToolBar summaryToolBar = new JToolBar();
@@ -118,11 +176,26 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		summaryToolBar.setFloatable(false);
 		summaryPanel.add(summaryToolBar, BorderLayout.NORTH);
 
+		JButton btnEditSummary = new JButton("");
+		btnEditSummary.setBorder(null);
+		btnEditSummary.setMaximumSize(new Dimension(25, 25));
+		btnEditSummary.setIcon(new ImageIcon(
+				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editproject.png")));
+		summaryToolBar.add(btnEditSummary);
+
+		JButton btnSaveSummary = new JButton("");
+		btnSaveSummary.setBorder(null);
+		btnSaveSummary.setMaximumSize(new Dimension(25, 25));
+		btnSaveSummary.setIcon(new ImageIcon(
+				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/export.png")));
+		summaryToolBar.add(btnSaveSummary);
+
 		JScrollPane summaryScrollPane = new JScrollPane();
 		summaryPanel.add(summaryScrollPane, BorderLayout.CENTER);
 
 		JPanel requirementPanel = new JPanel();
 		projectsTabbedPane.addTab("Requirements", null, requirementPanel, null);
+		projectsTabbedPane.setEnabledAt(2, false);
 		requirementPanel.setLayout(new BorderLayout(0, 0));
 
 		JToolBar requirementToolBar = new JToolBar();
@@ -130,14 +203,42 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		requirementToolBar.setFloatable(false);
 		requirementPanel.add(requirementToolBar, BorderLayout.NORTH);
 
+		JButton btnNewRequirement = new JButton("");
+		btnNewRequirement.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				newRequirement = new PSPNewRequirementDialog(ProjectID);
+				newRequirement.setVisible(true);
+			}
+		});
+		btnNewRequirement.setMaximumSize(new Dimension(25, 25));
+		btnNewRequirement.setBorder(null);
+		btnNewRequirement.setIcon(new ImageIcon(
+				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/filenew.png")));
+		requirementToolBar.add(btnNewRequirement);
+
+		JButton btnEditRequirement = new JButton("");
+		btnEditRequirement.setBorder(null);
+		btnEditRequirement.setMaximumSize(new Dimension(25, 25));
+		btnEditRequirement.setIcon(new ImageIcon(
+				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editproject.png")));
+		requirementToolBar.add(btnEditRequirement);
+
+		JButton btnDeleteRequirement = new JButton("");
+		btnDeleteRequirement.setMaximumSize(new Dimension(25, 25));
+		btnDeleteRequirement.setIcon(new ImageIcon(
+				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editdelete.png")));
+		btnDeleteRequirement.setBorder(null);
+		requirementToolBar.add(btnDeleteRequirement);
+
 		requirementTable = new JTable(rModel);
 		requirementTable.setFillsViewportHeight(true);
 
 		JScrollPane requirementScrollPane = new JScrollPane(requirementTable);
 		requirementPanel.add(requirementScrollPane, BorderLayout.CENTER);
 
-		JPanel designPanel = new JPanel();
+		designPanel = new JPanel();
 		projectsTabbedPane.addTab("Design", null, designPanel, null);
+		projectsTabbedPane.setEnabledAt(3, false);
 		designPanel.setLayout(new BorderLayout(0, 0));
 
 		JToolBar designToolBar = new JToolBar();
@@ -151,8 +252,9 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		JScrollPane designScrollPane = new JScrollPane(designTable);
 		designPanel.add(designScrollPane);
 
-		JPanel timeLogPanel = new JPanel();
+		timeLogPanel = new JPanel();
 		projectsTabbedPane.addTab("Time Log", null, timeLogPanel, null);
+		projectsTabbedPane.setEnabledAt(4, false);
 		timeLogPanel.setLayout(new BorderLayout(0, 0));
 
 		JToolBar timeLogToolBar = new JToolBar();
@@ -160,14 +262,42 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		timeLogToolBar.setFloatable(false);
 		timeLogPanel.add(timeLogToolBar, BorderLayout.NORTH);
 
+		JButton btnNewTimeEntry = new JButton("");
+		btnNewTimeEntry.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//newTimeLog = new PSPNewTimeLogEntryDialog(ProjectID);
+				//newTimeLog.setVisible(true);
+			}
+		});
+		btnNewTimeEntry.setBorder(null);
+		btnNewTimeEntry.setIcon(new ImageIcon(
+				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/filenew.png")));
+		btnNewTimeEntry.setMaximumSize(new Dimension(25, 25));
+		timeLogToolBar.add(btnNewTimeEntry);
+
+		JButton btnEditTimeEntry = new JButton("");
+		btnEditTimeEntry.setBorder(null);
+		btnEditTimeEntry.setMaximumSize(new Dimension(25, 25));
+		btnEditTimeEntry.setIcon(new ImageIcon(
+				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editproject.png")));
+		timeLogToolBar.add(btnEditTimeEntry);
+
+		JButton btnDeleteTimeEntry = new JButton("");
+		btnDeleteTimeEntry.setBorder(null);
+		btnDeleteTimeEntry.setMaximumSize(new Dimension(25, 25));
+		btnDeleteTimeEntry.setIcon(new ImageIcon(
+				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editdelete.png")));
+		timeLogToolBar.add(btnDeleteTimeEntry);
+
 		timeLogTable = new JTable(tModel);
 		timeLogTable.setFillsViewportHeight(true);
 
 		JScrollPane timeLogScrollPane = new JScrollPane(timeLogTable);
 		timeLogPanel.add(timeLogScrollPane, BorderLayout.CENTER);
 
-		JPanel codePanel = new JPanel();
+		codePanel = new JPanel();
 		projectsTabbedPane.addTab("Code", null, codePanel, null);
+		projectsTabbedPane.setEnabledAt(5, false);
 		codePanel.setLayout(new BorderLayout(0, 0));
 
 		JToolBar codeToolBar = new JToolBar();
@@ -178,8 +308,9 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		JScrollPane codeScrollPane = new JScrollPane();
 		codePanel.add(codeScrollPane);
 
-		JPanel defectLogPanel = new JPanel();
+		defectLogPanel = new JPanel();
 		projectsTabbedPane.addTab("Defect Log", null, defectLogPanel, null);
+		projectsTabbedPane.setEnabledAt(6, false);
 		defectLogPanel.setLayout(new BorderLayout(0, 0));
 
 		JToolBar defectLogToolBar = new JToolBar();
@@ -187,14 +318,36 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		defectLogToolBar.setPreferredSize(new Dimension(13, 25));
 		defectLogPanel.add(defectLogToolBar, BorderLayout.NORTH);
 
+		JButton btnNewDefect = new JButton("");
+		btnNewDefect.setMaximumSize(new Dimension(25, 25));
+		btnNewDefect.setBorder(null);
+		btnNewDefect.setIcon(new ImageIcon(
+				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/filenew.png")));
+		defectLogToolBar.add(btnNewDefect);
+
+		JButton btnEditDefect = new JButton("");
+		btnEditDefect.setMaximumSize(new Dimension(25, 25));
+		btnEditDefect.setBorder(null);
+		btnEditDefect.setIcon(new ImageIcon(
+				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editproject.png")));
+		defectLogToolBar.add(btnEditDefect);
+
+		JButton btnDeleteDefect = new JButton("");
+		btnDeleteDefect.setMaximumSize(new Dimension(25, 25));
+		btnDeleteDefect.setBorder(null);
+		btnDeleteDefect.setIcon(new ImageIcon(
+				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editdelete.png")));
+		defectLogToolBar.add(btnDeleteDefect);
+
 		defectLogTable = new JTable(dModel);
 		defectLogTable.setFillsViewportHeight(true);
 
 		JScrollPane defectLogScrollPane = new JScrollPane(defectLogTable);
 		defectLogPanel.add(defectLogScrollPane);
 
-		JPanel postMortemPanel = new JPanel();
+		postMortemPanel = new JPanel();
 		projectsTabbedPane.addTab("Post Mortem", null, postMortemPanel, null);
+		projectsTabbedPane.setEnabledAt(7, false);
 		postMortemPanel.setLayout(new BorderLayout(0, 0));
 
 		JToolBar postMortemToolBar = new JToolBar();
@@ -204,7 +357,22 @@ public class PSPProjectsOverviewPanel extends JPanel {
 
 		JScrollPane postMortemScrollPane = new JScrollPane();
 		postMortemPanel.add(postMortemScrollPane);
+		
 
+	}
+
+	public void resetPanels() {
+		if (ProjectID <= 0) {
+			projectsTabbedPane.setEnabledAt(0, isEnabled());
+			projectsTabbedPane.setEnabledAt(1, !isEnabled());
+			projectsTabbedPane.setEnabledAt(2, !isEnabled());
+			projectsTabbedPane.setEnabledAt(3, !isEnabled());
+			projectsTabbedPane.setEnabledAt(4, !isEnabled());
+			projectsTabbedPane.setEnabledAt(5, !isEnabled());
+			projectsTabbedPane.setEnabledAt(6, !isEnabled());
+			projectsTabbedPane.setEnabledAt(7, !isEnabled());
+		}
+		
 	}
 
 	protected class ProjectTableModel extends AbstractTableModel {
@@ -247,7 +415,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 			return Manager.Projects.get(row).getPhase();
 		}
 	}
-	
+
 	protected class RequirementTableModel extends AbstractTableModel {
 		protected String[] columnNames = new String[] { "ID", "Type", "Description", "Priority" };
 
@@ -266,10 +434,13 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		@Override
 		public int getRowCount() {
 			// TODO Auto-generated method stub
-//			if(Manager.Projects.get(ProjectID).getRequirements().isEmpty()){
-			return 0;
-//			}		
-//			return Manager.Projects.get(ProjectID).getRequirements().size();
+
+			try {
+				return Manager.Projects.get(ProjectID).getRequirements().size();
+			} catch (Exception e) {
+				return 0;
+			}
+
 		}
 
 		@Override
@@ -289,9 +460,10 @@ public class PSPProjectsOverviewPanel extends JPanel {
 
 		}
 	}
-	
+
 	protected class TimeLogTableModel extends AbstractTableModel {
-		protected String[] columnNames = new String[] { "ID", "Entry Date","Comments","Phase", "Start Time", "Stopping Time"};
+		protected String[] columnNames = new String[] { "ID", "Entry Date", "Comments", "Phase", "Start Time",
+				"Stopping Time" };
 
 		@Override
 		public String getColumnName(int col) {
@@ -307,8 +479,13 @@ public class PSPProjectsOverviewPanel extends JPanel {
 
 		@Override
 		public int getRowCount() {
-			// TODO Auto-generated method stub
-			return Manager.Projects.get(ProjectID).getTimeLog().size();
+			// TODO Auto-generated method stub;
+			try {
+				return Manager.Projects.get(ProjectID).getTimeLog().size();
+			} catch (Exception e) {
+				return 0;
+			}
+
 		}
 
 		@Override
@@ -334,7 +511,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 			}
 		}
 	}
-	
+
 	protected class DefectTableModel extends AbstractTableModel {
 		protected String[] columnNames = new String[] { "Defect ID", "Date Found", "Type", "Phase Injected",
 				"Description", "Severity" };
@@ -354,7 +531,12 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		@Override
 		public int getRowCount() {
 			// TODO Auto-generated method stub
-			return Manager.Projects.get(ProjectID).getDefectLog().size();
+			try {
+				return Manager.Projects.get(ProjectID).getDefectLog().size();
+			} catch (Exception e) {
+				return 0;
+			}
+
 		}
 
 		@Override

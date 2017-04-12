@@ -21,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.io.IOException;
 import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
@@ -34,7 +35,7 @@ import javax.swing.SpringLayout;
 public class PSPNewDefectDialog extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-	PSPProjectManager Manager = new PSPProjectManager();
+	PSPProjectManager Manager;
 	private static int count = 0;
 	private JTextField textField;
 	private JTextField txtPlaceForTime;
@@ -47,23 +48,16 @@ public class PSPNewDefectDialog extends JDialog {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		
-		int ID;
-		Date dateFound;
-		PSPDefectType defectType;
-		PSPProjectPhase phaseInjected;
-		PSPProjectPhase phaseRemoved;
-		Time lengthFixing;
-		String description;
-		
-		try {
-			PSPNewDefectDialog dialog = new PSPNewDefectDialog();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public static void NewDialog() throws IOException {
+		// TODO Auto-generated method stub
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				PSPNewDefectDialog nd = new PSPNewDefectDialog();
+				nd.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+				nd.setAlwaysOnTop(true);
+				nd.setVisible(true);
+			}
+		});
 	}
 
 	/**

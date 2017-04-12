@@ -39,7 +39,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 
 @SuppressWarnings("serial")
-public class PSPProjectsPanel extends JPanel {
+public class ZZZZPSPProjectsPanel extends JPanel {
 	private JTable table;
 
 	public static void main(String[] args) throws IOException {
@@ -58,7 +58,7 @@ public class PSPProjectsPanel extends JPanel {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// Create and set up the content pane.
-		PSPProjectsPanel newContentPane = new PSPProjectsPanel();
+		ZZZZPSPProjectsPanel newContentPane = new ZZZZPSPProjectsPanel();
 		newContentPane.setOpaque(true); // content panes must be opaque
 		frame.setContentPane(newContentPane);
 
@@ -70,7 +70,7 @@ public class PSPProjectsPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public PSPProjectsPanel() {
+	public ZZZZPSPProjectsPanel() {
 		tableData data = new tableData();
 		
 		setBorder(null);
@@ -115,7 +115,7 @@ public class PSPProjectsPanel extends JPanel {
 							}
 						});
 						btnEditProject.setIcon(
-								new ImageIcon(PSPProjectsPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/export.png")));
+								new ImageIcon(ZZZZPSPProjectsPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/export.png")));
 						btnEditProject.setSize(new Dimension(25, 25));
 						btnEditProject.setPreferredSize(new Dimension(25, 25));
 						btnEditProject.setMinimumSize(new Dimension(25, 25));
@@ -145,7 +145,7 @@ public class PSPProjectsPanel extends JPanel {
 									}
 								});
 								btnNewProject.setIcon(new ImageIcon(
-										PSPProjectsPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/newproject.png")));
+										ZZZZPSPProjectsPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/newproject.png")));
 								btnNewProject.setHorizontalAlignment(SwingConstants.LEFT);
 								
 										JButton btnDeleteproject = new JButton("");
@@ -166,7 +166,7 @@ public class PSPProjectsPanel extends JPanel {
 										btnDeleteproject.setPreferredSize(new Dimension(25, 25));
 										btnDeleteproject.setVerticalAlignment(SwingConstants.TOP);
 										btnDeleteproject.setIcon(new ImageIcon(
-												PSPProjectsPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editdelete.png")));
+												ZZZZPSPProjectsPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editdelete.png")));
 										btnDeleteproject.setHorizontalAlignment(SwingConstants.LEFT);
 
 		

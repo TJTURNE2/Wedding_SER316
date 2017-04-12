@@ -13,24 +13,21 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class PSPProject implements java.io.Serializable {
 
-	
-	private static int counter = 0;		
+	private static int counter = 0;
 	private int ID;
 	private String ProjectName;
 	private String Description;
 	private PSPType PSP;
 	private PSPProjectPhase Phase;
-	
+
 	protected PSPPlanSummary Summary;
 	protected List<PSPProjectTimeLogEntry> TimeLog;
 	protected List<PSPProjectDefectEntry> DefectLog;
 	protected List<PSPProjectRequirement> Requirements;
 
-	
-	public PSPProject(){
-		
+	public PSPProject() {
 		ID = counter;
-		counter = counter +1;
+		counter = counter + 1;
 		PSP = PSPType.PSP0;
 		Phase = PSPProjectPhase.PLANNING;
 		ProjectName = "Project " + ID;
@@ -39,9 +36,9 @@ public class PSPProject implements java.io.Serializable {
 		TimeLog = new ArrayList<PSPProjectTimeLogEntry>();
 		DefectLog = new ArrayList<PSPProjectDefectEntry>();
 		Requirements = new ArrayList<PSPProjectRequirement>();
-		
+
 	}
-	
+
 	/**
 	 * @return the counter
 	 */
@@ -50,68 +47,83 @@ public class PSPProject implements java.io.Serializable {
 	}
 
 	/**
-	 * @param counter the counter to set
+	 * @param counter
+	 *            the counter to set
 	 */
 	public static void setCounter(int counter) {
 		PSPProject.counter = counter;
 	}
-	
+
 	/**
 	 * @return the iD
 	 */
 	public int getID() {
 		return ID;
 	}
+
 	/**
 	 * @return the projectName
 	 */
 	public String getProjectName() {
 		return ProjectName;
 	}
+
 	/**
 	 * @return the description
 	 */
 	public String getDescription() {
 		return Description;
 	}
+
 	/**
 	 * @return the pSP
 	 */
 	public PSPType getPSP() {
 		return PSP;
 	}
+
 	/**
 	 * @return the phase
 	 */
 	public PSPProjectPhase getPhase() {
 		return Phase;
 	}
+
 	/**
-	 * @param iD the iD to set
+	 * @param iD
+	 *            the iD to set
 	 */
 	public void setID(int iD) {
 		ID = iD;
 	}
+
 	/**
-	 * @param projectName the projectName to set
+	 * @param projectName
+	 *            the projectName to set
 	 */
 	public void setProjectName(String projectName) {
 		ProjectName = projectName;
 	}
+
 	/**
-	 * @param description the description to set
+	 * @param description
+	 *            the description to set
 	 */
 	public void setDescription(String description) {
 		Description = description;
 	}
+
 	/**
-	 * @param pSP the pSP to set
+	 * @param pSP
+	 *            the pSP to set
 	 */
 	public void setPSP(PSPType pSP) {
 		PSP = pSP;
 	}
+
 	/**
-	 * @param phase the phase to set
+	 * @param phase
+	 *            the phase to set
 	 */
 	public void setPhase(PSPProjectPhase phase) {
 		Phase = phase;
@@ -125,12 +137,12 @@ public class PSPProject implements java.io.Serializable {
 	}
 
 	/**
-	 * @param summary the summary to set
+	 * @param summary
+	 *            the summary to set
 	 */
 	public void setSummary(PSPPlanSummary summary) {
 		Summary = summary;
 	}
-
 
 	/**
 	 * @return the timeLog
@@ -140,14 +152,20 @@ public class PSPProject implements java.io.Serializable {
 	}
 
 	/**
-	 * @param timeLog the timeLog to set
+	 * @param timeLog
+	 *            the timeLog to set
 	 */
 	public void setTimeLog(List<PSPProjectTimeLogEntry> timeLog) {
 		TimeLog = timeLog;
 	}
-	
-	public void addTimeEntry(PSPProjectTimeLogEntry entry){
-		
+
+	public void addTimeEntry(PSPProjectTimeLogEntry entry) {
+
+		for (PSPProjectTimeLogEntry E : TimeLog) {
+			if (entry.getID() <= E.getID()) {
+				entry.setID(E.getID() + 1);
+			}
+		}
 		TimeLog.add(entry);
 	}
 
@@ -159,13 +177,20 @@ public class PSPProject implements java.io.Serializable {
 	}
 
 	/**
-	 * @param defectLog the defectLog to set
+	 * @param defectLog
+	 *            the defectLog to set
 	 */
 	public void setDefectLog(List<PSPProjectDefectEntry> defectLog) {
 		DefectLog = defectLog;
 	}
-	
-	public void addDefectEntry(PSPProjectDefectEntry entry){
+
+	public void addDefectEntry(PSPProjectDefectEntry entry) {
+		
+		for (PSPProjectDefectEntry E : DefectLog) {
+			if (entry.getID() <= E.getID()) {
+				entry.setID(E.getID() + 1);
+			}
+		}
 		DefectLog.add(entry);
 	}
 
@@ -177,35 +202,39 @@ public class PSPProject implements java.io.Serializable {
 	}
 
 	/**
-	 * @param requirements the requirements to set
+	 * @param requirements
+	 *            the requirements to set
 	 */
 	public void setRequirements(List<PSPProjectRequirement> requirements) {
 		Requirements = requirements;
 	}
-	
-	public void addRequirementEntry(PSPProjectRequirement entry){
-		Requirements.add(entry);
-	}
 
+	public void addRequirementEntry(PSPProjectRequirement entry) {
+		for (PSPProjectRequirement E : Requirements) {
+			if (entry.getID() <= E.getID()) {
+				entry.setID(E.getID() + 1);
+			}
+		}
+		Requirements.add(entry);
+
+	}
 
 	/**
 	 * Class for PSP Type
 	 */
-	public enum PSPType implements java.io.Serializable{
+	public enum PSPType implements java.io.Serializable {
 		PSP0("PSP0"), PSP01("PSP0.1"), PSP1("PSP1"), PSP11("PSP1.1"), PSP2("PSP2"), PSP21("PSP2.1"), PSP3("PSP3");
 
 		private String name;
-		
-		PSPType(String name){
+
+		PSPType(String name) {
 			this.name = name;
 		}
-		
+
 		@Override
-		public String toString(){
+		public String toString() {
 			return name;
 		}
 	}
-	
-	
-	
+
 }

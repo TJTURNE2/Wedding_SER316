@@ -6,26 +6,28 @@ package net.sf.memoranda.psp;
 @SuppressWarnings("serial")
 public class PSPProjectRequirement implements java.io.Serializable{
 	
-    private static int count =0;
 	private int ID;
 	private PSPRequirementType RequirmentType;
 	private String Description;
 	private int Priority;
+	private boolean Completed;
 
-	protected PSPProjectRequirement() {
-		count +=1;
-		ID = count;
+	public PSPProjectRequirement() {
+
+		ID = 0;
 		RequirmentType = PSPRequirementType.FUNCTIONAL;
 		Description = "None";
 		Priority = 1;
+		Completed = false;
 	}
 	
-	public PSPProjectRequirement(int iD, PSPRequirementType requirmentType, String description, int priority) {
+	public PSPProjectRequirement(int iD, PSPRequirementType requirmentType, String description, int priority, boolean complete) {
 		super();
 		ID = iD;
 		RequirmentType = requirmentType;
 		Description = description;
 		Priority = priority;
+		Completed = complete;
 	}
 
 	public int getID() {
@@ -53,20 +55,6 @@ public class PSPProjectRequirement implements java.io.Serializable{
 	}
 
 	/**
-	 * @return the count
-	 */
-	public static int getCount() {
-		return count;
-	}
-
-	/**
-	 * @param count the count to set
-	 */
-	public static void setCount(int count) {
-		PSPProjectRequirement.count = count;
-	}
-
-	/**
 	 * @return the priority
 	 */
 	public int getPriority() {
@@ -78,6 +66,20 @@ public class PSPProjectRequirement implements java.io.Serializable{
 	 */
 	public void setPriority(int priority) {
 		Priority = priority;
+	}
+
+	/**
+	 * @return the completed
+	 */
+	public boolean isCompleted() {
+		return Completed;
+	}
+
+	/**
+	 * @param completed the completed to set
+	 */
+	public void setCompleted(boolean completed) {
+		Completed = completed;
 	}
 
 	public enum PSPRequirementType implements java.io.Serializable{
