@@ -31,8 +31,8 @@ public class DefectLog {
 		DATA("Data"),						// Structure, content
 		FUNCTION("Function"),				// Logic, pointers, loops, recursion, computation, function defects
 		SYSTEM("System"),					// Configuration, timing, memory
-		ENVIRONMENT("Environment");		// Design, compile, test, or other support system problems
-			// EDIT #51 /\ found error: "Encvironment" -> "Environment"
+		ENVIRONMENT("Encvironment");		// Design, compile, test, or other support system problems
+
 		private String _value;
 
 		private Type(String value) {
@@ -44,82 +44,29 @@ public class DefectLog {
 			return _value;
 		}
 	};
-	
-	private enum Severity {
-		LOW("Low"), // Low severity
-		MAJOR("Major"), // Major severity
-		BLOCKER("Blocker"); // Blocker severity
-		
-		private String _value;
-		
-		private Severity(String value) {
-			_value = value;
-		}
-		
-		@Override
-		public String toString() {
-			return _value;
-		}
-	};
 
-	private enum Phase {
-		DEFAULT("--"), // Default
-		PLAN("Plan"), // Planning phase
-		DESIGN("Design"), // Design phase
-		CODE("Code"), // Coding phase
-		COMPILE("Compile"), // Compile Phase
-		TEST("Test"),  		// Test phase
-		POSTMORTEM("Post Mortem");
-		
-		private String _value;
-		
-		private Phase(String value) {
-			_value = value;
-		}
-		
-		@Override
-		public String toString() {
-			return _value;
-		}
-	};
 
 	private String _date;
 	private int _defectNum;
 	private Type _type;
-	private Phase _inject;
-	private Phase _remove;
+	private String _inject;
+	private String _remove;
 	private int _fixTime;
 	private int _refNum;
-	private String _description;
 	private boolean _isActive;
-	private static final String _DELIMITER = "*^*";
-	private Severity _severity;
-	
-	public DefectLog() {
-		_date = null;
-		_defectNum = 0;
-		_type = Type.valueOf("None");
-		_inject = Phase.valueOf("DEFAULT");
-		_remove = Phase.valueOf("DEFAULT");
-		_severity = Severity.valueOf("LOW");
-		_fixTime = 0;
-		_refNum = 0;
-		_description = null;
-		_isActive = false;
-	}
+	private String _description;
 
-	public DefectLog(String date, int defectNum, String type, String inject, String remove, String severity,
-			int fixTime, int refNum, String description, boolean isActive) {
+	public DefectLog(String date, int defectNum, String type, String inject, String remove,
+			int fixTime, int refNum, boolean isActive, String description) {
 		_date = date;
 		_defectNum = defectNum;
 		_type = Type.valueOf(type.toUpperCase(Locale.ENGLISH));
-		_inject = Phase.valueOf(inject);
-		_remove = Phase.valueOf(remove);
-		_severity = Severity.valueOf(severity);
+		_inject = inject;
+		_remove = remove;
 		_fixTime = fixTime;
 		_refNum = refNum;
-		_description = description;
 		_isActive = isActive;
+		_description = description;
 	}
 
 	public String getDate() {
@@ -147,29 +94,21 @@ public class DefectLog {
 	}
 
 	public String getInject() {
-		return _inject.toString();
+		return _inject;
 	}
 
 	public void setInject(String inject) {
-		_inject = Phase.valueOf(inject.toUpperCase(Locale.ENGLISH));;
+		_inject = inject;
 	}
 
 	public String getRemove() {
-		return _remove.toString();
+		return _remove;
 	}
 
 	public void setRemove(String remove) {
-		_remove = Phase.valueOf(remove.toUpperCase(Locale.ENGLISH));
+		_remove = remove;
 	}
 
-	public String getSeverity() {
-		return _severity.toString();
-	}
-	
-	public void setSeverity(String severity) {
-		_severity = Severity.valueOf(severity.toUpperCase(Locale.ENGLISH));
-	}
-	
 	public int getFixTime() {
 		return _fixTime;
 	}
@@ -218,7 +157,7 @@ public class DefectLog {
 	*/
 	public String[] getValuesArray() {
 		String[] array = {_date, String.valueOf(_defectNum), _type.toString(),
-				_inject.toString(), _remove.toString(), _severity.toString(), String.valueOf(_fixTime), String.valueOf(_refNum),
+				_inject, _remove, String.valueOf(_fixTime), String.valueOf(_refNum),
 				_description, String.valueOf(_isActive)};
 		return array;
 	}
@@ -234,14 +173,8 @@ public class DefectLog {
 	 * cannot be used since the description may contain spaces.
 	*/
 	public String toFile() {
-		return ("date" + (_date.equals("") ? "null" : _date) +
-				_DELIMITER + "defectNum" + _DELIMITER + (_defectNum < 1 ? "null" : _defectNum) +
-				_DELIMITER + "type" + _DELIMITER + _type +
-				_DELIMITER + "inject" + _DELIMITER + (_inject.equals("") ? "null" : _inject) +
-				_DELIMITER + "remove" + _DELIMITER + (_remove.equals("") ? "null" : _remove) +
-				_DELIMITER + "fixTime" + _DELIMITER + _fixTime +
-				_DELIMITER + "refNum" + _DELIMITER + _refNum +
-				_DELIMITER + "description" + _DELIMITER + (_description.equals("") ? "null" : _description) +
-				_DELIMITER + "isActive" + _DELIMITER + _isActive);
+		return (_date + " " + _defectNum + " " + _type + " " + _inject + " " +
+				_remove + " " + _fixTime + " " + _refNum + " " + _isActive + " " +
+				_description);
 	}	
 }
