@@ -27,6 +27,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
@@ -34,6 +35,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 
 	private PSPProjectManager Manager = new PSPProjectManager();
 	private static int ProjectID = -1;
+	private static int requirementID;
 	private JTable projectsTable;
 	private JTable requirementTable;
 	private JTable designTable;
@@ -115,7 +117,10 @@ public class PSPProjectsOverviewPanel extends JPanel {
 				projectsTabbedPane.setEnabledAt(3, !isEnabled());
 				projectsTabbedPane.setEnabledAt(2, !isEnabled());
 				projectsTabbedPane.setEnabledAt(1, !isEnabled());
+				ProjectID = (int) projectsTable.getValueAt(projectsTable.getSelectedRow(), 0);
+				Manager.deleteProject(ProjectID);
 			}
+			
 		});
 		btnDeleteProject.setBorder(null);
 		btnDeleteProject.setMaximumSize(new Dimension(25, 25));
@@ -224,6 +229,18 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		requirementToolBar.add(btnEditRequirement);
 
 		JButton btnDeleteRequirement = new JButton("");
+		btnDeleteRequirement.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				requirementID = (int) requirementTable.getValueAt(requirementTable.getSelectedRow(), 0);
+				Manager.getProject(ProjectID).removeRequirement(requirementID);
+				try {
+					Manager.saveProjects();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		btnDeleteRequirement.setMaximumSize(new Dimension(25, 25));
 		btnDeleteRequirement.setIcon(new ImageIcon(
 				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editdelete.png")));
@@ -283,6 +300,21 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		timeLogToolBar.add(btnEditTimeEntry);
 
 		JButton btnDeleteTimeEntry = new JButton("");
+		btnDeleteTimeEntry.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				int timeID = (int) timeLogTable.getValueAt(timeLogTable.getSelectedRow(), 0);
+				Manager.getProject(ProjectID).removeDefectEntry(timeID);
+				timeLogTable.clearSelection();
+				try {
+					Manager.saveProjects();
+					timeLogTable.repaint();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		btnDeleteTimeEntry.setBorder(null);
 		btnDeleteTimeEntry.setMaximumSize(new Dimension(25, 25));
 		btnDeleteTimeEntry.setIcon(new ImageIcon(
@@ -339,6 +371,20 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		defectLogToolBar.add(btnEditDefect);
 
 		JButton btnDeleteDefect = new JButton("");
+		btnDeleteDefect.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int defectID = (int) defectLogTable.getValueAt(defectLogTable.getSelectedRow(), 0);
+				Manager.getProject(ProjectID).removeDefectEntry(defectID);
+				try {
+					Manager.saveProjects();
+					defectLogTable.repaint();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
 		btnDeleteDefect.setMaximumSize(new Dimension(25, 25));
 		btnDeleteDefect.setBorder(null);
 		btnDeleteDefect.setIcon(new ImageIcon(
@@ -365,20 +411,6 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		postMortemPanel.add(postMortemScrollPane);
 		
 
-	}
-
-	public void resetPanels() {
-		if (ProjectID <= 0) {
-			projectsTabbedPane.setEnabledAt(0, isEnabled());
-			projectsTabbedPane.setEnabledAt(1, !isEnabled());
-			projectsTabbedPane.setEnabledAt(2, !isEnabled());
-			projectsTabbedPane.setEnabledAt(3, !isEnabled());
-			projectsTabbedPane.setEnabledAt(4, !isEnabled());
-			projectsTabbedPane.setEnabledAt(5, !isEnabled());
-			projectsTabbedPane.setEnabledAt(6, !isEnabled());
-			projectsTabbedPane.setEnabledAt(7, !isEnabled());
-		}
-		
 	}
 
 	protected class ProjectTableModel extends AbstractTableModel {

@@ -168,6 +168,13 @@ public class PSPProject implements java.io.Serializable {
 		}
 		TimeLog.add(entry);
 	}
+	public void removeTimeEntry(int ID){
+		for (PSPProjectTimeLogEntry E : TimeLog) {
+			if (E.getID() == ID) {
+				TimeLog.remove(E);
+			}
+		}
+	}
 
 	/**
 	 * @return the defectLog
@@ -192,6 +199,13 @@ public class PSPProject implements java.io.Serializable {
 			}
 		}
 		DefectLog.add(entry);
+	}
+	public void removeDefectEntry(int ID){
+		for (PSPProjectDefectEntry E : DefectLog) {
+			if (E.getID() == ID) {
+				DefectLog.remove(E);
+			}
+		}
 	}
 
 	/**
@@ -219,6 +233,15 @@ public class PSPProject implements java.io.Serializable {
 
 	}
 
+	public void removeRequirement(int ID){
+		for (PSPProjectRequirement E : Requirements) {
+			if (E.getID() == ID) {
+				Requirements.remove(E);
+			}
+		}
+	}
+	
+	
 	/**
 	 * Class for PSP Type
 	 */
