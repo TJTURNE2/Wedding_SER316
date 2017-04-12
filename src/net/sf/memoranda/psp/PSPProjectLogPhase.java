@@ -12,7 +12,7 @@ public class PSPProjectLogPhase implements java.io.Serializable{
 	private PSPLogEntry Compile;
 	private PSPLogEntry Testing;
 	private PSPLogEntry Postmortem;
-	private int totalAcutal, totalTodate;
+	private int totalPlan, totalAcutal, totalTodate;
 
 	public PSPProjectLogPhase() {
 		Planning = new PSPLogEntry();
@@ -23,6 +23,7 @@ public class PSPProjectLogPhase implements java.io.Serializable{
 		Postmortem = new PSPLogEntry();
 		totalAcutal = 0;
 		totalTodate = 0;
+		totalPlan = 0;
 	}
 	
 	/**
@@ -167,6 +168,20 @@ public class PSPProjectLogPhase implements java.io.Serializable{
 	 */
 	public void setTotalTodate(int totalTodate) {
 		this.totalTodate = totalTodate;
+	}
+
+	/**
+	 * @return the totalPlan
+	 */
+	public int getTotalPlan() {
+		return totalPlan;
+	}
+
+	/**
+	 * @param totalPlan the totalPlan to set
+	 */
+	public void setTotalPlan(int totalPlan) {
+		this.totalPlan = totalPlan;
 	}
 
 }

@@ -8,9 +8,9 @@ package net.sf.memoranda.psp;
  *
  */
 //class to hold info for Phases
+	@SuppressWarnings("serial")
 	public class PSPLogEntry implements java.io.Serializable{
 
-	private static final long serialVersionUID = 1L;
 		private int planSize;
 		private int actualSize;
 		private int toDateSize;
