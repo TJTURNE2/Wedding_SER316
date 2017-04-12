@@ -12,21 +12,31 @@ import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
 import net.sf.memoranda.CurrentProject;
+import net.sf.memoranda.DefectLog;
+import net.sf.memoranda.DefectLogList;
 import net.sf.memoranda.TimeLog;
 import net.sf.memoranda.TimeLogList;
-import net.sf.memoranda.util.Util;
 
 public class TasksControlPanel extends JPanel {
-	BorderLayout borderLayout = new BorderLayout();
+
+	JTabbedPane tabbedPane = new JTabbedPane();
+	JPanel timePane = new JPanel(new BorderLayout());
+	JPanel defectPane = new JPanel(new BorderLayout());
+
 	JButton newTime = new JButton("Add New Time");
 
 	static TimeLogList timeLogList = null;
-	static JList logs = null;
-	static JScrollPane scrollPane = null;
+	static JList<TimeLog> timeLogs = null;
+	static JScrollPane timeScrollPane = new JScrollPane();
+
+	static DefectLogList defectLogList = null;
+	static JList<DefectLog> defectLogs = null;
+	static JScrollPane defectScrollPane = new JScrollPane();
 
 	public TasksControlPanel() {
 		newTime.addActionListener(new ActionListener() {
@@ -37,32 +47,50 @@ public class TasksControlPanel extends JPanel {
 
 		buildGUI();
 	}
-	
+
 	public void buildGUI() {
-		this.setLayout(borderLayout);
-		
+		this.setLayout(new BorderLayout());
+
+		tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
+
 		timeLogList = CurrentProject.getTimeLogList();
-		logs = new JList(timeLogList.getList());
-		scrollPane = new JScrollPane(logs);
+		timeLogs = new JList<TimeLog>(timeLogList.getList());
+		timeScrollPane.getViewport().setView(timeLogs);
 
-		logs.setFont(new java.awt.Font("Dialog", 0, 11));
-		logs.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		logs.addMouseListener(new LogEditListener());
+		timeLogs.setFont(new java.awt.Font("Dialog", 0, 11));
+		timeLogs.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		timeLogs.addMouseListener(new LogEditListener());
 
-		this.add(newTime, BorderLayout.PAGE_START);
-		this.add(scrollPane, BorderLayout.CENTER);
+		timePane.add(newTime, BorderLayout.PAGE_START);
+		timePane.add(timeScrollPane, BorderLayout.CENTER);
+
+		defectLogList = CurrentProject.getDefectLogList();
+		defectLogs = new JList<DefectLog>(defectLogList.getList());
+		defectScrollPane.getViewport().setView(defectLogs);
+
+		defectLogs.setFont(new java.awt.Font("Dialog", 0, 11));
+		defectLogs.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+		defectPane.add(defectScrollPane, BorderLayout.CENTER);
+
+		tabbedPane.setFont(new java.awt.Font("Dialog", 1, 10));
+		tabbedPane.add(timePane, "Time Logs");
+		tabbedPane.add(defectPane, "Defect Logs");
+
+		this.add(tabbedPane, BorderLayout.CENTER);
 	}
-	
+
 	public void refresh() {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				removeAll();
 				revalidate();
 				buildGUI();
+				repaint();
 			}
 		});
 	}
-	
+
 	TimeLogDialog createNewTimeLogDialog(String title, String[] initValues) {
 		TimeLogDialog dialog;
 
@@ -100,12 +128,12 @@ public class TasksControlPanel extends JPanel {
 
 			timeLogList.addLog(newLog);
 
-			logs.updateUI();
+			timeLogs.updateUI();
 		}
 	}
 
 	private void editExistingTimeLog() {
-		TimeLog log = timeLogList.getLog(logs.getSelectedIndex());
+		TimeLog log = timeLogList.getLog(timeLogs.getSelectedIndex());
 		String[] initValues = log.getValuesArray();
 
 		TimeLogDialog dialog = createNewTimeLogDialog("Edit Time Log", initValues);
@@ -118,8 +146,7 @@ public class TasksControlPanel extends JPanel {
 			log.setPhase(dialog.phase.getText());
 			log.setComments(dialog.comments.getText());
 
-			logs.updateUI();
+			timeLogs.updateUI();
 		}
 	}
-
 }

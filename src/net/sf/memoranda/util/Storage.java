@@ -8,6 +8,7 @@
  */
 package net.sf.memoranda.util;
 
+import net.sf.memoranda.DefectLogList;
 import net.sf.memoranda.Note;
 import net.sf.memoranda.NoteList;
 import net.sf.memoranda.Project;
@@ -25,7 +26,10 @@ public interface Storage {
     
 	TimeLogList openTimeLogList(Project _project);
 	void storeTimeLogList(TimeLogList tll, Project prj);
-    
+
+	DefectLogList openDefectLogList(Project _project);
+	void storeDefectLogList(DefectLogList _defectLogList, Project _project);
+
     NoteList openNoteList(Project prj);
     void storeNoteList(NoteList nl, Project prj);
     

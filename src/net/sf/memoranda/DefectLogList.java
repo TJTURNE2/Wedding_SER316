@@ -37,7 +37,7 @@ public class DefectLogList {
 			Scanner fileScan = new Scanner(defectListDoc);
 
 			while (fileScan.hasNextLine()) {
-				String temp, date = CurrentDate.get().toString(), type = "None",  inject = "--", remove = "--", description = "";
+				String temp, date = CurrentDate.get().toString(), type = "None",  inject = "Default", remove = "Default", severity = "Low", description = "";
 				int defectNum = 0, fixTime = 0, refNum = 0;
 				boolean isActive = false;
 
@@ -59,6 +59,9 @@ public class DefectLogList {
 					remove = lineScan.next();
 				}
 				if (lineScan.hasNext()) {
+					severity = lineScan.next();
+				}
+				if (lineScan.hasNext()) {
 					temp = lineScan.next();
 					fixTime = Integer.valueOf(temp);
 				}
@@ -71,10 +74,11 @@ public class DefectLogList {
 					isActive = Boolean.valueOf(temp);
 				}
 				if (lineScan.hasNext()) {
+					lineScan.skip(" ");
 					description = lineScan.nextLine();
 				}
 
-				_defectLogList.addElement(new DefectLog(date, defectNum, type, inject, remove, fixTime, refNum, isActive, description));
+				_defectLogList.addElement(new DefectLog(date, defectNum, type, inject, remove, severity, fixTime, refNum, isActive, description));
 
 				lineScan.close();
 			}
