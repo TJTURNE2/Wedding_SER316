@@ -171,9 +171,9 @@ public class PSPProject implements java.io.Serializable {
 		TimeLog.add(entry);
 	}
 	public void removeTimeEntry(int ID){
-		for (PSPProjectTimeLogEntry E : TimeLog) {
-			if (E.getID() == ID) {
-				TimeLog.remove(E);
+		for (int i = 0; i < TimeLog.size(); i++) {
+			if (TimeLog.get(i).getID() == ID) {
+				TimeLog.remove(i);
 			}
 		}
 	}
@@ -203,9 +203,9 @@ public class PSPProject implements java.io.Serializable {
 		DefectLog.add(entry);
 	}
 	public void removeDefectEntry(int ID){
-		for (PSPProjectDefectEntry E : DefectLog) {
-			if (E.getID() == ID) {
-				DefectLog.remove(E);
+		for (int i = 0; i < DefectLog.size(); i++) {
+			if (DefectLog.get(i).getID() == ID) {
+				DefectLog.remove(i);
 			}
 		}
 	}
@@ -236,9 +236,15 @@ public class PSPProject implements java.io.Serializable {
 	}
 
 	public void removeRequirement(int ID){
-		for (PSPProjectRequirement E : Requirements) {
-			if (E.getID() == ID) {
-				Requirements.remove(E);
+//		for (PSPProjectRequirement E : Requirements) {
+//			if (E.getID() == ID) {
+//				Requirements.remove(E);
+//			}
+//		}
+//		
+		for (int i = 0; i < Requirements.size(); i++) {
+			if (Requirements.get(i).getID() == ID) {
+				Requirements.remove(i);
 			}
 		}
 	}

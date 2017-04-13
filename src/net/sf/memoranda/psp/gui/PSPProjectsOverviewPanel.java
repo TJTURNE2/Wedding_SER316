@@ -44,20 +44,23 @@ import javax.swing.SpringLayout;
 @SuppressWarnings("serial")
 public class PSPProjectsOverviewPanel extends JPanel {
 
-	private PSPProjectManager Manager = new PSPProjectManager();
+	private static PSPProjectManager Manager = new PSPProjectManager();
 	private static int ProjectID = -1;
 	private static int requirementID;
-	private JTable projectsTable;
-	private JTable requirementTable;
-	private JTable designTable;
-	private JTable timeLogTable;
-	private JTable defectLogTable;
-	private JTable notesTable;
-	private ProjectTableModel pModel;
-	private DefectTableModel dModel;
-	private TimeLogTableModel tModel;
-	private RequirementTableModel rModel;
-	private NoteTableModel nModel;
+	private static int defectID;
+	private static int timeID;
+	private static int noteID;
+	private static JTable projectsTable;
+	private static JTable requirementTable;
+	private static JTable designTable;
+	private static JTable timeLogTable;
+	private static JTable defectLogTable;
+	private static JTable notesTable;
+	private static ProjectTableModel pModel;
+	private static DefectTableModel dModel;
+	private static TimeLogTableModel tModel;
+	private static RequirementTableModel rModel;
+	private static NoteTableModel nModel;
 	private PSPNewProjectDialog newProject;
 	private PSPNewTimeEntryDialog newTimeLog;
 	private PSPNewRequirementDialog newRequirement;
@@ -137,18 +140,18 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		projectsToolBar.add(btnEditProject);
 
 		JButton btnDeleteProject = new JButton("");
+		btnDeleteProject.setMultiClickThreshhold(200);
 		btnDeleteProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				projectsTabbedPane.setEnabledAt(8, !isEnabled());
-				projectsTabbedPane.setEnabledAt(7, !isEnabled());
-				projectsTabbedPane.setEnabledAt(6, !isEnabled());
-				projectsTabbedPane.setEnabledAt(5, !isEnabled());
-				projectsTabbedPane.setEnabledAt(4, !isEnabled());
-				projectsTabbedPane.setEnabledAt(3, !isEnabled());
-				projectsTabbedPane.setEnabledAt(2, !isEnabled());
-				projectsTabbedPane.setEnabledAt(1, !isEnabled());
+				resetPanels();
 				ProjectID = (int) projectsTable.getValueAt(projectsTable.getSelectedRow(), 0);
+				//ProjectID = (int) projectsTable.getValueAt(projectsTable.getSelectedRow(), 0);
+				if(ProjectID > -1){
+				System.out.println("This is working kinda - delete "+ ProjectID);
 				Manager.deleteProject(ProjectID);
+				pModel.fireTableDataChanged();
+				}
+				ProjectID = -1;
 			}
 			
 		});
@@ -164,37 +167,9 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		projectsTable.setBorder(null);
 		projectsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
-
-				projectsTabbedPane.setEnabledAt(8, !isEnabled());
-				projectsTabbedPane.setEnabledAt(7, !isEnabled());
-				projectsTabbedPane.setEnabledAt(6, !isEnabled());
-				projectsTabbedPane.setEnabledAt(5, !isEnabled());
-				projectsTabbedPane.setEnabledAt(4, !isEnabled());
-				projectsTabbedPane.setEnabledAt(3, !isEnabled());
-				projectsTabbedPane.setEnabledAt(2, !isEnabled());
-				projectsTabbedPane.setEnabledAt(1, !isEnabled());
-				
+				btnDeleteProject.setEnabled(true);
 				ProjectID = (int) projectsTable.getValueAt(projectsTable.getSelectedRow(), 0);
-				
-				switch((PSPProjectPhase)Manager.getProject(ProjectID).getPhase()){
-				case POSTMORTEM:
-					projectsTabbedPane.setEnabledAt(8, isEnabled());
-				case TEST:
-				case COMPILE:
-				case CODEREVIEW:
-				case CODE:
-					projectsTabbedPane.setEnabledAt(6, isEnabled());
-				case DESIGNREVIEW:
-					projectsTabbedPane.setEnabledAt(7, isEnabled());
-				case DESIGN:
-					projectsTabbedPane.setEnabledAt(5, isEnabled());
-					projectsTabbedPane.setEnabledAt(4, isEnabled());
-					projectsTabbedPane.setEnabledAt(3, isEnabled());
-				case PLANNING:
-					projectsTabbedPane.setEnabledAt(2, isEnabled());
-					projectsTabbedPane.setEnabledAt(1, isEnabled());
-				}
-				
+				resetPanels();
 			}
 		});
 
@@ -1446,9 +1421,10 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		btnDeleteRequirement.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				requirementID = (int) requirementTable.getValueAt(requirementTable.getSelectedRow(), 0);
+				try {				
 				Manager.getProject(ProjectID).removeRequirement(requirementID);
-				try {
 					Manager.saveProjects();
+					rModel.fireTableDataChanged();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -1535,16 +1511,18 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		btnDeleteTimeEntry.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				int timeID = (int) timeLogTable.getValueAt(timeLogTable.getSelectedRow(), 0);
-				Manager.getProject(ProjectID).removeDefectEntry(timeID);
-				timeLogTable.clearSelection();
+				timeID = (int) timeLogTable.getValueAt(timeLogTable.getSelectedRow(), 0);
 				try {
-					Manager.saveProjects();
-					timeLogTable.repaint();
+				System.out.println("Deleting a time entry " +timeID);
+				Manager.getProject(ProjectID).removeTimeEntry(timeID);
+				Manager.saveProjects();
+				tModel.fireTableDataChanged();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				timeID = -1;
+				
 			}
 		});
 		btnDeleteTimeEntry.setBorder(null);
@@ -1588,6 +1566,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				newDefect = new PSPNewDefectDialog(ProjectID);
 				newDefect.setVisible(true);
+				newDefect.setAlwaysOnTop(true);
 			}
 		});
 		btnNewDefect.setMaximumSize(new Dimension(25, 25));
@@ -1606,15 +1585,18 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		JButton btnDeleteDefect = new JButton("");
 		btnDeleteDefect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int defectID = (int) defectLogTable.getValueAt(defectLogTable.getSelectedRow(), 0);
-				Manager.getProject(ProjectID).removeDefectEntry(defectID);
 				try {
-					Manager.saveProjects();
-					defectLogTable.repaint();
+				defectID = (int) defectLogTable.getValueAt(defectLogTable.getSelectedRow(), 0);
+				System.out.println("Try to remove a defect " + defectID);
+				Manager.getProject(ProjectID).removeDefectEntry(defectID);
+				Manager.saveProjects();
+				dModel.fireTableDataChanged();
+				//pModel.fireTableDataChanged();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				defectID = -1;
 				
 			}
 		});
@@ -1645,6 +1627,45 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		postMortemPanel.add(postMortemScrollPane);
 		
 
+	}
+	
+	public void resetPanels(){
+		//update tables?
+//		pModel.fireTableDataChanged();
+//		dModel.fireTableDataChanged();
+//		tModel.fireTableDataChanged();
+//		rModel.fireTableDataChanged();
+		Manager.updateProject();
+		//disable all
+		projectsTabbedPane.setEnabledAt(8, !isEnabled());
+		projectsTabbedPane.setEnabledAt(7, !isEnabled());
+		projectsTabbedPane.setEnabledAt(6, !isEnabled());
+		projectsTabbedPane.setEnabledAt(5, !isEnabled());
+		projectsTabbedPane.setEnabledAt(4, !isEnabled());
+		projectsTabbedPane.setEnabledAt(3, !isEnabled());
+		projectsTabbedPane.setEnabledAt(2, !isEnabled());
+		projectsTabbedPane.setEnabledAt(1, !isEnabled());
+		
+		//eneable panels based off phase
+		switch((PSPProjectPhase)Manager.getProject(ProjectID).getPhase()){
+		case POSTMORTEM:
+			projectsTabbedPane.setEnabledAt(8, isEnabled());
+		case TEST:
+		case COMPILE:
+		case CODEREVIEW:
+		case CODE:
+			projectsTabbedPane.setEnabledAt(6, isEnabled());
+		case DESIGNREVIEW:
+			projectsTabbedPane.setEnabledAt(7, isEnabled());
+		case DESIGN:
+			projectsTabbedPane.setEnabledAt(5, isEnabled());
+			projectsTabbedPane.setEnabledAt(4, isEnabled());
+			projectsTabbedPane.setEnabledAt(3, isEnabled());
+		case PLANNING:
+			projectsTabbedPane.setEnabledAt(2, isEnabled());
+			projectsTabbedPane.setEnabledAt(1, isEnabled());
+		}
+		
 	}
 
 	protected class ProjectTableModel extends AbstractTableModel {

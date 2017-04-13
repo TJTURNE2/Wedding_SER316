@@ -79,7 +79,10 @@ public class PSPProjectManager {
 	 */
 	public boolean deleteProject(int ID) {
 		try {
-			Projects.remove(Projects.get(ID));
+			for (PSPProject P : Projects) {
+				if (ID == P.getID())
+					Projects.remove(P);
+			}
 			this.saveProjects();
 		} catch (Exception e) {
 			return false;
@@ -103,23 +106,58 @@ public class PSPProjectManager {
 	/**
 	 * @return
 	 */
-	public boolean updateProject() {
-		return true;
+	public void updateProject() {
+		try {
+			saveProjects();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			// e1.printStackTrace();
+			System.out.println("Could not save projects");
+		}
+
+		File file = new File(fileName);
+		ObjectInputStream in = null;
+
+		try {
+
+			if (file.createNewFile())
+				System.out.println("file created");
+			if (file.exists()) {
+				System.out.println("Reading from file " + fileName + "...");
+				System.out.println(file.getAbsolutePath());
+				in = new ObjectInputStream(new FileInputStream(file));
+				Projects = (List<PSPProject>) in.readObject();
+				PSPProject.setCounter(Projects.size());
+			}
+		} catch (Exception e) {
+			// e.printStackTrace();
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (Throwable t) {
+					// t.printStackTrace();
+				}
+			}
+		}
+
 	}
 
 	/**
 	 * @return
 	 */
 	public PSPProject getProject(int ID) {
-		PSPProject Project = null;
-		for (PSPProject P : Projects) {
-			if (ID == P.getID())
-				Project = P;
-		}
-		if (Project == null) {
+		try {
+
+			for (PSPProject P : Projects) {
+				if (ID == P.getID())
+					return P;
+			}
+		} catch (Exception e) {
 			throw new IllegalArgumentException("There is no such project");
 		}
-		return Project;
+		return null;
+
 	}
 
 	/**
@@ -152,21 +190,20 @@ public class PSPProjectManager {
 		}
 	}
 
-	////////////////////////////////////////////Defects
-//	/**
-//	 * @return
-//	 */
-//	public boolean newDefect(int ID) {
-//		Projects.get(ID).DefectLog.add(new PSPProjectDefectEntry());
-//		return true;
-//	}
-//	
-//	/**
-//	 * @return
-//	 */
-//	public List<PSPProjectDefectEntry> getAllDefects(int ID) {
-//		return Projects.get(ID).DefectLog;
-//	}
-	
+	//////////////////////////////////////////// Defects
+	// /**
+	// * @return
+	// */
+	// public boolean newDefect(int ID) {
+	// Projects.get(ID).DefectLog.add(new PSPProjectDefectEntry());
+	// return true;
+	// }
+	//
+	// /**
+	// * @return
+	// */
+	// public List<PSPProjectDefectEntry> getAllDefects(int ID) {
+	// return Projects.get(ID).DefectLog;
+	// }
 
 }
