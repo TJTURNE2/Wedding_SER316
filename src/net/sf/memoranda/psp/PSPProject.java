@@ -24,6 +24,7 @@ public class PSPProject implements java.io.Serializable {
 	protected List<PSPProjectTimeLogEntry> TimeLog;
 	protected List<PSPProjectDefectEntry> DefectLog;
 	protected List<PSPProjectRequirement> Requirements;
+	protected List <PSPProjectDesignNote> Notes;
 
 	public PSPProject() {
 		ID = counter;
@@ -36,6 +37,7 @@ public class PSPProject implements java.io.Serializable {
 		TimeLog = new ArrayList<PSPProjectTimeLogEntry>();
 		DefectLog = new ArrayList<PSPProjectDefectEntry>();
 		Requirements = new ArrayList<PSPProjectRequirement>();
+		Notes = new ArrayList<PSPProjectDesignNote>();
 
 	}
 
@@ -237,6 +239,39 @@ public class PSPProject implements java.io.Serializable {
 		for (PSPProjectRequirement E : Requirements) {
 			if (E.getID() == ID) {
 				Requirements.remove(E);
+			}
+		}
+	}
+	
+	
+	/**
+	 * @return the notes
+	 */
+	public List<PSPProjectDesignNote> getNotes() {
+		return Notes;
+	}
+
+	/**
+	 * @param notes the notes to set
+	 */
+	public void setNotes(List<PSPProjectDesignNote> notes) {
+		Notes = notes;
+	}
+
+	public void addDesignNote(PSPProjectDesignNote entry) {
+		for (PSPProjectDesignNote N : Notes) {
+			if (entry.getID() <= N.getID()) {
+				entry.setID(N.getID() + 1);
+			}
+		}
+		Notes.add(entry);
+
+	}
+
+	public void removeDesignNote(int ID){
+		for (PSPProjectDesignNote N : Notes) {
+			if (N.getID() == ID) {
+				Notes.remove(N);
 			}
 		}
 	}

@@ -35,6 +35,11 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.SwingConstants;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerDateModel;
+import java.util.Date;
+import java.util.Calendar;
+import javax.swing.SpringLayout;
 
 @SuppressWarnings("serial")
 public class PSPProjectsOverviewPanel extends JPanel {
@@ -47,10 +52,12 @@ public class PSPProjectsOverviewPanel extends JPanel {
 	private JTable designTable;
 	private JTable timeLogTable;
 	private JTable defectLogTable;
+	private JTable notesTable;
 	private ProjectTableModel pModel;
 	private DefectTableModel dModel;
 	private TimeLogTableModel tModel;
 	private RequirementTableModel rModel;
+	private NoteTableModel nModel;
 	private PSPNewProjectDialog newProject;
 	private PSPNewTimeEntryDialog newTimeLog;
 	private PSPNewRequirementDialog newRequirement;
@@ -58,7 +65,8 @@ public class PSPProjectsOverviewPanel extends JPanel {
 	private JTabbedPane projectsTabbedPane;
 	private JTabbedPane summarytabbedPane;
 	private JPanel projectsPanel;
-	private JPanel summaryPanel;
+	private JPanel projectSummaryPanel;
+	private JPanel locPanel;
 	private JPanel designPanel;
 	private JPanel timeLogPanel;
 	private JPanel codePanel;
@@ -69,6 +77,11 @@ public class PSPProjectsOverviewPanel extends JPanel {
 	private JPanel phaseDefectsPanel;
 	private JPanel defectsRemovedPanel;
 	private JPanel programSummary;
+	private JPanel summaryPanel;
+	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
+	private JTextField textField_3;
 
 	/**
 	 * Create the panel.
@@ -82,6 +95,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		dModel = new DefectTableModel();
 		tModel = new TimeLogTableModel();
 		rModel = new RequirementTableModel();
+		nModel = new NoteTableModel();
 
 		setLayout(new BorderLayout(0, 0));
 		
@@ -125,6 +139,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		JButton btnDeleteProject = new JButton("");
 		btnDeleteProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				projectsTabbedPane.setEnabledAt(8, !isEnabled());
 				projectsTabbedPane.setEnabledAt(7, !isEnabled());
 				projectsTabbedPane.setEnabledAt(6, !isEnabled());
 				projectsTabbedPane.setEnabledAt(5, !isEnabled());
@@ -150,6 +165,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		projectsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
 
+				projectsTabbedPane.setEnabledAt(8, !isEnabled());
 				projectsTabbedPane.setEnabledAt(7, !isEnabled());
 				projectsTabbedPane.setEnabledAt(6, !isEnabled());
 				projectsTabbedPane.setEnabledAt(5, !isEnabled());
@@ -162,19 +178,20 @@ public class PSPProjectsOverviewPanel extends JPanel {
 				
 				switch((PSPProjectPhase)Manager.getProject(ProjectID).getPhase()){
 				case POSTMORTEM:
-					projectsTabbedPane.setEnabledAt(7, isEnabled());
+					projectsTabbedPane.setEnabledAt(8, isEnabled());
 				case TEST:
 				case COMPILE:
 				case CODEREVIEW:
 				case CODE:
-					projectsTabbedPane.setEnabledAt(5, isEnabled());
-				case DESIGNREVIEW:
 					projectsTabbedPane.setEnabledAt(6, isEnabled());
+				case DESIGNREVIEW:
+					projectsTabbedPane.setEnabledAt(7, isEnabled());
 				case DESIGN:
+					projectsTabbedPane.setEnabledAt(5, isEnabled());
 					projectsTabbedPane.setEnabledAt(4, isEnabled());
 					projectsTabbedPane.setEnabledAt(3, isEnabled());
-					projectsTabbedPane.setEnabledAt(2, isEnabled());
 				case PLANNING:
+					projectsTabbedPane.setEnabledAt(2, isEnabled());
 					projectsTabbedPane.setEnabledAt(1, isEnabled());
 				}
 				
@@ -188,13 +205,105 @@ public class PSPProjectsOverviewPanel extends JPanel {
 
 		summaryPanel = new JPanel();
 		projectsTabbedPane.addTab("Summary", null, summaryPanel, null);
-		projectsTabbedPane.setEnabledAt(1, false);
 		summaryPanel.setLayout(new BorderLayout(0, 0));
+		
+		JToolBar sumToolBar = new JToolBar();
+		sumToolBar.setPreferredSize(new Dimension(13, 25));
+		sumToolBar.setBorder(null);
+		sumToolBar.setFloatable(false);
+		summaryPanel.add(sumToolBar, BorderLayout.NORTH);
+		
+		JButton btnsaveSum = new JButton("");
+		btnsaveSum.setMaximumSize(new Dimension(25, 25));
+		btnsaveSum.setIcon(new ImageIcon(PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editproject.png")));
+		sumToolBar.add(btnsaveSum);
+		
+		JPanel panel = new JPanel();
+		summaryPanel.add(panel, BorderLayout.CENTER);
+		SpringLayout sl_panel = new SpringLayout();
+		panel.setLayout(sl_panel);
+		
+		JLabel lblNewLabel_29 = new JLabel("Student");
+		sl_panel.putConstraint(SpringLayout.NORTH, lblNewLabel_29, 33, SpringLayout.NORTH, panel);
+		sl_panel.putConstraint(SpringLayout.WEST, lblNewLabel_29, 44, SpringLayout.WEST, panel);
+		panel.add(lblNewLabel_29);
+		
+		textField = new JTextField();
+		sl_panel.putConstraint(SpringLayout.NORTH, textField, 30, SpringLayout.NORTH, panel);
+		sl_panel.putConstraint(SpringLayout.WEST, textField, 93, SpringLayout.WEST, panel);
+		sl_panel.putConstraint(SpringLayout.EAST, textField, 305, SpringLayout.WEST, panel);
+		panel.add(textField);
+		textField.setColumns(10);
+		
+		JLabel lblNewLabel_30 = new JLabel("Instructor");
+		sl_panel.putConstraint(SpringLayout.NORTH, lblNewLabel_30, 60, SpringLayout.NORTH, panel);
+		sl_panel.putConstraint(SpringLayout.WEST, lblNewLabel_30, 33, SpringLayout.WEST, panel);
+		panel.add(lblNewLabel_30);
+		
+		textField_1 = new JTextField();
+		sl_panel.putConstraint(SpringLayout.NORTH, textField_1, 57, SpringLayout.NORTH, panel);
+		sl_panel.putConstraint(SpringLayout.WEST, textField_1, 93, SpringLayout.WEST, panel);
+		sl_panel.putConstraint(SpringLayout.EAST, textField_1, 305, SpringLayout.WEST, panel);
+		panel.add(textField_1);
+		textField_1.setColumns(10);
+		
+		JLabel lblNewLabel_31 = new JLabel("Program");
+		sl_panel.putConstraint(SpringLayout.NORTH, lblNewLabel_31, 87, SpringLayout.NORTH, panel);
+		sl_panel.putConstraint(SpringLayout.WEST, lblNewLabel_31, 39, SpringLayout.WEST, panel);
+		panel.add(lblNewLabel_31);
+		
+		textField_2 = new JTextField();
+		sl_panel.putConstraint(SpringLayout.NORTH, textField_2, 84, SpringLayout.NORTH, panel);
+		sl_panel.putConstraint(SpringLayout.WEST, textField_2, 93, SpringLayout.WEST, panel);
+		sl_panel.putConstraint(SpringLayout.EAST, textField_2, 305, SpringLayout.WEST, panel);
+		panel.add(textField_2);
+		textField_2.setColumns(10);
+		
+		JLabel lblNewLabel_34 = new JLabel("Language");
+		sl_panel.putConstraint(SpringLayout.NORTH, lblNewLabel_34, 114, SpringLayout.NORTH, panel);
+		sl_panel.putConstraint(SpringLayout.WEST, lblNewLabel_34, 33, SpringLayout.WEST, panel);
+		panel.add(lblNewLabel_34);
+		
+		textField_3 = new JTextField();
+		sl_panel.putConstraint(SpringLayout.NORTH, textField_3, 111, SpringLayout.NORTH, panel);
+		sl_panel.putConstraint(SpringLayout.WEST, textField_3, 93, SpringLayout.WEST, panel);
+		sl_panel.putConstraint(SpringLayout.EAST, textField_3, 305, SpringLayout.WEST, panel);
+		panel.add(textField_3);
+		textField_3.setColumns(10);
+		
+		JLabel lblNewLabel_32 = new JLabel("Start Date");
+		sl_panel.putConstraint(SpringLayout.NORTH, lblNewLabel_32, 171, SpringLayout.NORTH, panel);
+		sl_panel.putConstraint(SpringLayout.WEST, lblNewLabel_32, 30, SpringLayout.WEST, panel);
+		panel.add(lblNewLabel_32);
+		
+		JSpinner spinner_67 = new JSpinner();
+		sl_panel.putConstraint(SpringLayout.NORTH, spinner_67, 168, SpringLayout.NORTH, panel);
+		sl_panel.putConstraint(SpringLayout.WEST, spinner_67, 93, SpringLayout.WEST, panel);
+		sl_panel.putConstraint(SpringLayout.EAST, spinner_67, 215, SpringLayout.WEST, panel);
+		spinner_67.setModel(new SpinnerDateModel(new Date(1491980400000L), null, null, Calendar.DAY_OF_YEAR));
+		panel.add(spinner_67);
+		
+		JLabel lblNewLabel_33 = new JLabel("End Date");
+		sl_panel.putConstraint(SpringLayout.NORTH, lblNewLabel_33, 198, SpringLayout.NORTH, panel);
+		sl_panel.putConstraint(SpringLayout.WEST, lblNewLabel_33, 33, SpringLayout.WEST, panel);
+		panel.add(lblNewLabel_33);
+		
+		JSpinner spinner_68 = new JSpinner();
+		sl_panel.putConstraint(SpringLayout.NORTH, spinner_68, 195, SpringLayout.NORTH, panel);
+		sl_panel.putConstraint(SpringLayout.WEST, spinner_68, 93, SpringLayout.WEST, panel);
+		sl_panel.putConstraint(SpringLayout.EAST, spinner_68, 215, SpringLayout.WEST, panel);
+		spinner_68.setModel(new SpinnerDateModel(new Date(1491980400000L), null, null, Calendar.DAY_OF_YEAR));
+		panel.add(spinner_68);
+		
+		locPanel = new JPanel();
+		projectsTabbedPane.addTab("LOC", null, locPanel, null);
+		projectsTabbedPane.setEnabledAt(1, false);
+		locPanel.setLayout(new BorderLayout(0, 0));
 
 		JToolBar summaryToolBar = new JToolBar();
 		summaryToolBar.setPreferredSize(new Dimension(13, 25));
 		summaryToolBar.setFloatable(false);
-		summaryPanel.add(summaryToolBar, BorderLayout.NORTH);
+		locPanel.add(summaryToolBar, BorderLayout.NORTH);
 
 		JButton btnEditSummary = new JButton("");
 		btnEditSummary.setBorder(null);
@@ -211,17 +320,16 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		summaryToolBar.add(btnSaveSummary);
 
 		//JScrollPane summaryScrollPane = new JScrollPane();
-		//summaryPanel.add(summaryScrollPane, BorderLayout.CENTER);
+		//locPanel.add(summaryScrollPane, BorderLayout.CENTER);
 		summaryLOCPanel = new JPanel();
 		phaseTimePanel = new JPanel();
 		phaseDefectsPanel = new JPanel();
 		defectsRemovedPanel = new JPanel();
 		programSummary = new JPanel();
 		summarytabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		summaryPanel.add(summarytabbedPane, BorderLayout.CENTER);
+		locPanel.add(summarytabbedPane, BorderLayout.CENTER);
 		//summarytabbedPane.addTab("Program", null,programSummary,null);
 		summarytabbedPane.addTab("Line of Code",null,summaryLOCPanel,null);
-		summarytabbedPane.setEnabledAt(1, true);
 		summarytabbedPane.setEnabledAt(0, true);
 		GridBagLayout gbl_summaryLOCPanel = new GridBagLayout();
 		gbl_summaryLOCPanel.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0};
@@ -480,7 +588,6 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		gbc_nRToDateSpinner.gridy = 8;
 		summaryLOCPanel.add(nRToDateSpinner, gbc_nRToDateSpinner);
 		summarytabbedPane.addTab("Time In Phase",null,phaseTimePanel,null);
-		summarytabbedPane.setEnabledAt(2, true);
 		GridBagLayout gbl_phaseTimePanel = new GridBagLayout();
 		gbl_phaseTimePanel.columnWidths = new int[]{2, 15, 2, 0, 0, 0, 0, 0, 2, 0};
 		gbl_phaseTimePanel.rowHeights = new int[] {0, 0, 0, 0, 0, 0, 0, 30, 30};
@@ -797,7 +904,6 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		gbc_spinner_26.gridy = 8;
 		phaseTimePanel.add(spinner_26, gbc_spinner_26);
 		summarytabbedPane.addTab("Defects Injected",null,phaseDefectsPanel,null);
-		summarytabbedPane.setEnabledAt(3, true);
 		GridBagLayout gbl_phaseDefectsPanel = new GridBagLayout();
 		gbl_phaseDefectsPanel.columnWidths = new int[]{0, 0, 0, 0, 2, 0, 0, 0, 0, 0};
 		gbl_phaseDefectsPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -1370,8 +1476,26 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		designToolBar.setPreferredSize(new Dimension(13, 25));
 		designToolBar.setFloatable(false);
 		designPanel.add(designToolBar, BorderLayout.NORTH);
+		
+		JButton btnNewDesignNote = new JButton("");
+		btnNewDesignNote.setMaximumSize(new Dimension(25, 25));
+		btnNewDesignNote.setIcon(new ImageIcon(PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/filenew.png")));
+		btnNewDesignNote.setBorder(null);
+		designToolBar.add(btnNewDesignNote);
+		
+		JButton btnEditDesignNote = new JButton("");
+		btnEditDesignNote.setMaximumSize(new Dimension(25, 25));
+		btnEditDesignNote.setIcon(new ImageIcon(PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editproject.png")));
+		btnEditDesignNote.setBorder(null);
+		designToolBar.add(btnEditDesignNote);
+		
+		JButton btnDeleteDesignNote = new JButton("");
+		btnDeleteDesignNote.setMaximumSize(new Dimension(25, 25));
+		btnDeleteDesignNote.setIcon(new ImageIcon(PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editdelete.png")));
+		btnDeleteDesignNote.setBorder(null);
+		designToolBar.add(btnDeleteDesignNote);
 
-		designTable = new JTable();
+		designTable = new JTable(nModel);
 		designTable.setFillsViewportHeight(true);
 
 		JScrollPane designScrollPane = new JScrollPane(designTable);
@@ -1449,6 +1573,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		codePanel.add(codeScrollPane);
 
 		defectLogPanel = new JPanel();
+		notesTable = new JTable();
 		projectsTabbedPane.addTab("Defect Log", null, defectLogPanel, null);
 		projectsTabbedPane.setEnabledAt(6, false);
 		defectLogPanel.setLayout(new BorderLayout(0, 0));
@@ -1507,6 +1632,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 
 		postMortemPanel = new JPanel();
 		projectsTabbedPane.addTab("Post Mortem", null, postMortemPanel, null);
+		projectsTabbedPane.setEnabledAt(8, false);
 		projectsTabbedPane.setEnabledAt(7, false);
 		postMortemPanel.setLayout(new BorderLayout(0, 0));
 
@@ -1706,6 +1832,48 @@ public class PSPProjectsOverviewPanel extends JPanel {
 			{
 				return Manager.Projects.get(ProjectID).getDefectLog().get(row).getSeverity();
 			}
+		}
+	}
+	
+	protected class NoteTableModel extends AbstractTableModel {
+		protected String[] columnNames = new String[] { "Note ID", "Note", "Priority"};
+
+		@Override
+		public String getColumnName(int col) {
+
+			return columnNames[col];
+		}
+
+		@Override
+		public int getColumnCount() {
+			// TODO Auto-generated method stub
+			return 3;
+		}
+
+		@Override
+		public int getRowCount() {
+			// TODO Auto-generated method stub
+			try {
+				return Manager.Projects.get(ProjectID).getNotes().size();
+			} catch (Exception e) {
+				return 0;
+			}
+
+		}
+
+		@Override
+		public Object getValueAt(int row, int col) {
+
+			if (col == 0) {
+				return Manager.Projects.get(ProjectID).getNotes().get(row).getID();
+			}
+			if (col == 1) {
+				return Manager.Projects.get(ProjectID).getNotes().get(row).getDescription();
+			}
+			{
+				return Manager.Projects.get(ProjectID).getNotes().get(row).getPriority();
+			}
+
 		}
 	}
 
