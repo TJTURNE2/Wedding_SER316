@@ -39,6 +39,16 @@ public class DefectLog {
 			_value = value;
 		}
 
+		public static Type forValue(String type) {
+			for (Type t : values()) {
+				if (t._value.equalsIgnoreCase(type)) {
+					return t;
+				}
+			}
+			
+			return NONE;
+		}
+
 		@Override
 		public String toString() {
 			return _value;
@@ -54,6 +64,16 @@ public class DefectLog {
 
 		private Severity(String value) {
 			_value = value;
+		}
+
+		public static Severity forValue(String type) {
+			for (Severity s : values()) {
+				if (s._value.equalsIgnoreCase(type)) {
+					return s;
+				}
+			}
+			
+			return LOW;
 		}
 
 		@Override
@@ -75,6 +95,16 @@ public class DefectLog {
 
 		private Phase(String value) {
 			_value = value;
+		}
+
+		public static Phase forValue(String type) {
+			for (Phase p : values()) {
+				if (p._value.equalsIgnoreCase(type)) {
+					return p;
+				}
+			}
+			
+			return NONE;
 		}
 
 		@Override
@@ -111,10 +141,10 @@ public class DefectLog {
 			int fixTime, int refNum, boolean isActive, String description) {
 		_date = date;
 		_defectNum = defectNum;
-		_type = Type.valueOf(type.toUpperCase(Locale.ENGLISH));
-		_inject = Phase.valueOf(inject.toUpperCase(Locale.ENGLISH));
-		_remove = Phase.valueOf(remove.toUpperCase(Locale.ENGLISH));
-		_severity = Severity.valueOf(severity.toUpperCase(Locale.ENGLISH));
+		_type = Type.forValue(type);
+		_inject = Phase.forValue(inject);
+		_remove = Phase.forValue(remove);
+		_severity = Severity.forValue(severity);
 		_fixTime = fixTime;
 		_refNum = refNum;
 		_isActive = isActive;
@@ -142,7 +172,7 @@ public class DefectLog {
 	}
 
 	public void setType(String type) {
-		_type = Type.valueOf(type.toUpperCase(Locale.ENGLISH));
+		_type = Type.forValue(type);
 	}
 
 	public String getInject() {
@@ -150,7 +180,7 @@ public class DefectLog {
 	}
 
 	public void setInject(String inject) {
-		_inject = Phase.valueOf(inject.toUpperCase(Locale.ENGLISH));;
+		_inject = Phase.forValue(inject);
 	}
 
 	public String getRemove() {
@@ -158,7 +188,7 @@ public class DefectLog {
 	}
 
 	public void setRemove(String remove) {
-		_remove = Phase.valueOf(remove.toUpperCase(Locale.ENGLISH));
+		_remove = Phase.forValue(remove);
 	}
 
 	public String getSeverity() {
@@ -166,7 +196,7 @@ public class DefectLog {
 	}
 
 	public void setSeverity(String severity) {
-		_severity = Severity.valueOf(severity.toUpperCase(Locale.ENGLISH));
+		_severity = Severity.forValue(severity);
 	}
 
 	public int getFixTime() {
