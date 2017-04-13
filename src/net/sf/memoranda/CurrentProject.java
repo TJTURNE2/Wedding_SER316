@@ -80,6 +80,10 @@ public class CurrentProject {
 	public static DefectLogList getDefectLogList() {
 		return _defectLogList;
 	}
+	
+	public static void setDefectLogList(DefectLogList logList) {
+		_defectLogList = logList;
+	}
 
     public static NoteList getNoteList() {
             return _notelist;

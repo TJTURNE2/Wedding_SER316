@@ -112,6 +112,18 @@ public class DefectLogList {
 	public void addLog(DefectLog log) {
 		_defectLogList.addElement(log);
 	}
+	
+	/**
+	 * @method: replaceLog
+	 * @inputs: A single Defect Log, A index int value
+	 * @returns: void
+	 * 
+	 * @description: Takes a Defect Log and index as a parameter and replaces the log
+	 * with the currently at the index of the Vector of logs.
+	*/
+	public void replaceLog(DefectLog log, int index) {
+		_defectLogList.set(index, log);
+	}
 
 	/**
 	 * @method: getLog

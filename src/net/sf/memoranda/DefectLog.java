@@ -63,7 +63,7 @@ public class DefectLog {
 	};
 
 	private enum Phase {
-		DEFAULT("--"), // Default
+		NONE("None"), // None
 		PLAN("Plan"), // Planning phase
 		DESIGN("Design"), // Design phase
 		CODE("Code"), // Coding phase
@@ -97,9 +97,9 @@ public class DefectLog {
 	public DefectLog() {
 		_date = null;
 		_defectNum = 0;
-		_type = Type.valueOf("None");
-		_inject = Phase.valueOf("DEFAULT");
-		_remove = Phase.valueOf("DEFAULT");
+		_type = Type.valueOf("NONE");
+		_inject = Phase.valueOf("NONE");
+		_remove = Phase.valueOf("NONE");
 		_severity = Severity.valueOf("LOW");
 		_fixTime = 0;
 		_refNum = 0;

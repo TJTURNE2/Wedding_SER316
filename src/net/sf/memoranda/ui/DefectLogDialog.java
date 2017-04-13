@@ -1,5 +1,12 @@
 package net.sf.memoranda.ui;
 
+/**
+ * @class DefectLogDialog
+ * 
+ * @description: Defines a class for creating a Defect Log Defect Box that allows 
+ * 				User to complete a new defect log
+ */
+
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -56,6 +63,7 @@ public class DefectLogDialog extends JDialog {
 //    Border border5;
 //    Border border6;
     JPanel jPanel2 = new JPanel(new GridLayout(4, 2));
+    int defectNum;
     
     //JTextArea descriptionField = new JTextArea();
     JTextField descriptionField = new JTextField();
@@ -70,7 +78,7 @@ public class DefectLogDialog extends JDialog {
 	        Local.getString("Checking"), Local.getString("Data"),
 	        Local.getString("Function"), Local.getString("System"),
 	        Local.getString("Environment")};
-  String[] phase = {Local.getString("--"), Local.getString("Plan"), 
+  String[] phase = {Local.getString("None"), Local.getString("Plan"), 
 		  Local.getString("Design"), Local.getString("Code"),
 		  Local.getString("Compile"), Local.getString("Test"),
 		  Local.getString("Post Mortem")};
@@ -111,6 +119,19 @@ public class DefectLogDialog extends JDialog {
       }
   }
   
+  
+  public DefectLogDialog(Frame frame, String title, int num) {
+      super(frame, title, true);
+      try {
+    	  defectNum = num;
+          jbInit();            
+          pack();
+      }
+      catch (Exception ex) {
+          new ExceptionDialog(ex);
+      }
+  }
+  
   void jbInit() throws Exception {
 
 		this.setResizable(false);
@@ -118,7 +139,7 @@ public class DefectLogDialog extends JDialog {
 	        border1 = BorderFactory.createEmptyBorder(5, 5, 5, 5);
 	        border2 = BorderFactory.createEtchedBorder(Color.white, 
 	            new Color(142, 142, 142));
-	        int defectNum = 1; // TODO - pull next defect number from list needs Task #54
+	       // defectNum = CurrentProject.getDefectLogList().getList().size() + 1; // TODO - pull next defect number from list needs Task #54
 	        border3 = new TitledBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0), 
 	        Local.getString("Defect #" + defectNum), TitledBorder.LEFT, TitledBorder.BELOW_TOP);
 	        border4 = BorderFactory.createEmptyBorder(0, 5, 0, 5);
