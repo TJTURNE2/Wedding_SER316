@@ -596,83 +596,102 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		JLabel lblNewLabel_8 = new JLabel("PLAN");
 		phaseDefectsPanel.add(lblNewLabel_8, "cell 0 1,alignx left,aligny center");
 		
-		JSpinner spinner_29 = new JSpinner();
-		phaseDefectsPanel.add(spinner_29, "cell 1 1,grow");
+		JSpinner dIActualPlanSpinner = new JSpinner();
+		dIActualPlanSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		phaseDefectsPanel.add(dIActualPlanSpinner, "cell 1 1,grow");
 		
-		JSpinner spinner_35 = new JSpinner();
-		phaseDefectsPanel.add(spinner_35, "cell 2 1,growx,aligny center");
+		JSpinner dIToDatePlanSpinner = new JSpinner();
+		dIToDatePlanSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		phaseDefectsPanel.add(dIToDatePlanSpinner, "cell 2 1,growx,aligny center");
 		
-		JSpinner spinner_46 = new JSpinner();
-		phaseDefectsPanel.add(spinner_46, "cell 3 1,growx,aligny center");
+		JSpinner dIToDatePerPlanSpinner = new JSpinner();
+		dIToDatePerPlanSpinner.setModel(new SpinnerNumberModel(new Double(0), new Double(0), null, new Double(1)));
+		phaseDefectsPanel.add(dIToDatePerPlanSpinner, "cell 3 1,growx,aligny center");
 		
 		JLabel lblNewLabel_9 = new JLabel("DLD");
 		phaseDefectsPanel.add(lblNewLabel_9, "cell 0 2,alignx left,aligny center");
 		
-		JSpinner spinner_30 = new JSpinner();
-		phaseDefectsPanel.add(spinner_30, "cell 1 2,grow");
+		JSpinner dIActualDLDSpinner = new JSpinner();
+		dIActualDLDSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		phaseDefectsPanel.add(dIActualDLDSpinner, "cell 1 2,grow");
 		
-		JSpinner spinner_36 = new JSpinner();
-		phaseDefectsPanel.add(spinner_36, "cell 2 2,growx,aligny center");
+		JSpinner dIToDateDLDSpinner = new JSpinner();
+		dIToDateDLDSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		phaseDefectsPanel.add(dIToDateDLDSpinner, "cell 2 2,growx,aligny center");
 		
-		JSpinner spinner_45 = new JSpinner();
-		phaseDefectsPanel.add(spinner_45, "cell 3 2,growx,aligny center");
+		JSpinner dIToDatePerDLDSpinner = new JSpinner();
+		dIToDatePerDLDSpinner.setModel(new SpinnerNumberModel(new Double(0), new Double(0), null, new Double(1)));
+		phaseDefectsPanel.add(dIToDatePerDLDSpinner, "cell 3 2,growx,aligny center");
 		
 		JLabel lblNewLabel_11 = new JLabel("CODE");
 		phaseDefectsPanel.add(lblNewLabel_11, "cell 0 3,alignx left,aligny center");
 		
-		JSpinner spinner_31 = new JSpinner();
-		phaseDefectsPanel.add(spinner_31, "cell 1 3,grow");
+		JSpinner dIActualCodeSpinner = new JSpinner();
+		dIActualCodeSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		phaseDefectsPanel.add(dIActualCodeSpinner, "cell 1 3,grow");
 		
-		JSpinner spinner_37 = new JSpinner();
-		phaseDefectsPanel.add(spinner_37, "cell 2 3,growx,aligny center");
+		JSpinner dIToDateCodeSpinner = new JSpinner();
+		dIToDateCodeSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		phaseDefectsPanel.add(dIToDateCodeSpinner, "cell 2 3,growx,aligny center");
 		
-		JSpinner spinner_44 = new JSpinner();
-		phaseDefectsPanel.add(spinner_44, "cell 3 3,growx,aligny center");
+		JSpinner dIToDatePerCodeSpinner = new JSpinner();
+		dIToDatePerCodeSpinner.setModel(new SpinnerNumberModel(new Double(0), new Double(0), null, new Double(1)));
+		phaseDefectsPanel.add(dIToDatePerCodeSpinner, "cell 3 3,growx,aligny center");
 		
 		JLabel lblNewLabel_12 = new JLabel("COMPILE");
 		phaseDefectsPanel.add(lblNewLabel_12, "cell 0 4,alignx left,aligny center");
 		
-		JSpinner spinner_32 = new JSpinner();
-		phaseDefectsPanel.add(spinner_32, "cell 1 4,grow");
+		JSpinner dIActualCompileSpinner = new JSpinner();
+		dIActualCompileSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		phaseDefectsPanel.add(dIActualCompileSpinner, "cell 1 4,grow");
 		
-		JSpinner spinner_38 = new JSpinner();
-		phaseDefectsPanel.add(spinner_38, "cell 2 4,growx,aligny center");
+		JSpinner dIToDateCompileSpinner = new JSpinner();
+		dIToDateCompileSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		phaseDefectsPanel.add(dIToDateCompileSpinner, "cell 2 4,growx,aligny center");
 		
-		JSpinner spinner_43 = new JSpinner();
-		phaseDefectsPanel.add(spinner_43, "cell 3 4,growx,aligny center");
+		JSpinner dIToDatePerCompileSpinner = new JSpinner();
+		dIToDatePerCompileSpinner.setModel(new SpinnerNumberModel(new Double(0), new Double(0), null, new Double(1)));
+		phaseDefectsPanel.add(dIToDatePerCompileSpinner, "cell 3 4,growx,aligny center");
 		
 		JLabel lblNewLabel_13 = new JLabel("UT");
 		phaseDefectsPanel.add(lblNewLabel_13, "cell 0 5,alignx left,aligny center");
 		
-		JSpinner spinner_33 = new JSpinner();
-		phaseDefectsPanel.add(spinner_33, "cell 1 5,growx,aligny center");
+		JSpinner dIActualUTSpinner = new JSpinner();
+		dIActualUTSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		phaseDefectsPanel.add(dIActualUTSpinner, "cell 1 5,growx,aligny center");
 		
-		JSpinner spinner_39 = new JSpinner();
-		phaseDefectsPanel.add(spinner_39, "cell 2 5,growx,aligny center");
+		JSpinner dIToDateUTSpinner = new JSpinner();
+		dIToDateUTSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		phaseDefectsPanel.add(dIToDateUTSpinner, "cell 2 5,growx,aligny center");
 		
-		JSpinner spinner_42 = new JSpinner();
-		phaseDefectsPanel.add(spinner_42, "cell 3 5,growx,aligny center");
+		JSpinner dIToDatePerUTSpinner = new JSpinner();
+		phaseDefectsPanel.add(dIToDatePerUTSpinner, "cell 3 5,growx,aligny center");
 		
 		JLabel lblNewLabel_14 = new JLabel("PM");
 		phaseDefectsPanel.add(lblNewLabel_14, "cell 0 6,alignx left,aligny center");
 		
-		JSpinner spinner_34 = new JSpinner();
-		phaseDefectsPanel.add(spinner_34, "cell 1 6,growx,aligny center");
+		JSpinner dIActualPMSpinner = new JSpinner();
+		dIActualPMSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		phaseDefectsPanel.add(dIActualPMSpinner, "cell 1 6,growx,aligny center");
 		
-		JSpinner spinner_40 = new JSpinner();
-		phaseDefectsPanel.add(spinner_40, "cell 2 6,growx,aligny center");
+		JSpinner dIToDatePMSpinner = new JSpinner();
+		dIToDatePMSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		phaseDefectsPanel.add(dIToDatePMSpinner, "cell 2 6,growx,aligny center");
 		
-		JSpinner spinner_41 = new JSpinner();
-		phaseDefectsPanel.add(spinner_41, "cell 3 6,growx,aligny center");
+		JSpinner dIToDatePerPMSpinner = new JSpinner();
+		dIToDatePerPMSpinner.setModel(new SpinnerNumberModel(new Double(0), new Double(0), null, new Double(1)));
+		phaseDefectsPanel.add(dIToDatePerPMSpinner, "cell 3 6,growx,aligny center");
 		
 		JLabel lblDI = new JLabel("Total");
 		phaseDefectsPanel.add(lblDI, "cell 0 7,alignx right,aligny center");
 		
-		JSpinner spinner_27 = new JSpinner();
-		phaseDefectsPanel.add(spinner_27, "cell 1 7,growx,aligny center");
+		JSpinner dIActualTotalSpinner = new JSpinner();
+		dIActualTotalSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		phaseDefectsPanel.add(dIActualTotalSpinner, "cell 1 7,growx,aligny center");
 		
-		JSpinner spinner_28 = new JSpinner();
-		phaseDefectsPanel.add(spinner_28, "cell 2 7,growx,aligny center");
+		JSpinner dIToDateTotalSpinner = new JSpinner();
+		dIToDateTotalSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		phaseDefectsPanel.add(dIToDateTotalSpinner, "cell 2 7,growx,aligny center");
 		summarytabbedPane.addTab("Defects Removed",null,defectsRemovedPanel,null);
 		defectsRemovedPanel.setLayout(new MigLayout("", "[60px][50px,left][50px,left][50px,left]", "[20px][20px][20px][20px][20px][20px][20px][20px]"));
 		
@@ -691,83 +710,103 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		JLabel lblNewLabel_22 = new JLabel("PLAN");
 		defectsRemovedPanel.add(lblNewLabel_22, "cell 0 1,alignx left,aligny center");
 		
-		JSpinner spinner_47 = new JSpinner();
-		defectsRemovedPanel.add(spinner_47, "cell 1 1,growx,aligny center");
+		JSpinner drToActualPlanSpinner = new JSpinner();
+		drToActualPlanSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		defectsRemovedPanel.add(drToActualPlanSpinner, "cell 1 1,growx,aligny center");
 		
-		JSpinner spinner_56 = new JSpinner();
-		defectsRemovedPanel.add(spinner_56, "cell 2 1,growx,aligny center");
+		JSpinner drToDatePlanSpinner = new JSpinner();
+		drToDatePlanSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		defectsRemovedPanel.add(drToDatePlanSpinner, "cell 2 1,growx,aligny center");
 		
-		JSpinner spinner_61 = new JSpinner();
-		defectsRemovedPanel.add(spinner_61, "cell 3 1,growx,aligny center");
+		JSpinner drToDatePerPlanSpinner = new JSpinner();
+		drToDatePerPlanSpinner.setModel(new SpinnerNumberModel(new Double(0), new Double(0), null, new Double(1)));
+		defectsRemovedPanel.add(drToDatePerPlanSpinner, "cell 3 1,growx,aligny center");
 		
 		JLabel lblNewLabel_23 = new JLabel("DLD");
 		defectsRemovedPanel.add(lblNewLabel_23, "cell 0 2,alignx left,aligny center");
 		
-		JSpinner spinner_48 = new JSpinner();
-		defectsRemovedPanel.add(spinner_48, "cell 1 2,growx,aligny center");
+		JSpinner drToActualDLDSpinner = new JSpinner();
+		drToActualDLDSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		defectsRemovedPanel.add(drToActualDLDSpinner, "cell 1 2,growx,aligny center");
 		
-		JSpinner spinner_55 = new JSpinner();
-		defectsRemovedPanel.add(spinner_55, "cell 2 2,growx,aligny center");
+		JSpinner drToDateDLDSpinner = new JSpinner();
+		drToDateDLDSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		defectsRemovedPanel.add(drToDateDLDSpinner, "cell 2 2,growx,aligny center");
 		
-		JSpinner spinner_62 = new JSpinner();
-		defectsRemovedPanel.add(spinner_62, "cell 3 2,growx,aligny center");
+		JSpinner drToDatePerDLDSpinner = new JSpinner();
+		drToDatePerDLDSpinner.setModel(new SpinnerNumberModel(new Double(0), new Double(0), null, new Double(1)));
+		defectsRemovedPanel.add(drToDatePerDLDSpinner, "cell 3 2,growx,aligny center");
 		
 		JLabel lblNewLabel_24 = new JLabel("CODE");
 		defectsRemovedPanel.add(lblNewLabel_24, "cell 0 3,alignx left,aligny center");
 		
-		JSpinner spinner_49 = new JSpinner();
-		defectsRemovedPanel.add(spinner_49, "cell 1 3,growx,aligny center");
+		JSpinner drToActualCodeSpinner = new JSpinner();
+		drToActualCodeSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		defectsRemovedPanel.add(drToActualCodeSpinner, "cell 1 3,growx,aligny center");
 		
-		JSpinner spinner_57 = new JSpinner();
-		defectsRemovedPanel.add(spinner_57, "cell 2 3,growx,aligny center");
+		JSpinner drToDateCodeSpinner = new JSpinner();
+		drToDateCodeSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		defectsRemovedPanel.add(drToDateCodeSpinner, "cell 2 3,growx,aligny center");
 		
-		JSpinner spinner_63 = new JSpinner();
-		defectsRemovedPanel.add(spinner_63, "cell 3 3,growx,aligny center");
+		JSpinner drToDatePerCodeSpinner = new JSpinner();
+		drToDatePerCodeSpinner.setModel(new SpinnerNumberModel(new Double(0), new Double(0), null, new Double(1)));
+		defectsRemovedPanel.add(drToDatePerCodeSpinner, "cell 3 3,growx,aligny center");
 		
 		JLabel lblNewLabel_25 = new JLabel("COMPILE");
 		defectsRemovedPanel.add(lblNewLabel_25, "cell 0 4,alignx left,aligny center");
 		
-		JSpinner spinner_50 = new JSpinner();
-		defectsRemovedPanel.add(spinner_50, "cell 1 4,growx,aligny center");
+		JSpinner drToActualCompileSpinner = new JSpinner();
+		drToActualCompileSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		defectsRemovedPanel.add(drToActualCompileSpinner, "cell 1 4,growx,aligny center");
 		
-		JSpinner spinner_58 = new JSpinner();
-		defectsRemovedPanel.add(spinner_58, "cell 2 4,growx,aligny center");
+		JSpinner drToDateCompileSpinner = new JSpinner();
+		drToDateCompileSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		defectsRemovedPanel.add(drToDateCompileSpinner, "cell 2 4,growx,aligny center");
 		
-		JSpinner spinner_64 = new JSpinner();
-		defectsRemovedPanel.add(spinner_64, "cell 3 4,growx,aligny center");
+		JSpinner drToDatePerCompileSpinner = new JSpinner();
+		drToDatePerCompileSpinner.setModel(new SpinnerNumberModel(new Double(0), new Double(0), null, new Double(1)));
+		defectsRemovedPanel.add(drToDatePerCompileSpinner, "cell 3 4,growx,aligny center");
 		
 		JLabel lblNewLabel_26 = new JLabel("UT");
 		defectsRemovedPanel.add(lblNewLabel_26, "cell 0 5,alignx left,aligny center");
 		
-		JSpinner spinner_51 = new JSpinner();
-		defectsRemovedPanel.add(spinner_51, "cell 1 5,growx,aligny center");
+		JSpinner drToActualUTSpinner = new JSpinner();
+		drToActualUTSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		defectsRemovedPanel.add(drToActualUTSpinner, "cell 1 5,growx,aligny center");
 		
-		JSpinner spinner_59 = new JSpinner();
-		defectsRemovedPanel.add(spinner_59, "cell 2 5,growx,aligny center");
+		JSpinner drToDateUTSpinner = new JSpinner();
+		drToDateUTSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		defectsRemovedPanel.add(drToDateUTSpinner, "cell 2 5,growx,aligny center");
 		
-		JSpinner spinner_65 = new JSpinner();
-		defectsRemovedPanel.add(spinner_65, "cell 3 5,growx,aligny center");
+		JSpinner drToDatePerUTSpinner = new JSpinner();
+		drToDatePerUTSpinner.setModel(new SpinnerNumberModel(new Double(0), new Double(0), null, new Double(1)));
+		defectsRemovedPanel.add(drToDatePerUTSpinner, "cell 3 5,growx,aligny center");
 		
 		JLabel lblNewLabel_27 = new JLabel("PM");
 		defectsRemovedPanel.add(lblNewLabel_27, "cell 0 6,alignx left,aligny center");
 		
-		JSpinner spinner_52 = new JSpinner();
-		defectsRemovedPanel.add(spinner_52, "cell 1 6,growx,aligny center");
+		JSpinner drToActualPMSpinner = new JSpinner();
+		drToActualPMSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		defectsRemovedPanel.add(drToActualPMSpinner, "cell 1 6,growx,aligny center");
 		
-		JSpinner spinner_60 = new JSpinner();
-		defectsRemovedPanel.add(spinner_60, "cell 2 6,growx,aligny center");
+		JSpinner drToDatePMSpinner = new JSpinner();
+		drToDatePMSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		defectsRemovedPanel.add(drToDatePMSpinner, "cell 2 6,growx,aligny center");
 		
-		JSpinner spinner_66 = new JSpinner();
-		defectsRemovedPanel.add(spinner_66, "cell 3 6,growx,aligny center");
+		JSpinner drToDatePerPMSpinner = new JSpinner();
+		drToDatePerPMSpinner.setModel(new SpinnerNumberModel(new Double(0), new Double(0), null, new Double(1)));
+		defectsRemovedPanel.add(drToDatePerPMSpinner, "cell 3 6,growx,aligny center");
 		
 		JLabel lblNewLabel_28 = new JLabel("Total");
 		defectsRemovedPanel.add(lblNewLabel_28, "cell 0 7,alignx right,aligny center");
 		
-		JSpinner spinner_53 = new JSpinner();
-		defectsRemovedPanel.add(spinner_53, "cell 1 7,growx,aligny center");
+		JSpinner drToActualTotalSpinner = new JSpinner();
+		drToActualTotalSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		defectsRemovedPanel.add(drToActualTotalSpinner, "cell 1 7,growx,aligny center");
 		
-		JSpinner spinner_54 = new JSpinner();
-		defectsRemovedPanel.add(spinner_54, "cell 2 7,growx,aligny center");
+		JSpinner drToDateTotalSpinner = new JSpinner();
+		drToDateTotalSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		defectsRemovedPanel.add(drToDateTotalSpinner, "cell 2 7,growx,aligny center");
 		
 
 		JPanel requirementPanel = new JPanel();
