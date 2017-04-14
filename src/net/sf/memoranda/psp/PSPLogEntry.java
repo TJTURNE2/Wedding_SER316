@@ -31,36 +31,62 @@ package net.sf.memoranda.psp;
 			this.toDatePercent = toDatePercent;
 		}
 
-		protected int getPlanSize() {
+		/**
+		 * @return the planSize
+		 */
+		public int getPlanSize() {
 			return planSize;
 		}
 
-		protected void setPlanSize(int planSize) {
+		/**
+		 * @param planSize the planSize to set
+		 */
+		public void setPlanSize(int planSize) {
 			this.planSize = planSize;
 		}
 
-		protected int getActualSize() {
+		/**
+		 * @return the actualSize
+		 */
+		public int getActualSize() {
 			return actualSize;
 		}
 
-		protected void setActualSize(int actualSize) {
+		/**
+		 * @param actualSize the actualSize to set
+		 */
+		public void setActualSize(int actualSize) {
 			this.actualSize = actualSize;
 		}
 
-		protected int getToDateSize() {
+		/**
+		 * @return the toDateSize
+		 */
+		public int getToDateSize() {
 			return toDateSize;
 		}
 
-		protected void setToDateSize(int toDateSize) {
+		/**
+		 * @param toDateSize the toDateSize to set
+		 */
+		public void setToDateSize(int toDateSize) {
 			this.toDateSize = toDateSize;
 		}
 
-		protected double getToDatePercent() {
+		/**
+		 * @return the toDatePercent
+		 */
+		public double getToDatePercent() {
 			return toDatePercent;
 		}
 
-		protected void setToDatePercent(double toDatePercent) {
+		/**
+		 * @param toDatePercent the toDatePercent to set
+		 */
+		public void setToDatePercent(double toDatePercent) {
 			this.toDatePercent = toDatePercent;
 		}
+
+
 
 	}
