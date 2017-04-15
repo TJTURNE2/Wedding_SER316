@@ -85,6 +85,7 @@ public class AppFrame extends JFrame {
     JMenu jMenuEdit = new JMenu();
     JMenu jMenuFormat = new JMenu();
     JMenu jMenuInsert = new JMenu();
+    JButton jMenuLogin= new JButton("Login");
 
     public WorkPanel workPanel = new WorkPanel();
     HTMLEditor editor = workPanel.dailyItemsPanel.editorPanel.editor;
@@ -474,6 +475,24 @@ public class AppFrame extends JFrame {
         menuBar.add(jMenuFormat);
         menuBar.add(jMenuGo);
         menuBar.add(jMenuHelp);
+        
+        jMenuLogin.setOpaque(true);
+        jMenuLogin.setContentAreaFilled(false);
+        jMenuLogin.setBorderPainted(false);
+        jMenuLogin.setFocusable(false);
+        jMenuLogin.addActionListener(
+                new ActionListener(){
+                    public void actionPerformed(ActionEvent e) {
+                        LoginDialog loginDlg = new LoginDialog(null, Local.getString("Login"));
+                        loginDlg.setVisible(true);
+                        // if logon successfully
+                        if(loginDlg.isSucceeded()){
+                            jMenuLogin.setText("Hi " + loginDlg.getUsername() + "!");
+                        }
+                    }
+                });;
+        menuBar.add(jMenuLogin);
+        
         this.setJMenuBar(menuBar);
         //contentPane.add(toolBar, BorderLayout.NORTH);
         contentPane.add(statusBar, BorderLayout.SOUTH);
