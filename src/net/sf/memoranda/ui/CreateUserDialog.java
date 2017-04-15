@@ -18,19 +18,17 @@ import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
 import net.sf.memoranda.UserProfile;
-import net.sf.memoranda.util.Local;
 
-public class LoginDialog extends JDialog {
+public class CreateUserDialog extends JDialog {
 	private JTextField tfUsername;
     private JPasswordField pfPassword;
     private JLabel lbUsername;
     private JLabel lbPassword;
-    private JButton btnLogin;
-    private JButton btnCancel;
     private JButton btnCreate;
+    private JButton btnCancel;
     private boolean succeeded;
 	
-	public LoginDialog(Frame frame, String title) {
+	public CreateUserDialog(Frame frame, String title) {
 		super(frame, title, true);
         try {
             jbInit();
@@ -73,22 +71,22 @@ public class LoginDialog extends JDialog {
         panel.add(pfPassword, cs);
         panel.setBorder(new LineBorder(Color.GRAY));
  
-        btnLogin = new JButton("Login");
+        btnCreate = new JButton("Create");
 		 
-        btnLogin.addActionListener(new ActionListener() {
+        btnCreate.addActionListener(new ActionListener() {
  
             public void actionPerformed(ActionEvent e) {
                 if (UserProfile.authenticate(getUsername(), getPassword())) {
-                    JOptionPane.showMessageDialog(LoginDialog.this,
-                            "Hi " + getUsername() + "! You have successfully logged in.",
-                            "Login",
+                    JOptionPane.showMessageDialog(CreateUserDialog.this,
+                            "Hi " + getUsername() + "! You have successfully created this user.",
+                            "Create User",
                             JOptionPane.INFORMATION_MESSAGE);
                     succeeded = true;
                     dispose();
                 } else {
-                    JOptionPane.showMessageDialog(LoginDialog.this,
-                            "Invalid username or password",
-                            "Login",
+                    JOptionPane.showMessageDialog(CreateUserDialog.this,
+                            "Something went wrong.",
+                            "Create User",
                             JOptionPane.ERROR_MESSAGE);
                     // reset username and password
                     tfUsername.setText("");
@@ -105,20 +103,9 @@ public class LoginDialog extends JDialog {
                 dispose();
             }
         });
-        
-        btnCreate = new JButton("Create User");
-        btnCreate.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		dispose();
-        		CreateUserDialog createDlg = new CreateUserDialog(null, Local.getString("Create User"));
-                createDlg.setVisible(true);
-        	}
-        });
-        
         JPanel bp = new JPanel();
-        bp.add(btnLogin);
-        bp.add(btnCancel);
         bp.add(btnCreate);
+        bp.add(btnCancel);
  
         getContentPane().add(panel, BorderLayout.CENTER);
         getContentPane().add(bp, BorderLayout.PAGE_END);
@@ -136,9 +123,4 @@ public class LoginDialog extends JDialog {
     public boolean isSucceeded() {
         return succeeded;
     }
-	
-	public static void login() {
-		
-	}
-
 }
