@@ -272,6 +272,14 @@ public class JNCalendarPanel extends JPanel {
     notifyListeners();
   }
 
+  /**
+   * @method: monthBackB_actionPerformed
+   * @inputs: e (an ActionEvent)
+   * @returns: none
+   * 
+   * @description: method that performs the action of moving the calendar
+   * 			   a month backward.
+   */
   void monthBackB_actionPerformed(ActionEvent e) {
     Calendar cal = _date.getCalendar();
     cal.add(Calendar.MONTH, -1); cal.getTime();
@@ -286,6 +294,14 @@ public class JNCalendarPanel extends JPanel {
     notifyListeners();
   }
 
+  /**
+   * @method: monthForwardB_actionPerformed
+   * @inputs: e (an ActionEvent)
+   * @returns: none
+   * 
+   * @description: method that performs the action of moving the calendar
+   * 			   a month forward.
+   */
   void monthForwardB_actionPerformed(ActionEvent e) {
     Calendar cal = _date.getCalendar();
     cal.add(Calendar.MONTH, 1); cal.getTime();
