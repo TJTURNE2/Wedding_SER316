@@ -86,6 +86,7 @@ public class AppFrame extends JFrame {
     JMenu jMenuFormat = new JMenu();
     JMenu jMenuInsert = new JMenu();
     JButton jMenuLogin= new JButton("Login");
+    JButton jMenuLogout = new JButton("Logout");
 
     public WorkPanel workPanel = new WorkPanel();
     HTMLEditor editor = workPanel.dailyItemsPanel.editorPanel.editor;
@@ -480,6 +481,22 @@ public class AppFrame extends JFrame {
         jMenuLogin.setContentAreaFilled(false);
         jMenuLogin.setBorderPainted(false);
         jMenuLogin.setFocusable(false);
+        
+        jMenuLogout.setOpaque(true);
+        jMenuLogout.setContentAreaFilled(false);
+        jMenuLogout.setBorderPainted(false);
+        jMenuLogout.setFocusable(false);
+        
+        jMenuLogout.addActionListener(
+                new ActionListener(){
+                    public void actionPerformed(ActionEvent e) {
+                    		jMenuLogin.setText("Login");
+                    		menuBar.remove(jMenuLogout);
+                    		menuBar.revalidate();
+                    		menuBar.repaint();
+                    }
+                });
+        
         jMenuLogin.addActionListener(
                 new ActionListener(){
                     public void actionPerformed(ActionEvent e) {
@@ -488,9 +505,14 @@ public class AppFrame extends JFrame {
                         // if logon successfully
                         if(loginDlg.isSucceeded()){
                             jMenuLogin.setText("Hi " + loginDlg.getUsername() + "!");
+                            menuBar.add(jMenuLogout);
+                            menuBar.revalidate();
+                    		menuBar.repaint();
                         }
                     }
-                });;
+                });
+        
+        
         menuBar.add(jMenuLogin);
         
         this.setJMenuBar(menuBar);
