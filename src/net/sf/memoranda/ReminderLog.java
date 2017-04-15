@@ -1,4 +1,21 @@
+/** @file: ReminderLog.java
+ *  @author: nathanwaitman
+ *  @date: April 14, 2017
+ *  
+ *  @description: Instances of the Reminder Log class will store data relative
+ *  			  to each reminder log created by the user. There is one reminder
+ *  			  log object for each reminder log created by the user.
+ */
 package net.sf.memoranda;
+
+/**
+ * 
+ * @class ReminderLog
+ *
+ * @description: Defines a class for creating Reminder Logs, including getters and
+ *               setters used for editing the Reminder Log, and a method used when 
+ *               saving reminder log to a file.
+ */
 
 public class ReminderLog {
 
@@ -36,6 +53,14 @@ public class ReminderLog {
 		return date + " " + reminder;
 	}
 
+	/**
+	 * @method: toFile
+	 * @inputs: none
+	 * @return: String to be written to a file
+	 * 
+	 * @description: Formats a string with all of the reminder log's attributes and 
+	 *               prints it to a file. 
+	 */
 	public String toFile() {
 		return ("date*^*" + (date.equals("") ? "null" : date) +
 				"*^*reminder*^*" + (reminder.equals("") ? "null" : reminder));

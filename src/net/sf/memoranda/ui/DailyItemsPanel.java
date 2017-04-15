@@ -95,13 +95,8 @@ public class DailyItemsPanel extends JPanel {
         
     TasksControlPanel tasksControlPane = new TasksControlPanel();
     AgendaControlPanel agendaControlPane = new AgendaControlPanel();
-    NotesControlPanel eventsControlPane = new NotesControlPanel();
-    
-    //AgendaControlPanel agendaControlPane = new AgendaControlPanel();
-    //EventsControlPanel eventsControlPane = new EventsControlPanel();
-    
-    //JTabbedPane eventsTabbedPane = new JTabbedPane();
-	//JTabbedPane agendaTabbedPane = new JTabbedPane();
+    EventsControlPanel eventsControlPane = new EventsControlPanel();
+  
     Border border2;
 
 	String CurrentPanel;
@@ -248,6 +243,7 @@ public class DailyItemsPanel extends JPanel {
                 
                 tasksControlPane.refresh();
                 agendaControlPane.refresh();
+                eventsControlPane.refresh();
 
                 
 //                // DEBUG
@@ -310,7 +306,7 @@ public class DailyItemsPanel extends JPanel {
         editorPanel.setDocument(currentNote);
         History.add(new HistoryItem(CurrentDate.get(), CurrentProject.get()));
         cmainPanel.add(mainTabsPanel, BorderLayout.CENTER);
-        mainTabsPanel.add(notesControlPane, "EVENTSTAB");
+        mainTabsPanel.add(eventsControlPane, "EVENTSTAB");
         mainTabsPanel.add(tasksControlPane, "TASKSTAB");
         mainTabsPanel.add(notesControlPane, "NOTESTAB");
 		mainTabsPanel.add(agendaControlPane, "AGENDATAB");

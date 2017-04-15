@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
 
-public class ReminderLogDialog extends JDialog {
+public class EventsPanelDialog extends JDialog {
 	Dimension dialogSize = new Dimension(420,230);
 	public boolean isCancelled = true;
 	
@@ -29,9 +29,9 @@ public class ReminderLogDialog extends JDialog {
 	MaskFormatter dateFormat = createFormatter("##/##/##");
 	JFormattedTextField date = new JFormattedTextField(dateFormat);
 	
-	JPanel reminderPanel = new JPanel();
-	JLabel reminderLabel = new JLabel("<html><center>Reminder</center></html>");
-	JTextField reminder = new JTextField(20);
+	JPanel eventPanel = new JPanel();
+	JLabel eventLabel = new JLabel("<html><center>Event</center></html>");
+	JTextField event = new JTextField(20);
 	
 	// JScrollPane scrollPane = new JScrollPane(comments);		// For use with JTextArea
 	
@@ -39,7 +39,7 @@ public class ReminderLogDialog extends JDialog {
 	JButton save = new JButton("Save");
 	JButton cancel = new JButton("Cancel");
 	
-	public ReminderLogDialog(Frame frame, String title) {
+	public EventsPanelDialog(Frame frame, String title) {
 		super(frame, title, true);
 		
 		this.setResizable(false);
@@ -52,8 +52,8 @@ public class ReminderLogDialog extends JDialog {
 
 		startPanel.add(dateLabel);
 		startPanel.add(date);
-		startPanel.add(reminderLabel);
-		startPanel.add(reminder);
+		startPanel.add(eventLabel);
+		startPanel.add(event);
 		
 		//reminderPanel.setPreferredSize(new Dimension(dialogSize.width/3,dialogSize.height-100));
 		//reminderPanel.setLayout(new BoxLayout(reminderPanel, BoxLayout.Y_AXIS));
@@ -87,11 +87,11 @@ public class ReminderLogDialog extends JDialog {
 		pack();
 	}
 	
-	public ReminderLogDialog(Frame frame, String title, String[] initValues) {
+	public EventsPanelDialog(Frame frame, String title, String[] initValues) {
 		this(frame, title);
 		
 		date.setText(initValues[0]);
-		reminder.setText(initValues[1]);
+		event.setText(initValues[1]);
 	}
 	
 	private MaskFormatter createFormatter(String format) {
@@ -104,3 +104,4 @@ public class ReminderLogDialog extends JDialog {
 	    return formatter;
 	}
 }
+

@@ -140,10 +140,10 @@ public class AgendaControlPanel extends JPanel {
 	}
 	
 	private void deleteNewReminder() {
-		int selectedIndex = logs.getSelectedIndex();
-		if (selectedIndex != -1){
-			logs.remove(selectedIndex);
-		}
+		//int selectedIndex = logs.getSelectedIndex();
+		//if (selectedIndex != -1){
+		//	logs.remove(selectedIndex);
+		//}
 		
 		
 	}

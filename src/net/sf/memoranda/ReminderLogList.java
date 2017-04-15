@@ -1,3 +1,13 @@
+/**
+ * @file: ReminderLogList.java
+ * @author: nathanwaitman
+ * @date: April 14, 2017
+ * 
+ * @description: Creates a list for storing all Reminder Logs that are created.
+ * 			     Manages all Reminder Logs for a project and supports loading a
+ *               new list from file when switching projects.
+ */
+
 package net.sf.memoranda;
 
 import java.io.File;
@@ -7,6 +17,12 @@ import java.util.Vector;
 
 import net.sf.memoranda.util.Util;
 
+/**
+ * @class ReminderLogList
+ * 
+ * @description: Defines a class for creating a Reminder Log List. Has methods for 
+ *               adding and retrieving logs, as well as a getter for the vector.
+ */
 public class ReminderLogList {
 	private Vector<ReminderLog> reminderLogList = null;
 
@@ -52,18 +68,50 @@ public class ReminderLogList {
 		}
 	}
 
+	/**
+	 * @method: getList
+	 * @inputs: none
+	 * @return: The vector of reminder logs
+	 * 
+	 * @description: This method returns the vector of reminder logs to be 
+	 *               used by the agenda control panel for displaying the list.
+	 */
+	
 	public Vector<ReminderLog> getList() {
 		return reminderLogList;
 	}
 	
+	/**
+	 * @method: deleteLog 
+	 * @inputs: log
+	 * @return: void
+	 * 
+	 * @description: Removes a log from the vector of logs.
+	 */
 	public void deleteLog(ReminderLog log) {
 		reminderLogList.remove(log);
 	}
 
+	/**
+	 * @method: addLog 
+	 * @inputs: log
+	 * @return: void
+	 * 
+	 * @description: Takes a reminder log as a parameter and inserts into the
+	 *               vector of logs.
+	 */
 	public void addLog(ReminderLog log) {
 		reminderLogList.addElement(log);
 	}
 
+	/**
+	 * @method: getLog 
+	 * @inputs: an integer representing an index
+	 * @return: a Reminder Log object
+	 * 
+	 * @description: Takes an integer as a parameter and returns the
+	 *               reminder log located at that index in the vector of defects.
+	 */
 	public ReminderLog getLog(int index) {
 		return reminderLogList.elementAt(index);
 	}
