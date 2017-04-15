@@ -55,6 +55,10 @@ public class ReminderLogList {
 	public Vector<ReminderLog> getList() {
 		return reminderLogList;
 	}
+	
+	public void deleteLog(ReminderLog log) {
+		reminderLogList.remove(log);
+	}
 
 	public void addLog(ReminderLog log) {
 		reminderLogList.addElement(log);

@@ -1,6 +1,7 @@
 package net.sf.memoranda.ui;
 
 import java.awt.BorderLayout;
+import javax.swing.DefaultListModel;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Insets;
@@ -11,6 +12,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -44,9 +46,9 @@ import net.sf.memoranda.util.Util;
 public class AgendaControlPanel extends JPanel {
 	BorderLayout borderLayout = new BorderLayout();
 	JButton newReminder = new JButton("Add New Reminder");
+	JButton deleteReminder = new JButton("Delete Selected Reminder");
 
-
-	
+	private DefaultListModel<String> model = new DefaultListModel<String>();
 	static ReminderLogList reminderLogList = null;
 	static JList logs = null;
 	static JScrollPane scrollPane = null;
@@ -55,6 +57,11 @@ public class AgendaControlPanel extends JPanel {
 		newReminder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addNewReminderLog();
+			}
+		});
+		deleteReminder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				deleteNewReminder();
 			}
 		});
 
@@ -79,6 +86,9 @@ public class AgendaControlPanel extends JPanel {
 
 		this.add(newReminder, BorderLayout.PAGE_START);
 		this.add(scrollPane, BorderLayout.CENTER);
+		this.add(deleteReminder, BorderLayout.PAGE_END);
+
+		
 	}
 	
 	public void refresh() {
@@ -128,6 +138,16 @@ public class AgendaControlPanel extends JPanel {
 			logs.updateUI();
 		}
 	}
+	
+	private void deleteNewReminder() {
+		int selectedIndex = logs.getSelectedIndex();
+		if (selectedIndex != -1){
+			logs.remove(selectedIndex);
+		}
+		
+		
+	}
+	
 
 	private void editExistingReminderLog() {
 		ReminderLog log = reminderLogList.getLog(logs.getSelectedIndex());
@@ -141,6 +161,13 @@ public class AgendaControlPanel extends JPanel {
 
 			logs.updateUI();
 		}
-	}
+	
 
+	
+
+	}
 }
+	
+	
+	
+
