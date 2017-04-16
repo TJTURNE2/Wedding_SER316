@@ -219,6 +219,12 @@ public class JNCalendarPanel extends JPanel {
         monthsCB_actionPerformed(e);
       }
     });
+    
+    popoutCalendar.addActionListener(new java.awt.event.ActionListener(){
+    	public void actionPerformed(ActionEvent e){
+    		popCalendar_actionPerformed(e);
+    	}
+    });
 
     yearSpin.addChangeListener(new ChangeListener() {
       public void stateChanged(ChangeEvent e) {
@@ -308,6 +314,11 @@ public class JNCalendarPanel extends JPanel {
   }
   
   void popCalendar_actionPerformed(ActionEvent e){
+	  JNCalendarDialog dlg = new JNCalendarDialog(App.getFrame(), Local.getString("Calendar"));
+	  
+	  if(dlg.CANCELLED)
+		  return;
+	  
 	  
   }
 
