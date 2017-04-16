@@ -52,4 +52,7 @@ public interface Storage {
     
     void restoreContext();
     void storeContext();
+    
+    void openUserProfileManager();
+    void storeUserProfileManager();
 }

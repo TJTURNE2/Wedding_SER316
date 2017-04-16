@@ -34,6 +34,7 @@ import net.sf.memoranda.TaskList;
 import net.sf.memoranda.TaskListImpl;
 import net.sf.memoranda.TimeLog;
 import net.sf.memoranda.TimeLogList;
+import net.sf.memoranda.UserProfile;
 import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.ui.ExceptionDialog;
 import net.sf.memoranda.ui.htmleditor.AltHTMLWriter;
@@ -511,5 +512,29 @@ public class FileStorage implements Storage {
 		catch (FileNotFoundException e) {
 			Util.debug("Error writing Time Log to file for project " + prj.getTitle());
 		}
+	}
+	
+	public void openUserProfileManager() {
+		String fileName = JN_DOCPATH + ".userprofiles";
+		if (documentExists(fileName)) {
+			System.out.println(
+					"[DEBUG] Open user profile manager: " + JN_DOCPATH + ".userprofiles");
+			UserProfile._doc = openDocument(JN_DOCPATH + ".userprofiles");
+			
+			return;
+		}
+		/*DEBUG*/
+		System.out.println(
+				"[DEBUG] New user profile manager: " + JN_DOCPATH + ".userprofiles");
+		UserProfile._doc = null;
+	}
+	/**
+	 * @see net.sf.memoranda.util.Storage#storeEventsList()
+	 */
+	public void storeUserProfileManager() {
+		/*DEBUG*/
+		System.out.println(
+				"[DEBUG] Save user profile manager: " + JN_DOCPATH + ".userprofiles");
+		saveDocument(UserProfile._doc, JN_DOCPATH + ".userprofiles");
 	}
 }

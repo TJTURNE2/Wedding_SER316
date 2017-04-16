@@ -18,6 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
 import net.sf.memoranda.UserProfile;
+import net.sf.memoranda.util.CurrentStorage;
 import net.sf.memoranda.util.Local;
 
 public class LoginDialog extends JDialog {
@@ -29,6 +30,7 @@ public class LoginDialog extends JDialog {
     private JButton btnCancel;
     private JButton btnCreate;
     private boolean succeeded;
+    private static UserProfile userProfile;
 	
 	public LoginDialog(Frame frame, String title) {
 		super(frame, title, true);
@@ -74,11 +76,12 @@ public class LoginDialog extends JDialog {
         panel.setBorder(new LineBorder(Color.GRAY));
  
         btnLogin = new JButton("Login");
-		 
+		
+        userProfile = null;
         btnLogin.addActionListener(new ActionListener() {
  
             public void actionPerformed(ActionEvent e) {
-                if (UserProfile.authenticate(getUsername(), getPassword())) {
+                if (userProfile.authenticate(getUsername(), getPassword())) {
                     JOptionPane.showMessageDialog(LoginDialog.this,
                             "Hi " + getUsername() + "! You have successfully logged in.",
                             "Login",

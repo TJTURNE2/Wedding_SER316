@@ -18,6 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
 import net.sf.memoranda.UserProfile;
+import net.sf.memoranda.util.CurrentStorage;
 
 public class CreateUserDialog extends JDialog {
 	private JTextField tfUsername;
@@ -72,16 +73,17 @@ public class CreateUserDialog extends JDialog {
         panel.setBorder(new LineBorder(Color.GRAY));
  
         btnCreate = new JButton("Create");
-		 
+        
         btnCreate.addActionListener(new ActionListener() {
  
             public void actionPerformed(ActionEvent e) {
-                if (UserProfile.authenticate(getUsername(), getPassword())) {
+                if (UserProfile.createUser(getUsername(), getPassword())) {
                     JOptionPane.showMessageDialog(CreateUserDialog.this,
                             "Hi " + getUsername() + "! You have successfully created this user.",
                             "Create User",
                             JOptionPane.INFORMATION_MESSAGE);
                     succeeded = true;
+                    CurrentStorage.get().storeUserProfileManager();
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(CreateUserDialog.this,
