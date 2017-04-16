@@ -8,6 +8,7 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -25,10 +26,13 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
@@ -36,6 +40,13 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import net.sf.memoranda.ReminderLogList;
+import net.sf.memoranda.ReminderLog;
+import net.sf.memoranda.EventsLogList;
+import net.sf.memoranda.ui.EventsControlPanel;
+import net.sf.memoranda.ui.EventsControlPanel.LogEditListener;
+import net.sf.memoranda.CurrentProject;
+import net.sf.memoranda.EventsLog;
 import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.util.Local;
 
@@ -80,6 +91,9 @@ public class EventDialog extends JDialog implements WindowListener {
     CalendarFrame endCalFrame = new CalendarFrame();
     CalendarFrame startCalFrame = new CalendarFrame();
     private Date eventDate;
+    
+	static EventsLogList eventsLogList = null;
+	static JList logs = null;
     
     public EventDialog(Frame frame, String title) {
         super(frame, title, true);
@@ -181,7 +195,7 @@ public class EventDialog extends JDialog implements WindowListener {
         gbc.insets = new Insets(5, 5, 5, 40);
         gbc.anchor = GridBagConstraints.WEST;
         repeatPanel.add(lblDays, gbc);
-        lblSince.setText(Local.getString("Since"));
+        lblSince.setText(Local.getString("Start Repeating"));
         lblSince.setMinimumSize(new Dimension(70, 16));
         gbc = new GridBagConstraints();
         gbc.gridx = 4; gbc.gridy = 1;
@@ -253,7 +267,7 @@ public class EventDialog extends JDialog implements WindowListener {
         gbc.anchor = GridBagConstraints.WEST;
         repeatPanel.add(weekdaysCB, gbc);
         enableEndDateCB.setHorizontalAlignment(SwingConstants.RIGHT);
-        enableEndDateCB.setText(Local.getString("Till"));
+        enableEndDateCB.setText(Local.getString("Stop Repeating After"));
         enableEndDateCB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 enableEndDateCB_actionPerformed(e);
@@ -477,7 +491,7 @@ public class EventDialog extends JDialog implements WindowListener {
     void okB_actionPerformed(ActionEvent e) {
         this.dispose();
     }
-
+    
     void cancelB_actionPerformed(ActionEvent e) {
         CANCELLED = true;
         this.dispose();
