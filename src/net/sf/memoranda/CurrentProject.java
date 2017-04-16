@@ -26,7 +26,8 @@ public class CurrentProject {
 
     private static Project _project = null;
     private static TaskList _tasklist = null;
-    private static TimeLogList timeLogList = null;
+    private static TimeLogList _timeLogList = null;
+    private static DefectLogList _defectLogList = null;
     private static NoteList _notelist = null;
     private static ResourcesList _resources = null;
     private static Vector projectListeners = new Vector();
@@ -54,9 +55,11 @@ public class CurrentProject {
 		}		
 		
         _tasklist = CurrentStorage.get().openTaskList(_project);
-        timeLogList = CurrentStorage.get().openTimeLogList(_project);
+        _timeLogList = CurrentStorage.get().openTimeLogList(_project);
+        _defectLogList = CurrentStorage.get().openDefectLogList(_project);
         reminderLogList = CurrentStorage.get().openReminderLogList(_project);
         eventsLogList = CurrentStorage.get().openEventsLogList(_project);
+
         _notelist = CurrentStorage.get().openNoteList(_project);
         _resources = CurrentStorage.get().openResourcesList(_project);
         AppFrame.addExitListener(new ActionListener() {
@@ -76,7 +79,15 @@ public class CurrentProject {
     }
     
 	public static TimeLogList getTimeLogList() {
-		return timeLogList;
+		return _timeLogList;
+	}
+	
+	public static DefectLogList getDefectLogList() {
+		return _defectLogList;
+	}
+	
+	public static void setDefectLogList(DefectLogList logList) {
+		_defectLogList = logList;
 	}
 	
 	public static ReminderLogList getReminderLogList() {
@@ -99,16 +110,24 @@ public class CurrentProject {
         if (project.getID().equals(_project.getID())) return;
         TaskList newtasklist = CurrentStorage.get().openTaskList(project);
         TimeLogList newtimeloglist = CurrentStorage.get().openTimeLogList(project);
+
+        DefectLogList newdefectloglist = CurrentStorage.get().openDefectLogList(project);
+
         ReminderLogList newreminderloglist = CurrentStorage.get().openReminderLogList(project);
         EventsLogList neweventsloglist = CurrentStorage.get().openEventsLogList(project);
+
         NoteList newnotelist = CurrentStorage.get().openNoteList(project);
         ResourcesList newresources = CurrentStorage.get().openResourcesList(project);
         notifyListenersBefore(project, newnotelist, newtasklist, newresources);
         _project = project;
         _tasklist = newtasklist;
-        timeLogList = newtimeloglist;
+
+        _timeLogList = newtimeloglist;
+        _defectLogList = newdefectloglist;
+
         reminderLogList = newreminderloglist;
         eventsLogList = neweventsloglist;
+
         _notelist = newnotelist;
         _resources = newresources;
         notifyListenersAfter();
@@ -142,9 +161,12 @@ public class CurrentProject {
         
         storage.storeNoteList(_notelist, _project);
         storage.storeTaskList(_tasklist, _project);
-        storage.storeTimeLogList(timeLogList, _project);
+
+        storage.storeTimeLogList(_timeLogList, _project);
+        storage.storeDefectLogList(_defectLogList, _project);
         storage.storeReminderLogList(reminderLogList, _project);
         storage.storeEventsLogList(eventsLogList, _project);
+
         storage.storeResourcesList(_resources, _project);
         storage.storeProjectManager();
     }
@@ -152,9 +174,13 @@ public class CurrentProject {
     public static void free() {
         _project = null;
         _tasklist = null;
-        timeLogList = null;
+
+        _timeLogList = null;
+        _defectLogList = null;
+
         reminderLogList = null;
         eventsLogList = null;
+
         _notelist = null;
         _resources = null;
     }

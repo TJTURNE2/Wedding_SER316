@@ -1,4 +1,4 @@
-package net.sf.memoranda;
+package test.net.sf.memoranda;
 
 import static org.junit.Assert.*;
 
@@ -6,7 +6,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class ReminderLogTest {
+import net.sf.memoranda.EventsLog;
+
+public class EventsLogTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -16,11 +18,11 @@ public class ReminderLogTest {
 	public static void tearDownAfterClass() throws Exception {
 	}
 	
-	private static ReminderLog test = new ReminderLog("4/16/17", "This is a test");
-	private static ReminderLog invalidTest;
+	private static EventsLog test = new EventsLog("4/16/17", "This is a test");
+	private static EventsLog invalidTest;
 	
 	@Test
-	public void ReminderLogTestConstructor() {
+	public void EventsLogTestConstructor() {
 		assertNotNull(test);
 		assertNull(invalidTest);
 	}

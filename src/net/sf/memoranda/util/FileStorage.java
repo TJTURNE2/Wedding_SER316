@@ -22,6 +22,8 @@ import java.util.Vector;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
+import net.sf.memoranda.DefectLog;
+import net.sf.memoranda.DefectLogList;
 import net.sf.memoranda.EventsManager;
 import net.sf.memoranda.Note;
 import net.sf.memoranda.NoteList;
@@ -516,6 +518,58 @@ public class FileStorage implements Storage {
 			Util.debug("Error writing Time Log to file for project " + prj.getTitle());
 		}
 	}
+
+	/**
+	 * @method: openDefectLogList
+	 * @inputs: project to open the list from
+	 * @returns: DefectLogList object
+	 * 
+	 * @description: Loads the defect log list for the given project from a file
+	 * and returns the list. If a list does not exist yet, a new one is created.
+	*/
+	public DefectLogList openDefectLogList(Project prj) {
+		String fileName = JN_DOCPATH + prj.getID() + File.separator + ".defectloglist";
+
+		if (documentExists(fileName)) {
+			Util.debug(
+					"Open defect log list: "
+							+ fileName);
+
+			File defectListDoc = new File(fileName);
+			return new DefectLogList(defectListDoc);   
+		}
+		else {
+			Util.debug("New defect log list created");
+			return new DefectLogList();
+		}
+	}
+
+	/**
+	 * @method: storeDefectLogList
+	 * @inputs: DefectLogList, Project
+	 * @returns: void
+	 * 
+	 * @description: Takes the given defect log list and project, loads the 
+	 * file that stores the list, and attempts to write the contents of the list
+	 * to the file. If unsuccessful, an error is returned.
+	*/
+	public void storeDefectLogList(DefectLogList dll, Project prj) {
+		String fileName = JN_DOCPATH + prj.getID() + File.separator + ".defectloglist";
+
+		Util.debug(
+				"Save defect log list: "
+				+ fileName);
+		Vector<DefectLog> list = dll.getList();
+    try (PrintWriter out = new PrintWriter(new FileOutputStream(fileName))) {
+			for (int i = 0; i < list.size(); i++) {
+				out.println(list.elementAt(i).toFile());
+			}
+		}
+		catch (FileNotFoundException e) {
+			Util.debug("Error writing Defect Log to file for project " + prj.getTitle());
+		}
+  }
+
 	public ReminderLogList openReminderLogList(Project prj) {
 		String fileName = JN_DOCPATH + prj.getID() + File.separator + ".reminderloglist";
 
