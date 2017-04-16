@@ -60,6 +60,8 @@ public class JNCalendarPanel extends JPanel {
   BorderLayout borderLayout5 = new BorderLayout();
   JSpinner yearSpin = new JSpinner(new SpinnerNumberModel(jnCalendar.get().getYear(), 1980, 2999, 1));
   JSpinner.NumberEditor yearSpinner = new JSpinner.NumberEditor(yearSpin, "####");
+  JButton popoutCalendar = new JButton(new ImageIcon(net.sf.memoranda.ui.AppFrame.class.getResource("resources/icons/popout.png")));
+
 
   boolean ignoreChange = false;
 
@@ -103,12 +105,12 @@ public class JNCalendarPanel extends JPanel {
             todayB_actionPerformed(e);
         }
   };
+  
       
   void jbInit() throws Exception {
     //dayBackAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, KeyEvent.ALT_MASK));
     //dayForwardAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, KeyEvent.ALT_MASK));
     todayAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_HOME, KeyEvent.ALT_MASK));
-    
     monthsCB.setRequestFocusEnabled(false);
     monthsCB.setMaximumRowCount(12);
     monthsCB.setPreferredSize(new Dimension(50 , 20));
@@ -142,6 +144,16 @@ public class JNCalendarPanel extends JPanel {
     todayB.setIcon(new ImageIcon(net.sf.memoranda.ui.AppFrame.class.getResource("resources/icons/today.png")));
     todayB.setText("");
     todayB.setToolTipText(Local.getString("To today"));
+    
+    popoutCalendar.setMinimumSize(new Dimension(24, 24));
+    popoutCalendar.setOpaque(false);
+    popoutCalendar.setPreferredSize(new Dimension(24, 24));
+    popoutCalendar.setRequestFocusEnabled(false);
+    popoutCalendar.setBorderPainted(false);
+    popoutCalendar.setFocusPainted(false);
+    popoutCalendar.setToolTipText(Local.getString("Pop Out Calendar"));
+    
+    
     
     dayBackBPanel.setAlignmentX((float) 1.5);
     dayBackBPanel.setMinimumSize(new Dimension(40, 24));
@@ -179,6 +191,7 @@ public class JNCalendarPanel extends JPanel {
     dayBackBPanel.add(dayBackB, null);
     navbPanel.add(todayBPanel, BorderLayout.CENTER);
     todayBPanel.add(todayB, null);
+    todayBPanel.add(popoutCalendar, null);
     navbPanel.add(dayForwardBPanel, BorderLayout.EAST);
     dayForwardBPanel.add(dayForwardB, null);
     this.add(mntyPanel,  BorderLayout.SOUTH);
@@ -292,6 +305,10 @@ public class JNCalendarPanel extends JPanel {
     _date = new CalendarDate(cal);
     refreshView();
     notifyListeners();
+  }
+  
+  void popCalendar_actionPerformed(ActionEvent e){
+	  
   }
 
 
