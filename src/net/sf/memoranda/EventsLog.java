@@ -3,7 +3,7 @@
  *  @date: April 14, 2017
  *  
  *  @description: Instances of the Events Log class will store data relative
- *  			  to each reminder log created by the user. There is one events
+ *  			  to each events log created by the user. There is one events
  *  			  log object for each events log created by the user.
  */
 package net.sf.memoranda;
@@ -19,38 +19,38 @@ package net.sf.memoranda;
 
 public class EventsLog {
 
-	String date;
-	String event;
+	private String _date;
+	private String _event;
 	
 	public EventsLog(String date, String event) {
-		this.date = date;
-		this.event = event;
+		this._date = date;
+		this._event = event;
 	}
 
 	public String getDate() {
-		return date;
+		return _date;
 	}
 
 	public void setDate(String date) {
-		this.date = date;
+		this._date = date;
 	}
 
 
 	public String getEvent() {
-		return event;
+		return _event;
 	}
 
 	public void setEvent(String event) {
-		this.event = event;
+		this._event = event;
 	}
 	
 	public String[] getValuesArray() {
-		String[] values = {date, event};
+		String[] values = {_date, _event};
 		return values;
 	}
 	
 	public String toString() {
-		return date + " " + event;
+		return _date + " " + _event;
 	}
 
 	/**
@@ -62,8 +62,8 @@ public class EventsLog {
 	 *               prints it to a file. 
 	 */
 	public String toFile() {
-		return ("date*^*" + (date.equals("") ? "null" : date) +
-				"*^*event*^*" + (event.equals("") ? "null" : event));
+		return ("date*^*" + (_date.equals("") ? "null" : _date) +
+				"*^*event*^*" + (_event.equals("") ? "null" : _event));
 	}
 
 }

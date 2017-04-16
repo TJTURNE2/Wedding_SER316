@@ -80,17 +80,6 @@ public class ReminderLogList {
 	public Vector<ReminderLog> getList() {
 		return reminderLogList;
 	}
-	
-	/**
-	 * @method: deleteLog 
-	 * @inputs: log
-	 * @return: void
-	 * 
-	 * @description: Removes a log from the vector of logs.
-	 */
-	public void deleteLog(ReminderLog log) {
-		reminderLogList.remove(log);
-	}
 
 	/**
 	 * @method: addLog 

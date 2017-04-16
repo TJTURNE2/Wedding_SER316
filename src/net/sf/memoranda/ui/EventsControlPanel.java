@@ -46,9 +46,7 @@ import net.sf.memoranda.util.Util;
 public class EventsControlPanel extends JPanel {
 	BorderLayout borderLayout = new BorderLayout();
 	JButton newEvent = new JButton("Add New Event");
-	JButton deleteEvent = new JButton("Delete Selected Event");
 
-	private DefaultListModel<String> model = new DefaultListModel<String>();
 	static EventsLogList eventsLogList = null;
 	static JList logs = null;
 	static JScrollPane scrollPane = null;
@@ -59,19 +57,9 @@ public class EventsControlPanel extends JPanel {
 				addNewEventLog();
 			}
 		});
-		deleteEvent.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				deleteNewEvent();
-			}
-		});
 
 		buildGUI();
-	
- 
     }
-
- 
-
 	
 	public void buildGUI() {
 		this.setLayout(borderLayout);
@@ -86,8 +74,6 @@ public class EventsControlPanel extends JPanel {
 
 		this.add(newEvent, BorderLayout.PAGE_START);
 		this.add(scrollPane, BorderLayout.CENTER);
-		this.add(deleteEvent, BorderLayout.PAGE_END);
-
 		
 	}
 	
@@ -138,16 +124,6 @@ public class EventsControlPanel extends JPanel {
 			logs.updateUI();
 		}
 	}
-	
-	private void deleteNewEvent() {
-		//int selectedIndex = logs.getSelectedIndex();
-		//if (selectedIndex != -1){
-		//	logs.remove(selectedIndex);
-		//}
-		
-		
-	}
-	
 
 	private void editExistingEventLog() {
 		EventsLog log = eventsLogList.getLog(logs.getSelectedIndex());

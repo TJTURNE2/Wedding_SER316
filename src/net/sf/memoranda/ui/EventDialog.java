@@ -490,41 +490,8 @@ public class EventDialog extends JDialog implements WindowListener {
 
     void okB_actionPerformed(ActionEvent e) {
         this.dispose();
-        EventsPanelDialog dialog = createNewEventsLogDialog("New Event", null);
-		if (!dialog.isCancelled) {
-			EventsLog newLog = new EventsLog(
-					dialog.date.getText(),
-					dialog.event.getText());
-
-			eventsLogList = CurrentProject.getEventsLogList();
-			logs = new JList(eventsLogList.getList());
-			eventsLogList.addLog(newLog);
-
-			logs.setFont(new java.awt.Font("Dialog", 0, 11));
-			logs.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-			dialog.setVisible(true);
-			logs.updateUI();
-		}
     }
     
-	EventsPanelDialog createNewEventsLogDialog(String title, String[] initValues) {
-		EventsPanelDialog dialog;
-
-		if (initValues == null)
-			dialog = new EventsPanelDialog(App.getFrame(), title);
-		else
-			dialog = new EventsPanelDialog(App.getFrame(), title, initValues);
-
-		Dimension frameSize = App.getFrame().getSize();
-		Point location = App.getFrame().getLocation();
-		dialog.setLocation((frameSize.width - dialog.getSize().width) / 2 + location.x, (frameSize.height - dialog.getSize().height) / 2 + location.y);
-
-		dialog.setVisible(true);
-
-		return dialog;
-	}
-
     void cancelB_actionPerformed(ActionEvent e) {
         CANCELLED = true;
         this.dispose();
