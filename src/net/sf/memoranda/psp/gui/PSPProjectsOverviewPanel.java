@@ -375,8 +375,6 @@ public class PSPProjectsOverviewPanel extends JPanel {
 				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/export.png")));
 		summaryToolBar.add(btnSaveSummary);
 
-		// JScrollPane summaryScrollPane = new JScrollPane();
-		// locPanel.add(summaryScrollPane, BorderLayout.CENTER);
 		summaryLOCPanel = new JPanel();
 		summaryLOCPanel.setBackground(Color.WHITE);
 		phaseTimePanel = new JPanel();
@@ -904,8 +902,19 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		btnNewRequirement.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				newRequirement = new PSPNewRequirementDialog(ProjectID);
-				newRequirement.setVisible(true);
+				newRequirement.setVisible(true);		
+				try {
+					if (Manager.getProject(ProjectID).getRequirements().size() > 0
+							&& Manager.getProject(ProjectID).getPhase().equals(PSPProjectPhase.DESIGN)) {
+						Manager.getProject(ProjectID).setPhase(PSPProjectPhase.CODE);
+						Manager.saveProjects();
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
+
 		});
 		btnNewRequirement.setMaximumSize(new Dimension(25, 25));
 		btnNewRequirement.setBorder(null);
@@ -1100,7 +1109,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 					// pModel.fireTableDataChanged();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					//e1.printStackTrace();
 				}
 				defectID = -1;
 
@@ -1197,19 +1206,19 @@ public class PSPProjectsOverviewPanel extends JPanel {
 			}
 			{
 				PhaseDefects.getPlanning().setActualSize((int) dIActualPlanSpinner.getValue());
-				PhaseDefects.getPlanning().setToDateSize((int)dIToDatePlanSpinner.getValue());
-				PhaseDefects.getPlanning().setToDatePercent((double)dIToDatePerPlanSpinner.getValue());
-				PhaseDefects.getDesign().setActualSize((int)dIActualDLDSpinner.getValue());
-				PhaseDefects.getDesign().setToDateSize((int)dIToDateDLDSpinner.getValue());
-				PhaseDefects.getDesign().setToDatePercent((double)dIToDatePerDLDSpinner.getValue());
-				PhaseDefects.getCode().setActualSize((int)dIActualCodeSpinner.getValue());
-				PhaseDefects.getCode().setToDateSize((int)dIToDateCodeSpinner.getValue());
-				PhaseDefects.getCode().setToDatePercent((double)dIToDatePerCodeSpinner.getValue());
-				PhaseDefects.getCompile().setToDateSize((int)dIActualCompileSpinner.getValue());
-				PhaseDefects.getCompile().setActualSize((int)dIToDateCompileSpinner.getValue());
-				PhaseDefects.getCompile().setToDatePercent((double)dIToDatePerCompileSpinner.getValue());
-				PhaseDefects.getTesting().setActualSize((int)dIActualUTSpinner.getValue());
-				PhaseDefects.getTesting().setToDateSize((int)dIToDateUTSpinner.getValue());
+				PhaseDefects.getPlanning().setToDateSize((int) dIToDatePlanSpinner.getValue());
+				PhaseDefects.getPlanning().setToDatePercent((double) dIToDatePerPlanSpinner.getValue());
+				PhaseDefects.getDesign().setActualSize((int) dIActualDLDSpinner.getValue());
+				PhaseDefects.getDesign().setToDateSize((int) dIToDateDLDSpinner.getValue());
+				PhaseDefects.getDesign().setToDatePercent((double) dIToDatePerDLDSpinner.getValue());
+				PhaseDefects.getCode().setActualSize((int) dIActualCodeSpinner.getValue());
+				PhaseDefects.getCode().setToDateSize((int) dIToDateCodeSpinner.getValue());
+				PhaseDefects.getCode().setToDatePercent((double) dIToDatePerCodeSpinner.getValue());
+				PhaseDefects.getCompile().setToDateSize((int) dIActualCompileSpinner.getValue());
+				PhaseDefects.getCompile().setActualSize((int) dIToDateCompileSpinner.getValue());
+				PhaseDefects.getCompile().setToDatePercent((double) dIToDatePerCompileSpinner.getValue());
+				PhaseDefects.getTesting().setActualSize((int) dIActualUTSpinner.getValue());
+				PhaseDefects.getTesting().setToDateSize((int) dIToDateUTSpinner.getValue());
 				PhaseDefects.getTesting().setToDatePercent((double) dIToDatePerUTSpinner.getValue());
 				PhaseDefects.getPostmortem().setActualSize((int) dIActualPMSpinner.getValue());
 				PhaseDefects.getPostmortem().setToDateSize((int) dIToDatePMSpinner.getValue());
@@ -1220,26 +1229,26 @@ public class PSPProjectsOverviewPanel extends JPanel {
 			}
 
 			{
-				DefectsRemoved.getPlanning().setActualSize((int)drToActualPlanSpinner.getValue());
+				DefectsRemoved.getPlanning().setActualSize((int) drToActualPlanSpinner.getValue());
 				DefectsRemoved.getPlanning().setToDateSize((int) drToDatePlanSpinner.getValue());
-				DefectsRemoved.getPlanning().setToDatePercent((double)drToDatePerPlanSpinner.getValue());
-				DefectsRemoved.getDesign().setActualSize((int)drToActualDLDSpinner.getValue());
-				DefectsRemoved.getDesign().setToDateSize((int)drToDatePerDLDSpinner.getValue());
-				DefectsRemoved.getDesign().setToDatePercent((double)drToDatePerDLDSpinner.getValue());
-				DefectsRemoved.getCode().setActualSize((int)drToActualCodeSpinner.getValue());
-				DefectsRemoved.getCode().setToDateSize((int)drToDateCodeSpinner.getValue());
-				DefectsRemoved.getCode().setToDatePercent((double)drToDatePerCodeSpinner.getValue());
-				DefectsRemoved.getCompile().setActualSize((int)drToActualCompileSpinner.getValue());
-				DefectsRemoved.getCompile().setToDateSize((int)drToDateCompileSpinner.getValue());
-				DefectsRemoved.getCompile().setToDatePercent((double)drToDatePerCompileSpinner.getValue());
-				DefectsRemoved.getTesting().setActualSize((int)drToActualUTSpinner.getValue());
-				DefectsRemoved.getTesting().setToDateSize((int)drToDateUTSpinner.getValue());
-				DefectsRemoved.getTesting().setToDatePercent((double)drToDatePerUTSpinner.getValue());
-				DefectsRemoved.getPostmortem().setActualSize((int)drToActualPMSpinner.getValue());
-				DefectsRemoved.getPostmortem().setToDateSize((int)drToDatePMSpinner.getValue());
+				DefectsRemoved.getPlanning().setToDatePercent((double) drToDatePerPlanSpinner.getValue());
+				DefectsRemoved.getDesign().setActualSize((int) drToActualDLDSpinner.getValue());
+				DefectsRemoved.getDesign().setToDateSize((int) drToDatePerDLDSpinner.getValue());
+				DefectsRemoved.getDesign().setToDatePercent((double) drToDatePerDLDSpinner.getValue());
+				DefectsRemoved.getCode().setActualSize((int) drToActualCodeSpinner.getValue());
+				DefectsRemoved.getCode().setToDateSize((int) drToDateCodeSpinner.getValue());
+				DefectsRemoved.getCode().setToDatePercent((double) drToDatePerCodeSpinner.getValue());
+				DefectsRemoved.getCompile().setActualSize((int) drToActualCompileSpinner.getValue());
+				DefectsRemoved.getCompile().setToDateSize((int) drToDateCompileSpinner.getValue());
+				DefectsRemoved.getCompile().setToDatePercent((double) drToDatePerCompileSpinner.getValue());
+				DefectsRemoved.getTesting().setActualSize((int) drToActualUTSpinner.getValue());
+				DefectsRemoved.getTesting().setToDateSize((int) drToDateUTSpinner.getValue());
+				DefectsRemoved.getTesting().setToDatePercent((double) drToDatePerUTSpinner.getValue());
+				DefectsRemoved.getPostmortem().setActualSize((int) drToActualPMSpinner.getValue());
+				DefectsRemoved.getPostmortem().setToDateSize((int) drToDatePMSpinner.getValue());
 				DefectsRemoved.getPostmortem().setToDatePercent((double) drToDatePerPMSpinner.getValue());
-				DefectsRemoved.setTotalAcutal((int)drToActualTotalSpinner.getValue());
-				DefectsRemoved.setTotalTodate((int)drToDateTotalSpinner.getValue());
+				DefectsRemoved.setTotalAcutal((int) drToActualTotalSpinner.getValue());
+				DefectsRemoved.setTotalTodate((int) drToDateTotalSpinner.getValue());
 			}
 
 			Manager.saveProjects();
@@ -1280,9 +1289,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 				nRPlanSpinner.setValue(LOC.getNewReused().getPlanSize());
 				nRActualSpinner.setValue(LOC.getNewReused().getActualSize());
 				nRToDateSpinner.setValue(LOC.getNewReused().getToDateSize());
-
 			}
-
 			{
 				tIPPlanPlanSpinner.setValue(phaseTime.getPlanning().getPlanSize());
 				tIPActualPlanSpinner.setValue(phaseTime.getPlanning().getActualSize());
@@ -1311,7 +1318,6 @@ public class PSPProjectsOverviewPanel extends JPanel {
 				tIPPlanTotalSpinner.setValue(phaseTime.getTotalPlan());
 				tIPActualTotalSpinner.setValue(phaseTime.getTotalAcutal());
 				tIPToDateTotalSpinner.setValue(phaseTime.getTotalTodate());
-
 			}
 			{
 				dIActualPlanSpinner.setValue(PhaseDefects.getPlanning().getActualSize());
@@ -1335,9 +1341,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 				dIToDatePerPMSpinner.setValue(PhaseDefects.getPostmortem().getToDatePercent());
 				dIActualTotalSpinner.setValue(PhaseDefects.getTotalAcutal());
 				dIToDateTotalSpinner.setValue(PhaseDefects.getTotalTodate());
-
 			}
-
 			{
 				drToActualPlanSpinner.setValue(DefectsRemoved.getPlanning().getActualSize());
 				drToDatePlanSpinner.setValue(DefectsRemoved.getPlanning().getToDateSize());
@@ -1360,8 +1364,6 @@ public class PSPProjectsOverviewPanel extends JPanel {
 				drToActualTotalSpinner.setValue(DefectsRemoved.getTotalAcutal());
 				drToDateTotalSpinner.setValue(DefectsRemoved.getTotalTodate());
 			}
-
-			// Manager.saveProjects();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
@@ -1379,6 +1381,13 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		summary.setStartDate((Date) startDateSpinner.getValue());
 		summary.setEndDate((Date) endDateSpinner.getValue());
 
+		// chnagephase
+		if (summary.getStudent().isEmpty() != true && summary.getInstructor().isEmpty() != true
+				&& summary.getProgram().isEmpty() != true
+				&& Manager.getProject(ProjectID).getPhase().equals(PSPProjectPhase.PLANNING)) {
+			Manager.getProject(ProjectID).setPhase(PSPProjectPhase.DESIGN);
+		}
+
 		try {
 			Manager.saveProjects();
 			System.out.println("Saving summary");
@@ -1386,16 +1395,11 @@ public class PSPProjectsOverviewPanel extends JPanel {
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
 		}
-		// System.out.println(Manager.getProject(ProjectID).getSummary().getStudent());
-		// System.out.println((Date)startDateSpinner.getValue());
-		// System.out.println((Date)endDateSpinner.getValue());
-		//
-		// Manager.getProject(ProjectID).setSummary(summary);
+		resetPanels();
+
 	}
 
 	public void setSummary() {
-
-		//
 		try {
 			if (ProjectID >= 0) {
 				PSPPlanSummary summary = Manager.getProject(ProjectID).getSummary();
@@ -1403,8 +1407,6 @@ public class PSPProjectsOverviewPanel extends JPanel {
 				languageTextField.setText((summary.getLanguage() == null) ? " " : summary.getLanguage());
 				instructorTextField.setText((summary.getInstructor() == null) ? " " : summary.getInstructor());
 				programTextField.setText((summary.getProgram() == null) ? " " : summary.getProgram());
-				// startDateSpinner.setValue(summary.getStartDate());
-				// endDateSpinner.setValue(summary.getEndDate());
 				if (summary.getStartDate() == null) {
 					startDateSpinner.setValue(null);
 					// startDateSpinner.setValue((SpinnerDateModel) today);
@@ -1422,10 +1424,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 				} else {
 					endDateSpinner.setValue(summary.getEndDate());
 				}
-
-				// Manager.updateProject();
 			}
-			// Manager.saveProjects();
 			setLOC();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -1435,12 +1434,6 @@ public class PSPProjectsOverviewPanel extends JPanel {
 	}
 
 	public void resetPanels() {
-		// setSummary();
-		// update tables?
-		// pModel.fireTableDataChanged();
-		// dModel.fireTableDataChanged();
-		// tModel.fireTableDataChanged();
-		// rModel.fireTableDataChanged();
 		Manager.updateProject();
 		// disable all
 		projectsTabbedPane.setEnabledAt(8, !isEnabled());
@@ -1700,7 +1693,6 @@ public class PSPProjectsOverviewPanel extends JPanel {
 			{
 				return Manager.Projects.get(ProjectID).getNotes().get(row).getPriority();
 			}
-
 		}
 	}
 
