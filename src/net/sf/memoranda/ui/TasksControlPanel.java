@@ -37,6 +37,7 @@ import net.sf.memoranda.DefectLogList;
 import net.sf.memoranda.Note;
 import net.sf.memoranda.TimeLog;
 import net.sf.memoranda.TimeLogList;
+import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.date.CurrentDate;
 import net.sf.memoranda.ui.NotesControlPanel.PopupListener;
 import net.sf.memoranda.util.Configuration;
