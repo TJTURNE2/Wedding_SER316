@@ -3,6 +3,7 @@ package net.sf.memoranda.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -315,10 +316,14 @@ public class JNCalendarPanel extends JPanel {
   
   void popCalendar_actionPerformed(ActionEvent e){
 	  JNCalendarDialog dlg = new JNCalendarDialog(App.getFrame(), Local.getString("Calendar"));
-	  
+	  Dimension frmSize = App.getFrame().getSize();
+	  Point loc = App.getFrame().getLocation();
 	  if(dlg.CANCELLED)
 		  return;
 	  
+	  dlg.setLocation((frmSize.width - dlg.getSize().width) / 2 + loc.x, (frmSize.height - dlg.getSize().height) / 2 + loc.y);
+		dlg.setVisible(true);
+
 	  
   }
 

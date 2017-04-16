@@ -17,8 +17,12 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.Calendar;
 
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 import net.sf.memoranda.date.CurrentDate;
 
@@ -31,10 +35,24 @@ import net.sf.memoranda.date.CurrentDate;
  */
 public class JNCalendarDialog extends JDialog implements WindowListener {
     public boolean CANCELLED = false;
-
-    //components
+    
+    JPanel dialogPanel = new JPanel();
+    
+    //calendar components
     JPanel calendarPanel = new JPanel();
     JNCalendar jnCalendar = new JNCalendar(CurrentDate.get());
+    
+    //nav bar components
+    JPanel navBar = new JPanel();
+    JButton monthForwardButton = new JButton();
+    JButton monthBackwardButton = new JButton();
+    JButton todayButton = new JButton();
+    
+    //bottom panel components
+    JPanel monthYearPanel = new JPanel();
+    JSpinner yearSpin = new JSpinner(new SpinnerNumberModel(jnCalendar.get().getYear(), 1980, 2999, 1));
+    JSpinner.NumberEditor yearSpinner = new JSpinner.NumberEditor(yearSpin, "####");
+
     
     public JNCalendarDialog(Frame frame, String title){
     	super(frame, title, true);
@@ -50,12 +68,16 @@ public class JNCalendarDialog extends JDialog implements WindowListener {
     
     void jbInit() throws Exception {
     	this.setResizable(true);
+    	dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.PAGE_AXIS));
+    	
+    	//setup navbar
+    	navBar.setLayout(new BorderLayout());
     	
     	calendarPanel.setLayout(new BorderLayout());
-    	 jnCalendar.getTableHeader().setFont(new java.awt.Font("Dialog", 1, 10));
-    	 jnCalendar.setFont(new java.awt.Font("Dialog", 0, 10));
+    	 jnCalendar.getTableHeader().setFont(new java.awt.Font("Dialog", 1, 20));
+    	 jnCalendar.setFont(new java.awt.Font("Dialog", 0, 20));
     	 jnCalendar.setGridColor(Color.lightGray);
-    	 jnCalendar.getTableHeader().setPreferredSize(new Dimension(200, 15));
+    	 jnCalendar.getTableHeader().setPreferredSize(new Dimension(200, 40));
     	 calendarPanel.add(jnCalendar.getTableHeader(), BorderLayout.NORTH);
     	 calendarPanel.add(jnCalendar, BorderLayout.CENTER);
     	 this.add(calendarPanel);
