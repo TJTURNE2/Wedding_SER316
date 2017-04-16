@@ -195,7 +195,7 @@ public class EventDialog extends JDialog implements WindowListener {
         gbc.insets = new Insets(5, 5, 5, 40);
         gbc.anchor = GridBagConstraints.WEST;
         repeatPanel.add(lblDays, gbc);
-        lblSince.setText(Local.getString("Since"));
+        lblSince.setText(Local.getString("Start Repeating"));
         lblSince.setMinimumSize(new Dimension(70, 16));
         gbc = new GridBagConstraints();
         gbc.gridx = 4; gbc.gridy = 1;
@@ -267,7 +267,7 @@ public class EventDialog extends JDialog implements WindowListener {
         gbc.anchor = GridBagConstraints.WEST;
         repeatPanel.add(weekdaysCB, gbc);
         enableEndDateCB.setHorizontalAlignment(SwingConstants.RIGHT);
-        enableEndDateCB.setText(Local.getString("Till"));
+        enableEndDateCB.setText(Local.getString("Stop Repeating After"));
         enableEndDateCB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 enableEndDateCB_actionPerformed(e);
