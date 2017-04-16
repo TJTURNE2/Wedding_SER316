@@ -243,6 +243,9 @@ public class EventsPanel extends JPanel {
         ((SpinnerDateModel)dlg.timeSpin.getModel()).setStart(CalendarDate.today().getDate());
         ((SpinnerDateModel)dlg.timeSpin.getModel()).setEnd(CalendarDate.tomorrow().getDate());*/    
         dlg.textField.setText(ev.getText());
+        dlg.whereField.setText(ev.getWhere());
+        dlg.attendeeField.setText(ev.getAttendees());
+        dlg.descriptionArea.setText(ev.getDescription());
         int rep = ev.getRepeat();
         if (rep > 0) {
             dlg.startDate.getModel().setValue(ev.getStartDate().getDate());
@@ -302,10 +305,14 @@ public class EventsPanel extends JPanel {
         //int hh = ((Date) dlg.timeSpin.getModel().getValue()).getHours();
         //int mm = ((Date) dlg.timeSpin.getModel().getValue()).getMinutes();
         String text = dlg.textField.getText();
+        String where = dlg.whereField.getText();
+    	String attendees = dlg.attendeeField.getText();
+    	String description = dlg.descriptionArea.getText();
+    	
         if (dlg.noRepeatRB.isSelected())
-   	    EventsManager.createEvent(CurrentDate.get(), hh, mm, text);
+   	    EventsManager.createEvent(CurrentDate.get(), hh, mm, text, where, attendees, description);
         else {
-	    updateEvents(dlg,hh,mm,text);
+	    updateEvents(dlg,hh,mm,text, where, attendees, description);
 	}    
 	saveEvents();
     }
@@ -347,13 +354,16 @@ public class EventsPanel extends JPanel {
     	//int hh = ((Date) dlg.timeSpin.getModel().getValue()).getHours();
     	//int mm = ((Date) dlg.timeSpin.getModel().getValue()).getMinutes();
     	String text = dlg.textField.getText();
+    	String where = dlg.whereField.getText();
+    	String attendees = dlg.attendeeField.getText();
+    	String description = dlg.descriptionArea.getText();
 		
 		CalendarDate eventCalendarDate = new CalendarDate(dlg.getEventDate());
 		
     	if (dlg.noRepeatRB.isSelected())
-    		EventsManager.createEvent(eventCalendarDate, hh, mm, text);
+    		EventsManager.createEvent(eventCalendarDate, hh, mm, text, where, attendees, description);
     	else {
-    		updateEvents(dlg,hh,mm,text);
+    		updateEvents(dlg,hh,mm,text, where, attendees, description);
     	}
     	saveEvents();
     }
@@ -366,7 +376,7 @@ public class EventsPanel extends JPanel {
         parentPanel.updateIndicators();
     }
 
-    private void updateEvents(EventDialog dlg, int hh, int mm, String text) {
+    private void updateEvents(EventDialog dlg, int hh, int mm, String text, String where, String attendees, String description) {
 	int rtype;
         int period;
         CalendarDate sd = new CalendarDate((Date) dlg.startDate.getModel().getValue());
@@ -394,7 +404,7 @@ public class EventsPanel extends JPanel {
             rtype = EventsManager.REPEAT_MONTHLY;
             period = ((Integer) dlg.dayOfMonthSpin.getModel().getValue()).intValue();
         }
-        EventsManager.createRepeatableEvent(rtype, sd, ed, period, hh, mm, text, dlg.workingDaysOnlyCB.isSelected());
+        EventsManager.createRepeatableEvent(rtype, sd, ed, period, hh, mm, text, where, attendees, description, dlg.workingDaysOnlyCB.isSelected() );
     }
 
     void removeEventB_actionPerformed(ActionEvent e) {

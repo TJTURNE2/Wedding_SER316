@@ -57,6 +57,18 @@ public class EventImpl implements Event, Comparable {
     public String getText() {
         return _elem.getValue();
     }
+    
+    public String getWhere() {
+    	return _elem.getAttribute("where").getValue();
+    }
+    
+    public String getAttendees() {
+    	return _elem.getAttribute("attendees").getValue();
+    }
+    
+    public String getDescription() {
+    	return _elem.getAttribute("description").getValue();
+    }
 
     /**
      * @see net.sf.memoranda.Event#getContent()

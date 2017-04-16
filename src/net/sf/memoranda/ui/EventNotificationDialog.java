@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,6 +18,7 @@ import javax.swing.border.Border;
 
 import net.sf.memoranda.util.Configuration;
 import net.sf.memoranda.util.Local;
+import sun.tools.jar.resources.jar;
 
 import java.applet.Applet;
 import java.applet.AudioClip;
@@ -25,18 +28,15 @@ import java.net.URL;
 
 /*$Id: EventNotificationDialog.java,v 1.8 2004/10/18 19:08:56 ivanrise Exp $*/
 public class EventNotificationDialog extends JFrame {
-  JPanel panel1 = new JPanel();
-  BorderLayout borderLayout1 = new BorderLayout();
+  JPanel jpanel = new JPanel();
   JButton jButton1 = new JButton();
-  Border border1;
-  Border border2;
-  Border border3;
-  JPanel jPanel1 = new JPanel();
-  JLabel textLabel = new JLabel();
+  JLabel eventTitleLabel = new JLabel();
+  JLabel whereLabel = new JLabel();
+  JLabel descriptionLabel = new JLabel();
   JLabel timeLabel = new JLabel();
-  Border border4;
+  JLabel timeIcon = new JLabel();
 
-  public EventNotificationDialog(String title, String time, String text) {
+  public EventNotificationDialog(String title, String time, String eventTitle, String where, String description) {
     super();
     this.setTitle(title);
     try {
@@ -47,10 +47,13 @@ public class EventNotificationDialog extends JFrame {
       new ExceptionDialog(ex);
     }
     timeLabel.setText(time);
-    timeLabel.setIcon(new ImageIcon(net.sf.memoranda.ui.TaskDialog.class.getResource(
+    timeIcon.setIcon(new ImageIcon(net.sf.memoranda.ui.TaskDialog.class.getResource(
             "resources/icons/event48.png")));
-    textLabel.setText(text);
-    this.setSize(300,200);
+    eventTitleLabel.setText(eventTitle);
+    whereLabel.setText("at " + where);
+    descriptionLabel.setText(description);
+    
+    this.setSize(300,250);
     this.setLocationRelativeTo(null);
     this.setVisible(true);    
     this.toFront();
@@ -59,17 +62,14 @@ public class EventNotificationDialog extends JFrame {
   }
 
   public EventNotificationDialog() {
-    this("", "", "");
+    this("", "", "","","");
   }
   void jbInit() throws Exception {
     this.setResizable(false);
     this.setIconImage(new ImageIcon(EventNotificationDialog.class.getResource("resources/icons/jnotes16.png")).getImage());
     this.getContentPane().setBackground(new Color(251, 197, 63));
-    border2 = BorderFactory.createEmptyBorder(0,30,0,30);
-    border3 = BorderFactory.createCompoundBorder(BorderFactory.createEtchedBorder(Color.white,new Color(142, 142, 142)),BorderFactory.createEmptyBorder(0,30,0,30));
-    border4 = BorderFactory.createEmptyBorder(10,10,0,10);
-    panel1.setLayout(borderLayout1);
-    panel1.setBackground(new Color(251, 197, 63));
+    jpanel.setLayout(new BoxLayout(jpanel, BoxLayout.PAGE_AXIS));
+    jpanel.setBackground(new Color(251, 197, 63));
     
     jButton1.setText(Local.getString("Ok"));
     jButton1.setBounds(150, 415, 95, 30);
@@ -82,18 +82,28 @@ public class EventNotificationDialog extends JFrame {
         jButton1_actionPerformed(e);
       }
     });
-    panel1.setBorder(border4);
-    panel1.setMinimumSize(new Dimension(300, 200));
-    panel1.setPreferredSize(new Dimension(300, 200));
+    jpanel.setMinimumSize(new Dimension(300, 250));
+    jpanel.setPreferredSize(new Dimension(300, 250));
     timeLabel.setFont(new java.awt.Font("Dialog", 0, 20));
-    timeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-    textLabel.setHorizontalAlignment(SwingConstants.CENTER);
-    getContentPane().add(panel1);
-    panel1.add(jPanel1,  BorderLayout.SOUTH);
-    jPanel1.add(jButton1, null);
-    jPanel1.setBackground(new Color(251, 197, 63));
-    panel1.add(textLabel, BorderLayout.CENTER);
-    panel1.add(timeLabel, BorderLayout.NORTH);
+    timeLabel.setAlignmentX(CENTER_ALIGNMENT);
+    timeIcon.setAlignmentX(CENTER_ALIGNMENT);
+    eventTitleLabel.setFont(new java.awt.Font("Dialog", 0, 20));
+    eventTitleLabel.setAlignmentX(CENTER_ALIGNMENT);
+    whereLabel.setAlignmentX(CENTER_ALIGNMENT);
+    descriptionLabel.setAlignmentX(CENTER_ALIGNMENT);
+    
+    jButton1.setAlignmentX(CENTER_ALIGNMENT);
+    getContentPane().add(jpanel);
+    
+    jpanel.add(timeIcon);
+    jpanel.add(timeLabel);
+    jpanel.add(Box.createRigidArea(new Dimension(0, 10)));
+    jpanel.add(eventTitleLabel);
+    jpanel.add(whereLabel);
+    jpanel.add(Box.createRigidArea(new Dimension(0, 10)));
+    jpanel.add(descriptionLabel);
+    jpanel.add(Box.createRigidArea(new Dimension(0, 15)));
+    jpanel.add(jButton1);
     playSoundNotification();
   }
 
