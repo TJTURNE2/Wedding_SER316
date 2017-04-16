@@ -528,7 +528,15 @@ public class FileStorage implements Storage {
 							+ ".reminderloglist");
 
 			File reminderLogListDoc = new File(fileName);
+			try {
 			return new ReminderLogList(reminderLogListDoc);   
+			}
+			catch (FileNotFoundException e) {
+				Util.debug("Unable to open file at path " + fileName);
+				Util.debug("New reminder log list created");
+				return new ReminderLogList();
+
+			}
 		}
 		else {
 			System.out.println("[DEBUG] New time log list created");
@@ -567,7 +575,14 @@ public class FileStorage implements Storage {
 							+ ".eventsloglist");
 
 			File eventsLogListDoc = new File(fileName);
-			return new EventsLogList(eventsLogListDoc);   
+			try {
+				return new EventsLogList(eventsLogListDoc);
+			}
+			catch (FileNotFoundException e) {
+				Util.debug("Unable to open file at path " + fileName);
+				Util.debug("New time log list created");
+				return new EventsLogList();
+			}
 		}
 		else {
 			System.out.println("[DEBUG] New time log list created");

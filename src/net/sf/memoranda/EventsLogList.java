@@ -30,14 +30,16 @@ public class EventsLogList {
 		eventsLogList = new Vector<EventsLog>();
 	}
 
-	public EventsLogList(File EventsLogListDoc) {
+	public EventsLogList(File EventsLogListDoc) throws FileNotFoundException {
 		eventsLogList = new Vector<EventsLog>();
 
 		try {
 			Scanner fileScan = new Scanner(EventsLogListDoc);
+			int line = 0;
 
 			while (fileScan.hasNextLine()) {
 				String temp, date = "", event = "";
+				line++;
 
 				Scanner lineScan = new Scanner(fileScan.nextLine());
 				lineScan.useDelimiter("\\*\\^\\*");
@@ -54,6 +56,7 @@ public class EventsLogList {
 						break;
 					default:
 						Util.debug("Unable to switch value " + temp + " in event Log List constructor");
+						Util.debug("Line " + line + " not properly loaded.");
 					}
 				}
 				
@@ -65,6 +68,7 @@ public class EventsLogList {
 			fileScan.close();
 		} catch (FileNotFoundException e) {
 			Util.debug("Unable to scan file at path " + EventsLogListDoc.getPath());
+			throw e;
 		}
 	}
 

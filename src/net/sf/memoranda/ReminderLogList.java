@@ -30,7 +30,7 @@ public class ReminderLogList {
 		reminderLogList = new Vector<ReminderLog>();
 	}
 
-	public ReminderLogList(File reminderLogListDoc) {
+	public ReminderLogList(File reminderLogListDoc) throws FileNotFoundException {
 		reminderLogList = new Vector<ReminderLog>();
 
 		try {
@@ -65,6 +65,7 @@ public class ReminderLogList {
 			fileScan.close();
 		} catch (FileNotFoundException e) {
 			Util.debug("Unable to scan file at path " + reminderLogListDoc.getPath());
+			throw e;
 		}
 	}
 
