@@ -1,4 +1,4 @@
-package net.sf.memoranda.ui;
+package test.net.sf.memoranda;
 
 import static org.junit.Assert.*;
 
