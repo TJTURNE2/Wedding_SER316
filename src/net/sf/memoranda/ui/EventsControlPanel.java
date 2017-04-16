@@ -1,6 +1,7 @@
 package net.sf.memoranda.ui;
 
 import java.awt.BorderLayout;
+import javax.swing.DefaultListModel;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Insets;
@@ -11,6 +12,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -32,8 +34,8 @@ import javax.swing.event.ListSelectionListener;
 import net.sf.memoranda.CurrentNote;
 import net.sf.memoranda.CurrentProject;
 import net.sf.memoranda.Note;
-import net.sf.memoranda.TimeLog;
-import net.sf.memoranda.TimeLogList;
+import net.sf.memoranda.EventsLog;
+import net.sf.memoranda.EventsLogList;
 import net.sf.memoranda.date.CurrentDate;
 import net.sf.memoranda.ui.NotesControlPanel.PopupListener;
 import net.sf.memoranda.util.Configuration;
@@ -41,44 +43,38 @@ import net.sf.memoranda.util.CurrentStorage;
 import net.sf.memoranda.util.Local;
 import net.sf.memoranda.util.Util;
 
-public class TasksControlPanel extends JPanel {
+public class EventsControlPanel extends JPanel {
 	BorderLayout borderLayout = new BorderLayout();
-	JButton newTime = new JButton("Add New Time");
+	JButton newEvent = new JButton("Add New Event");
 
-
-	
-	static TimeLogList timeLogList = null;
+	static EventsLogList eventsLogList = null;
 	static JList logs = null;
 	static JScrollPane scrollPane = null;
 
-	public TasksControlPanel() {
-		newTime.addActionListener(new ActionListener() {
+	public EventsControlPanel() {
+		newEvent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				addNewTimeLog();
+				addNewEventLog();
 			}
 		});
 
 		buildGUI();
-	
- 
     }
-
- 
-
 	
 	public void buildGUI() {
 		this.setLayout(borderLayout);
 		
-		timeLogList = CurrentProject.getTimeLogList();
-		logs = new JList(timeLogList.getList());
+		eventsLogList = CurrentProject.getEventsLogList();
+		logs = new JList(eventsLogList.getList());
 		scrollPane = new JScrollPane(logs);
 
 		logs.setFont(new java.awt.Font("Dialog", 0, 11));
 		logs.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		logs.addMouseListener(new LogEditListener());
 
-		this.add(newTime, BorderLayout.PAGE_START);
+		this.add(newEvent, BorderLayout.PAGE_START);
 		this.add(scrollPane, BorderLayout.CENTER);
+		
 	}
 	
 	public void refresh() {
@@ -92,13 +88,13 @@ public class TasksControlPanel extends JPanel {
 		});
 	}
 	
-	TimeLogDialog createNewTimeLogDialog(String title, String[] initValues) {
-		TimeLogDialog dialog;
+	EventsPanelDialog createNewEventsPanelDialog(String title, String[] initValues) {
+		EventsPanelDialog dialog;
 
 		if (initValues == null)
-			dialog = new TimeLogDialog(App.getFrame(), title);
+			dialog = new EventsPanelDialog(App.getFrame(), title);
 		else
-			dialog = new TimeLogDialog(App.getFrame(), title, initValues);
+			dialog = new EventsPanelDialog(App.getFrame(), title, initValues);
 
 		Dimension frameSize = App.getFrame().getSize();
 		Point location = App.getFrame().getLocation();
@@ -112,43 +108,42 @@ public class TasksControlPanel extends JPanel {
 	class LogEditListener extends MouseAdapter {
 		public void mouseClicked(MouseEvent e) {
 			if (e.getClickCount() == 2)
-				editExistingTimeLog();
+				editExistingEventLog();
 		}
 	}
 
-	private void addNewTimeLog() {
-		TimeLogDialog dialog = createNewTimeLogDialog("New Time Log", null);
+	public void addNewEventLog() {
+		EventsPanelDialog dialog = createNewEventsPanelDialog("New Event", null);
 		if (!dialog.isCancelled) {
-			TimeLog newLog = new TimeLog(
+			EventsLog newLog = new EventsLog(
 					dialog.date.getText(),
-					dialog.startTime.getText(),
-					dialog.endTime.getText(),
-					dialog.interrupts.getText(),
-					dialog.phase.getText(),
-					dialog.comments.getText());
+					dialog.event.getText());
 
-			timeLogList.addLog(newLog);
+			eventsLogList.addLog(newLog);
 
 			logs.updateUI();
 		}
 	}
 
-	private void editExistingTimeLog() {
-		TimeLog log = timeLogList.getLog(logs.getSelectedIndex());
+	private void editExistingEventLog() {
+		EventsLog log = eventsLogList.getLog(logs.getSelectedIndex());
 		String[] initValues = log.getValuesArray();
 
-		TimeLogDialog dialog = createNewTimeLogDialog("Edit Time Log", initValues);
+		EventsPanelDialog dialog = createNewEventsPanelDialog("Edit Event", initValues);
 
 		if (!dialog.isCancelled) {
 			log.setDate(dialog.date.getText());
-			log.setStartTime(dialog.startTime.getText());
-			log.setEndTime(dialog.endTime.getText());
-			log.setInterruptTime(dialog.interrupts.getText());
-			log.setPhase(dialog.phase.getText());
-			log.setComments(dialog.comments.getText());
+			log.setEvent(dialog.event.getText());
 
 			logs.updateUI();
 		}
-	}
+	
 
+	
+
+	}
 }
+	
+	
+	
+

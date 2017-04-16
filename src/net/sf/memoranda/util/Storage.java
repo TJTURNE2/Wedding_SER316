@@ -14,6 +14,8 @@ import net.sf.memoranda.Project;
 import net.sf.memoranda.ResourcesList;
 import net.sf.memoranda.TaskList;
 import net.sf.memoranda.TimeLogList;
+import net.sf.memoranda.ReminderLogList;
+import net.sf.memoranda.EventsLogList;
 /**
  * 
  */
@@ -25,6 +27,12 @@ public interface Storage {
     
 	TimeLogList openTimeLogList(Project _project);
 	void storeTimeLogList(TimeLogList tll, Project prj);
+	
+	ReminderLogList openReminderLogList(Project _project);
+	void storeReminderLogList(ReminderLogList tll, Project prj);
+	
+	EventsLogList openEventsLogList(Project _project);
+	void storeEventsLogList(EventsLogList tll, Project prj);
     
     NoteList openNoteList(Project prj);
     void storeNoteList(NoteList nl, Project prj);

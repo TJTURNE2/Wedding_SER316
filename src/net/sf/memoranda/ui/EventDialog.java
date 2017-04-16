@@ -8,6 +8,7 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -25,10 +26,13 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
@@ -36,6 +40,13 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import net.sf.memoranda.ReminderLogList;
+import net.sf.memoranda.ReminderLog;
+import net.sf.memoranda.EventsLogList;
+import net.sf.memoranda.ui.EventsControlPanel;
+import net.sf.memoranda.ui.EventsControlPanel.LogEditListener;
+import net.sf.memoranda.CurrentProject;
+import net.sf.memoranda.EventsLog;
 import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.util.Local;
 
@@ -80,6 +91,9 @@ public class EventDialog extends JDialog implements WindowListener {
     CalendarFrame endCalFrame = new CalendarFrame();
     CalendarFrame startCalFrame = new CalendarFrame();
     private Date eventDate;
+    
+	static EventsLogList eventsLogList = null;
+	static JList logs = null;
     
     public EventDialog(Frame frame, String title) {
         super(frame, title, true);
@@ -477,7 +491,7 @@ public class EventDialog extends JDialog implements WindowListener {
     void okB_actionPerformed(ActionEvent e) {
         this.dispose();
     }
-
+    
     void cancelB_actionPerformed(ActionEvent e) {
         CANCELLED = true;
         this.dispose();
