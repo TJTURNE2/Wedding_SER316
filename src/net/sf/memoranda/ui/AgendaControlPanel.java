@@ -46,7 +46,6 @@ import net.sf.memoranda.util.Util;
 public class AgendaControlPanel extends JPanel {
 	BorderLayout borderLayout = new BorderLayout();
 	JButton newReminder = new JButton("Add New Reminder");
-	JButton deleteReminder = new JButton("Delete Selected Reminder");
 
 	private DefaultListModel<String> model = new DefaultListModel<String>();
 	static ReminderLogList reminderLogList = null;
@@ -57,11 +56,6 @@ public class AgendaControlPanel extends JPanel {
 		newReminder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addNewReminderLog();
-			}
-		});
-		deleteReminder.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				deleteNewReminder();
 			}
 		});
 
@@ -86,8 +80,6 @@ public class AgendaControlPanel extends JPanel {
 
 		this.add(newReminder, BorderLayout.PAGE_START);
 		this.add(scrollPane, BorderLayout.CENTER);
-		this.add(deleteReminder, BorderLayout.PAGE_END);
-
 		
 	}
 	
@@ -139,16 +131,6 @@ public class AgendaControlPanel extends JPanel {
 		}
 	}
 	
-	private void deleteNewReminder() {
-		//int selectedIndex = logs.getSelectedIndex();
-		//if (selectedIndex != -1){
-		//	logs.remove(selectedIndex);
-		//}
-		
-		
-	}
-	
-
 	private void editExistingReminderLog() {
 		ReminderLog log = reminderLogList.getLog(logs.getSelectedIndex());
 		String[] initValues = log.getValuesArray();

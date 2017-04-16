@@ -24,14 +24,14 @@ import net.sf.memoranda.util.Util;
  *               adding and retrieving logs, as well as a getter for the vector.
  */
 public class EventsLogList {
-	private Vector<EventsLog> eventsLogList = null;
+	private Vector<EventsLog> _eventsLogList = null;
 
 	public EventsLogList() {
-		eventsLogList = new Vector<EventsLog>();
+		_eventsLogList = new Vector<EventsLog>();
 	}
 
 	public EventsLogList(File EventsLogListDoc) throws FileNotFoundException {
-		eventsLogList = new Vector<EventsLog>();
+		_eventsLogList = new Vector<EventsLog>();
 
 		try {
 			Scanner fileScan = new Scanner(EventsLogListDoc);
@@ -60,7 +60,7 @@ public class EventsLogList {
 					}
 				}
 				
-				eventsLogList.addElement(new EventsLog(date, event));
+				_eventsLogList.addElement(new EventsLog(date, event));
 
 				lineScan.close();
 			}
@@ -78,11 +78,11 @@ public class EventsLogList {
 	 * @return: The vector of event logs
 	 * 
 	 * @description: This method returns the vector of event logs to be 
-	 *               used by the agenda control panel for displaying the list.
+	 *               used by the events control panel for displaying the list.
 	 */
 	
 	public Vector<EventsLog> getList() {
-		return eventsLogList;
+		return _eventsLogList;
 	}
 	
 	/**
@@ -93,7 +93,7 @@ public class EventsLogList {
 	 * @description: Removes a log from the vector of logs.
 	 */
 	public void deleteLog(EventsLog log) {
-		eventsLogList.remove(log);
+		_eventsLogList.remove(log);
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class EventsLogList {
 	 *               vector of logs.
 	 */
 	public void addLog(EventsLog log) {
-		eventsLogList.addElement(log);
+		_eventsLogList.addElement(log);
 	}
 
 	/**
@@ -117,10 +117,10 @@ public class EventsLogList {
 	 *               event log located at that index in the vector of defects.
 	 */
 	public EventsLog getLog(int index) {
-		return eventsLogList.elementAt(index);
+		return _eventsLogList.elementAt(index);
 	}
 	
 	public String toString() {
-		return eventsLogList.toString();
+		return _eventsLogList.toString();
 	}
 }
