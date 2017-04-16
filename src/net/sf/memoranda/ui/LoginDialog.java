@@ -1,3 +1,11 @@
+/*
+  File:	LoginDialog.java
+  Author:	Tomas Vartija
+  Date:	4/16/2017
+  
+  Description:  Creates the dialog window for logging in as a user.
+*/
+
 package net.sf.memoranda.ui;
 
 import java.awt.BorderLayout;
@@ -21,6 +29,11 @@ import net.sf.memoranda.UserProfile;
 import net.sf.memoranda.util.CurrentStorage;
 import net.sf.memoranda.util.Local;
 
+/**
+Class:	LoginDialog
+
+Description: Creates the User login JDialog
+*/
 public class LoginDialog extends JDialog {
 	private JTextField tfUsername;
     private JPasswordField pfPassword;
@@ -32,6 +45,11 @@ public class LoginDialog extends JDialog {
     private boolean succeeded;
     private static UserProfile userProfile;
 	
+    /**
+    Constructor: LoginDialog	
+    
+    Description: Constructor for LoginDialog Class
+    */
 	public LoginDialog(Frame frame, String title) {
 		super(frame, title, true);
         try {
@@ -43,6 +61,11 @@ public class LoginDialog extends JDialog {
         }
 	}
 	
+	/**
+	  Method: jbInit
+
+	  Description: Initializes the JDialog window setting up the GUI.
+	*/
 	void jbInit() throws Exception {
 		this.setResizable(false);
 		JPanel panel = new JPanel(new GridBagLayout());
@@ -128,20 +151,33 @@ public class LoginDialog extends JDialog {
 		
 	}
 	
+	/**
+	  Method: getUserName
+	  Returns: String - current username in text field
+
+	  Description: Returns the current text in the username field.
+	*/
 	public String getUsername() {
         return tfUsername.getText().trim();
     }
- 
+
+	/**
+	  Method: getPassword
+	  Returns: String - current password in text field
+
+	  Description: Returns the current text in the password field.
+	*/
     public String getPassword() {
         return new String(pfPassword.getPassword());
     }
- 
+
+    /**
+    Method: isSucceeded 
+    Returns: Boolean - successful login
+
+    Description: Returns true if the user login was successful.
+    */
     public boolean isSucceeded() {
         return succeeded;
     }
-	
-	public static void login() {
-		
-	}
-
 }

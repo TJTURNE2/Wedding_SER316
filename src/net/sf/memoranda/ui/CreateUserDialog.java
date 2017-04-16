@@ -1,3 +1,11 @@
+/*
+  File:	CreateUserDialog.java
+  Author:	Tomas Vartija
+  Date:	4/16/2017
+  
+  Description:  Creates the dialog window for creating a user.
+*/
+
 package net.sf.memoranda.ui;
 
 import java.awt.BorderLayout;
@@ -20,6 +28,11 @@ import javax.swing.border.LineBorder;
 import net.sf.memoranda.UserProfile;
 import net.sf.memoranda.util.CurrentStorage;
 
+/**
+Class: CreateUserDialog
+
+Description: Creates the JDialog window for creating a user.
+*/
 public class CreateUserDialog extends JDialog {
 	private JTextField tfUsername;
     private JPasswordField pfPassword;
@@ -29,6 +42,11 @@ public class CreateUserDialog extends JDialog {
     private JButton btnCancel;
     private boolean succeeded;
 	
+    /**
+    Constructor: CreateUserDialog	
+    
+    Description: Constructor for CreateUserDialog Class
+    */
 	public CreateUserDialog(Frame frame, String title) {
 		super(frame, title, true);
         try {
@@ -40,6 +58,11 @@ public class CreateUserDialog extends JDialog {
         }
 	}
 	
+	/**
+	  Method: jbInit
+
+	  Description: Initializes the JDialog window setting up the GUI.
+	*/
 	void jbInit() throws Exception {
 		this.setResizable(false);
 		JPanel panel = new JPanel(new GridBagLayout());
@@ -114,14 +137,32 @@ public class CreateUserDialog extends JDialog {
 		
 	}
 	
+	/**
+	  Method: getUserName
+	  Returns: String - current username in text field
+
+	  Description: Returns the current text in the username field.
+	*/
 	public String getUsername() {
         return tfUsername.getText().trim();
     }
- 
+	
+	/**
+	  Method: getPassword
+	  Returns: String - current password in text field
+
+	  Description: Returns the current text in the password field.
+	*/
     public String getPassword() {
         return new String(pfPassword.getPassword());
     }
- 
+    
+    /**
+    Method: isSucceeded 
+    Returns: Boolean - successful login
+
+    Description: Returns true if the user was created.
+    */
     public boolean isSucceeded() {
         return succeeded;
     }

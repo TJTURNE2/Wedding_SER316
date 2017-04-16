@@ -514,6 +514,12 @@ public class FileStorage implements Storage {
 		}
 	}
 	
+	/**
+	  Method: openUserProfileManager
+	  Returns: Document to .userprofile
+
+	  Description: Sets the _doc of UserProfile to the .userprofile file document.
+	*/
 	public void openUserProfileManager() {
 		String fileName = JN_DOCPATH + ".userprofiles";
 		if (documentExists(fileName)) {
@@ -528,9 +534,12 @@ public class FileStorage implements Storage {
 				"[DEBUG] New user profile manager: " + JN_DOCPATH + ".userprofiles");
 		UserProfile._doc = null;
 	}
+	
 	/**
-	 * @see net.sf.memoranda.util.Storage#storeEventsList()
-	 */
+	  Method: storeUserProfileManager
+
+	  Description: Saves the current UserProfile class to .userprofiles.
+	*/
 	public void storeUserProfileManager() {
 		/*DEBUG*/
 		System.out.println(
