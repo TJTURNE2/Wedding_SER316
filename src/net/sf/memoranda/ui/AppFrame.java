@@ -233,9 +233,9 @@ public class AppFrame extends JFrame {
     JMenuItem jMenuGoFwd = new JMenuItem(History.historyForwardAction);
 
     JMenuItem jMenuGoDayBack = new JMenuItem(
-            workPanel.dailyItemsPanel.calendar.dayBackAction);
+            workPanel.dailyItemsPanel.calendar.monthBackAction);
     JMenuItem jMenuGoDayFwd = new JMenuItem(
-            workPanel.dailyItemsPanel.calendar.dayForwardAction);
+            workPanel.dailyItemsPanel.calendar.monthForwardAction);
     JMenuItem jMenuGoToday = new JMenuItem(
             workPanel.dailyItemsPanel.calendar.todayAction);
 
@@ -440,8 +440,8 @@ public class AppFrame extends JFrame {
         jMenuGoHBack.setToolTipText(Local.getString("History back"));
         jMenuGoFwd.setText(Local.getString("History forward"));
         jMenuGoFwd.setToolTipText(Local.getString("History forward"));
-        jMenuGoDayBack.setText(Local.getString("One day back"));
-        jMenuGoDayFwd.setText(Local.getString("One day forward"));
+        jMenuGoDayBack.setText(Local.getString("One month back"));
+        jMenuGoDayFwd.setText(Local.getString("One month forward"));
         jMenuGoToday.setText(Local.getString("To today"));
 
         jMenuInsertSpecial.setText(Local.getString("Special"));

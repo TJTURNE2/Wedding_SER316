@@ -22,6 +22,8 @@ import java.util.Vector;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
+import net.sf.memoranda.DefectLog;
+import net.sf.memoranda.DefectLogList;
 import net.sf.memoranda.EventsManager;
 import net.sf.memoranda.Note;
 import net.sf.memoranda.NoteList;
@@ -35,6 +37,10 @@ import net.sf.memoranda.TaskListImpl;
 import net.sf.memoranda.TimeLog;
 import net.sf.memoranda.TimeLogList;
 import net.sf.memoranda.UserProfile;
+import net.sf.memoranda.ReminderLog;
+import net.sf.memoranda.ReminderLogList;
+import net.sf.memoranda.EventsLogList;
+import net.sf.memoranda.EventsLog;
 import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.ui.ExceptionDialog;
 import net.sf.memoranda.ui.htmleditor.AltHTMLWriter;
@@ -552,5 +558,149 @@ public class FileStorage implements Storage {
 		System.out.println(
 				"[DEBUG] Save user profile manager: " + JN_DOCPATH + ".userprofiles");
 		saveDocument(UserProfile._doc, JN_DOCPATH + ".userprofiles");
+  }
+
+  /**
+	 * @method: openDefectLogList
+	 * @inputs: project to open the list from
+	 * @returns: DefectLogList object
+	 * 
+	 * @description: Loads the defect log list for the given project from a file
+	 * and returns the list. If a list does not exist yet, a new one is created.
+	*/
+	public DefectLogList openDefectLogList(Project prj) {
+		String fileName = JN_DOCPATH + prj.getID() + File.separator + ".defectloglist";
+
+		if (documentExists(fileName)) {
+			Util.debug(
+					"Open defect log list: "
+							+ fileName);
+
+			File defectListDoc = new File(fileName);
+			return new DefectLogList(defectListDoc);   
+		}
+		else {
+			Util.debug("New defect log list created");
+			return new DefectLogList();
+		}
+	}
+
+	/**
+	 * @method: storeDefectLogList
+	 * @inputs: DefectLogList, Project
+	 * @returns: void
+	 * 
+	 * @description: Takes the given defect log list and project, loads the 
+	 * file that stores the list, and attempts to write the contents of the list
+	 * to the file. If unsuccessful, an error is returned.
+	*/
+	public void storeDefectLogList(DefectLogList dll, Project prj) {
+		String fileName = JN_DOCPATH + prj.getID() + File.separator + ".defectloglist";
+
+		Util.debug(
+				"Save defect log list: "
+				+ fileName);
+		Vector<DefectLog> list = dll.getList();
+    try (PrintWriter out = new PrintWriter(new FileOutputStream(fileName))) {
+			for (int i = 0; i < list.size(); i++) {
+				out.println(list.elementAt(i).toFile());
+			}
+		}
+		catch (FileNotFoundException e) {
+			Util.debug("Error writing Defect Log to file for project " + prj.getTitle());
+		}
+  }
+
+	public ReminderLogList openReminderLogList(Project prj) {
+		String fileName = JN_DOCPATH + prj.getID() + File.separator + ".reminderloglist";
+
+		if (documentExists(fileName)) {
+			System.out.println(
+					"[DEBUG] Open time log list: "
+							+ JN_DOCPATH
+							+ prj.getID()
+							+ File.separator
+							+ ".reminderloglist");
+
+			File reminderLogListDoc = new File(fileName);
+			try {
+			return new ReminderLogList(reminderLogListDoc);   
+			}
+			catch (FileNotFoundException e) {
+				Util.debug("Unable to open file at path " + fileName);
+				Util.debug("New reminder log list created");
+				return new ReminderLogList();
+
+			}
+		}
+		else {
+			System.out.println("[DEBUG] New time log list created");
+			return new ReminderLogList();
+		}
+	}
+
+	public void storeReminderLogList(ReminderLogList tll, Project prj) {
+		String fileName = JN_DOCPATH + prj.getID() + File.separator + ".reminderloglist";
+
+		Util.debug("Save reminder log list: "
+				+ JN_DOCPATH
+				+ prj.getID()
+				+ File.separator
+				+ ".reminderloglist");
+		Vector<ReminderLog> list = tll.getList();
+		try (PrintWriter out = new PrintWriter(new FileOutputStream(fileName))) {
+			for (int i = 0; i < list.size(); i++) {
+				out.println(list.elementAt(i).toFile());
+			}
+		}
+		catch (FileNotFoundException e) {
+			Util.debug("Error writing Reminder Log to file for project " + prj.getTitle());
+		}
+	}
+	
+	public EventsLogList openEventsLogList(Project prj) {
+		String fileName = JN_DOCPATH + prj.getID() + File.separator + ".eventsloglist";
+
+		if (documentExists(fileName)) {
+			System.out.println(
+					"[DEBUG] Open time log list: "
+							+ JN_DOCPATH
+							+ prj.getID()
+							+ File.separator
+							+ ".eventsloglist");
+
+			File eventsLogListDoc = new File(fileName);
+			try {
+				return new EventsLogList(eventsLogListDoc);
+			}
+			catch (FileNotFoundException e) {
+				Util.debug("Unable to open file at path " + fileName);
+				Util.debug("New time log list created");
+				return new EventsLogList();
+			}
+		}
+		else {
+			System.out.println("[DEBUG] New time log list created");
+			return new EventsLogList();
+		}
+	}
+
+	public void storeEventsLogList(EventsLogList tll, Project prj) {
+		String fileName = JN_DOCPATH + prj.getID() + File.separator + ".eventsloglist";
+
+		Util.debug("Save event log list: "
+				+ JN_DOCPATH
+				+ prj.getID()
+				+ File.separator
+				+ ".eventloglist");
+		Vector<EventsLog> list = tll.getList();
+		try (PrintWriter out = new PrintWriter(new FileOutputStream(fileName))) {
+			for (int i = 0; i < list.size(); i++) {
+				out.println(list.elementAt(i).toFile());
+			}
+		}
+		catch (FileNotFoundException e) {
+			Util.debug("Error writing Event Log to file for project " + prj.getTitle());
+		}
 	}
 }
