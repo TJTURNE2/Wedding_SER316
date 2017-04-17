@@ -24,28 +24,31 @@ public class testProjectImpl {
 	
 	@Test
 	public void testGetStatus() {
+		proj1.setStartDate(date3);
+		
+		//TEST SCHEDULED
+		assertEquals(proj1.getStatus(), Project.SCHEDULED);
 		proj1.setStartDate(date2);
+		assertNotEquals(proj1.getStatus(), Project.SCHEDULED);
 		
 		//test active
+		assertEquals(proj1.getStatus(), Project.ACTIVE);
 		proj1.setEndDate(date3);
 		assertEquals(proj1.getStatus(), Project.ACTIVE);
-		proj1.setStartDate(date3);
+		proj1.setStartDate(date1);
 		assertNotEquals(proj1.getStatus(), Project.ACTIVE);
 		
 		//test completed
-		
-		//test failed
-		
-		
-		//test scheduled
-		proj1.setStartDate(date3);
-		assertEquals(proj1.getStatus(), Project.SCHEDULED);
-		
+		assertNotEquals(proj1.getStatus(), Project.COMPLETED);
+		proj1.setStartDate(date4);
+		proj1.setEndDate(date2);
+		assertEquals(proj1.getStatus(), Project.COMPLETED);		
+				
 		//test frozen
+		assertNotEquals(proj1.getStatus(), Project.FROZEN);
 		proj1.freeze();
 		assertEquals(proj1.getStatus(), Project.FROZEN);
-		//proj1.unfreeze();
-		//assertNotEquals(proj1.getStatus(), Project.FROZEN);
+		
 		
 		
 		
