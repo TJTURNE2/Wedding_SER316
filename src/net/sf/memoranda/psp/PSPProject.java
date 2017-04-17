@@ -24,7 +24,8 @@ public class PSPProject implements java.io.Serializable {
 	protected List<PSPProjectTimeLogEntry> TimeLog;
 	protected List<PSPProjectDefectEntry> DefectLog;
 	protected List<PSPProjectRequirement> Requirements;
-	protected List <PSPProjectDesignNote> Notes;
+	protected List <PSPProjectDesignComponent> Components;
+	protected List <PSPProjectTestCase> UserTests;
 
 	public PSPProject() {
 		ID = counter;
@@ -37,7 +38,7 @@ public class PSPProject implements java.io.Serializable {
 		TimeLog = new ArrayList<PSPProjectTimeLogEntry>();
 		DefectLog = new ArrayList<PSPProjectDefectEntry>();
 		Requirements = new ArrayList<PSPProjectRequirement>();
-		Notes = new ArrayList<PSPProjectDesignNote>();
+		Components = new ArrayList<PSPProjectDesignComponent>();
 
 	}
 
@@ -251,38 +252,36 @@ public class PSPProject implements java.io.Serializable {
 	
 	
 	/**
-	 * @return the notes
+	 * @return the components
 	 */
-	public List<PSPProjectDesignNote> getNotes() {
-		return Notes;
+	public List<PSPProjectDesignComponent> getComponents() {
+		return Components;
 	}
 
 	/**
-	 * @param notes the notes to set
+	 * @param componets the components to set
 	 */
-	public void setNotes(List<PSPProjectDesignNote> notes) {
-		Notes = notes;
+	public void setComponents(List<PSPProjectDesignComponent> componets) {
+		Components = componets;
 	}
 
-	public void addDesignNote(PSPProjectDesignNote entry) {
-		for (PSPProjectDesignNote N : Notes) {
-			if (entry.getID() <= N.getID()) {
-				entry.setID(N.getID() + 1);
-			}
-		}
-		Notes.add(entry);
 
+	/**
+	 * @return the userTests
+	 */
+	public List<PSPProjectTestCase> getUserTests() {
+		return UserTests;
 	}
 
-	public void removeDesignNote(int ID){
-		for (PSPProjectDesignNote N : Notes) {
-			if (N.getID() == ID) {
-				Notes.remove(N);
-			}
-		}
+	/**
+	 * @param userTests the userTests to set
+	 */
+	public void setUserTests(List<PSPProjectTestCase> userTests) {
+		UserTests = userTests;
 	}
-	
-	
+
+
+
 	/**
 	 * Class for PSP Type
 	 */

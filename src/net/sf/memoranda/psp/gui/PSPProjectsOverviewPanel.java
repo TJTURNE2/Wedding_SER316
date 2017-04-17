@@ -50,6 +50,8 @@ import javax.swing.SpinnerNumberModel;
 import java.awt.GridLayout;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 @SuppressWarnings("serial")
 public class PSPProjectsOverviewPanel extends JPanel {
@@ -67,11 +69,14 @@ public class PSPProjectsOverviewPanel extends JPanel {
 	private static JTable timeLogTable;
 	private static JTable defectLogTable;
 	private static JTable notesTable;
+	private static JTable componentsTable;
+	private static JTable userTestTable;
 	private static ProjectTableModel pModel;
 	private static DefectTableModel dModel;
 	private static TimeLogTableModel tModel;
 	private static RequirementTableModel rModel;
-	private static NoteTableModel nModel;
+	private static ComponentTableModel cModel;
+	private static UserTestTableModel utModel;
 	private PSPNewProjectDialog newProject;
 	private PSPNewTimeEntryDialog newTimeLog;
 	private PSPNewRequirementDialog newRequirement;
@@ -186,6 +191,15 @@ public class PSPProjectsOverviewPanel extends JPanel {
 	private JSpinner drToDatePerPMSpinner;
 	private JSpinner drToActualTotalSpinner;
 	private JSpinner drToDateTotalSpinner;
+	private JPanel testPanel;
+	private JToolBar testToolBar;
+	private JScrollPane testScrollPane;
+	private JButton btnNewButton;
+	private JButton btnNewButton_1;
+	private JButton btnNewButton_2;
+	private JButton btnNewButton_3;
+	private JButton btnNewButton_4;
+	private JButton button;
 
 	/**
 	 * Create the panel.
@@ -200,11 +214,13 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		dModel = new DefectTableModel();
 		tModel = new TimeLogTableModel();
 		rModel = new RequirementTableModel();
-		nModel = new NoteTableModel();
+		cModel = new ComponentTableModel();
+		utModel = new UserTestTableModel();
 
 		setLayout(new BorderLayout(0, 0));
 
 		projectsTabbedPane = new JTabbedPane(JTabbedPane.LEFT);
+
 		projectsTabbedPane.setBorder(null);
 		projectsTabbedPane.setSize(new Dimension(600, 500));
 		projectsTabbedPane.setBackground(Color.WHITE);
@@ -902,7 +918,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		btnNewRequirement.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				newRequirement = new PSPNewRequirementDialog(ProjectID);
-				newRequirement.setVisible(true);		
+				newRequirement.setVisible(true);
 				try {
 					if (Manager.getProject(ProjectID).getRequirements().size() > 0
 							&& Manager.getProject(ProjectID).getPhase().equals(PSPProjectPhase.DESIGN)) {
@@ -957,7 +973,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 
 		designPanel = new JPanel();
 		projectsTabbedPane.addTab("Design", null, designPanel, null);
-		projectsTabbedPane.setEnabledAt(3, false);
+		projectsTabbedPane.setEnabledAt(4, false);
 		designPanel.setLayout(new BorderLayout(0, 0));
 
 		JToolBar designToolBar = new JToolBar();
@@ -986,15 +1002,90 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		btnDeleteDesignNote.setBorder(null);
 		designToolBar.add(btnDeleteDesignNote);
 
-		designTable = new JTable(nModel);
+		designTable = new JTable(cModel);
 		designTable.setFillsViewportHeight(true);
 
 		JScrollPane designScrollPane = new JScrollPane(designTable);
 		designPanel.add(designScrollPane);
 
+		codePanel = new JPanel();
+		projectsTabbedPane.addTab("Code", null, codePanel, null);
+		projectsTabbedPane.setEnabledAt(5, false);
+		codePanel.setLayout(new BorderLayout(0, 0));
+
+		JToolBar codeToolBar = new JToolBar();
+		codeToolBar.setBorder(null);
+		codeToolBar.setFloatable(false);
+		codeToolBar.setPreferredSize(new Dimension(13, 25));
+		codePanel.add(codeToolBar, BorderLayout.NORTH);
+
+		btnNewButton_2 = new JButton("");
+		btnNewButton_2.setMaximumSize(new Dimension(25, 25));
+		btnNewButton_2.setIcon(new ImageIcon(
+				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/filenew.png")));
+		btnNewButton_2.setPreferredSize(new Dimension(25, 25));
+		btnNewButton_2.setBorder(null);
+		codeToolBar.add(btnNewButton_2);
+
+		btnNewButton_3 = new JButton("");
+		btnNewButton_3.setMaximumSize(new Dimension(25, 25));
+		btnNewButton_3.setIcon(new ImageIcon(
+				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editproject.png")));
+		btnNewButton_3.setBorder(null);
+		codeToolBar.add(btnNewButton_3);
+
+		btnNewButton_4 = new JButton("");
+		btnNewButton_4.setIcon(new ImageIcon(
+				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editdelete.png")));
+		btnNewButton_4.setMaximumSize(new Dimension(25, 25));
+		codeToolBar.add(btnNewButton_4);
+
+		componentsTable = new JTable(cModel);
+		componentsTable.setFillsViewportHeight(true);
+		
+		JScrollPane codeScrollPane = new JScrollPane(componentsTable);
+		codePanel.add(codeScrollPane);
+		projectsTabbedPane.setEnabledAt(3, false);
+
+		testPanel = new JPanel();
+		projectsTabbedPane.addTab("User Test", null, testPanel, null);
+		projectsTabbedPane.setEnabledAt(6, false);
+		testPanel.setLayout(new BorderLayout(0, 0));
+
+		testToolBar = new JToolBar();
+		testToolBar.setFloatable(false);
+		testToolBar.setPreferredSize(new Dimension(13, 25));
+		testPanel.add(testToolBar, BorderLayout.NORTH);
+
+		btnNewButton = new JButton("");
+		btnNewButton.setMaximumSize(new Dimension(25, 25));
+		btnNewButton.setBorder(null);
+		btnNewButton.setIcon(new ImageIcon(
+				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/filenew.png")));
+		testToolBar.add(btnNewButton);
+
+		btnNewButton_1 = new JButton("");
+		btnNewButton_1.setMaximumSize(new Dimension(25, 25));
+		btnNewButton_1.setBorder(null);
+		btnNewButton_1.setIcon(new ImageIcon(
+				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editproject.png")));
+		testToolBar.add(btnNewButton_1);
+
+		button = new JButton("");
+		button.setBorder(null);
+		button.setIcon(new ImageIcon(
+				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editdelete.png")));
+		button.setMaximumSize(new Dimension(25, 25));
+		testToolBar.add(button);
+
+		userTestTable = new JTable(utModel);
+		userTestTable.setFillsViewportHeight(true);
+
+		testScrollPane = new JScrollPane(userTestTable);
+		testPanel.add(testScrollPane, BorderLayout.CENTER);
+
 		timeLogPanel = new JPanel();
 		projectsTabbedPane.addTab("Time Log", null, timeLogPanel, null);
-		projectsTabbedPane.setEnabledAt(4, false);
 		timeLogPanel.setLayout(new BorderLayout(0, 0));
 
 		JToolBar timeLogToolBar = new JToolBar();
@@ -1051,24 +1142,11 @@ public class PSPProjectsOverviewPanel extends JPanel {
 
 		JScrollPane timeLogScrollPane = new JScrollPane(timeLogTable);
 		timeLogPanel.add(timeLogScrollPane, BorderLayout.CENTER);
-
-		codePanel = new JPanel();
-		projectsTabbedPane.addTab("Code", null, codePanel, null);
-		projectsTabbedPane.setEnabledAt(5, false);
-		codePanel.setLayout(new BorderLayout(0, 0));
-
-		JToolBar codeToolBar = new JToolBar();
-		codeToolBar.setFloatable(false);
-		codeToolBar.setPreferredSize(new Dimension(13, 25));
-		codePanel.add(codeToolBar, BorderLayout.NORTH);
-
-		JScrollPane codeScrollPane = new JScrollPane();
-		codePanel.add(codeScrollPane);
+		projectsTabbedPane.setEnabledAt(7, false);
 
 		defectLogPanel = new JPanel();
 		notesTable = new JTable();
 		projectsTabbedPane.addTab("Defect Log", null, defectLogPanel, null);
-		projectsTabbedPane.setEnabledAt(6, false);
 		defectLogPanel.setLayout(new BorderLayout(0, 0));
 
 		JToolBar defectLogToolBar = new JToolBar();
@@ -1109,7 +1187,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 					// pModel.fireTableDataChanged();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
-					//e1.printStackTrace();
+					// e1.printStackTrace();
 				}
 				defectID = -1;
 
@@ -1129,8 +1207,8 @@ public class PSPProjectsOverviewPanel extends JPanel {
 
 		postMortemPanel = new JPanel();
 		projectsTabbedPane.addTab("Post Mortem", null, postMortemPanel, null);
+		projectsTabbedPane.setEnabledAt(9, false);
 		projectsTabbedPane.setEnabledAt(8, false);
-		projectsTabbedPane.setEnabledAt(7, false);
 		postMortemPanel.setLayout(new BorderLayout(0, 0));
 
 		JToolBar postMortemToolBar = new JToolBar();
@@ -1141,6 +1219,12 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		JScrollPane postMortemScrollPane = new JScrollPane();
 		postMortemPanel.add(postMortemScrollPane);
 
+		
+		projectsTabbedPane.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+			resetPanels();	
+			}
+		});
 	}
 
 	public void saveLOC() {
@@ -1655,8 +1739,8 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		}
 	}
 
-	protected class NoteTableModel extends AbstractTableModel {
-		protected String[] columnNames = new String[] { "Note ID", "Note", "Priority" };
+	protected class ComponentTableModel extends AbstractTableModel {
+		protected String[] columnNames = new String[] { "ID", "Module","Type", "Purpose","Fuction" };
 
 		@Override
 		public String getColumnName(int col) {
@@ -1667,14 +1751,14 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		@Override
 		public int getColumnCount() {
 			// TODO Auto-generated method stub
-			return 3;
+			return 5;
 		}
 
 		@Override
 		public int getRowCount() {
 			// TODO Auto-generated method stub
 			try {
-				return Manager.Projects.get(ProjectID).getNotes().size();
+				return Manager.Projects.get(ProjectID).getComponents().size();
 			} catch (Exception e) {
 				return 0;
 			}
@@ -1685,14 +1769,76 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		public Object getValueAt(int row, int col) {
 
 			if (col == 0) {
-				return Manager.Projects.get(ProjectID).getNotes().get(row).getID();
+				return Manager.Projects.get(ProjectID).getComponents().get(row).getID();
 			}
 			if (col == 1) {
-				return Manager.Projects.get(ProjectID).getNotes().get(row).getDescription();
+				return Manager.Projects.get(ProjectID).getComponents().get(row).getModule();
 			}
-			{
-				return Manager.Projects.get(ProjectID).getNotes().get(row).getPriority();
+			if (col == 2){
+				return Manager.Projects.get(ProjectID).getComponents().get(row).getType();
 			}
+			if (col == 3){
+				return Manager.Projects.get(ProjectID).getComponents().get(row).getPurpose();
+			}
+			if (col == 4){
+				return Manager.Projects.get(ProjectID).getComponents().get(row).getFunction();
+			}
+			
+			return "NAN";
+		}
+	}
+
+	protected class UserTestTableModel extends AbstractTableModel {
+		protected String[] columnNames = new String[] { "ID", "Module", "Title","Expected Results","Actual Results","Status" };
+
+		@Override
+		public String getColumnName(int col) {
+
+			return columnNames[col];
+		}
+
+		@Override
+		public int getColumnCount() {
+			// TODO Auto-generated method stub
+			return 6;
+		}
+
+		@Override
+		public int getRowCount() {
+			// TODO Auto-generated method stub
+
+			try {
+				return Manager.Projects.get(ProjectID).getUserTests().size();
+			} catch (Exception e) {
+				return 0;
+			}
+
+		}
+
+		@Override
+		public Object getValueAt(int row, int col) {
+			if (col == 0) {
+				return Manager.Projects.get(ProjectID).getUserTests().get(row).getID();
+			}
+			if (col == 1) {
+				return Manager.Projects.get(ProjectID).getUserTests().get(row).getModuleName();
+			}
+			if (col == 2) {
+				return Manager.Projects.get(ProjectID).getUserTests().get(row).getTestTitle();
+			}
+			if (col == 8){
+				return Manager.Projects.get(ProjectID).getUserTests().get(row).getExpectedResults();
+				
+			}
+			if (col == 9){
+				return Manager.Projects.get(ProjectID).getUserTests().get(row).getActualResults();
+			}
+			
+			if (col == 10){
+				return Manager.Projects.get(ProjectID).getUserTests().get(row).getStatus();
+			}
+			return "NAN";
+			
 		}
 	}
 
