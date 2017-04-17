@@ -8,6 +8,7 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -25,10 +26,14 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
@@ -36,6 +41,13 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import net.sf.memoranda.ReminderLogList;
+import net.sf.memoranda.ReminderLog;
+import net.sf.memoranda.EventsLogList;
+import net.sf.memoranda.ui.EventsControlPanel;
+import net.sf.memoranda.ui.EventsControlPanel.LogEditListener;
+import net.sf.memoranda.CurrentProject;
+import net.sf.memoranda.EventsLog;
 import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.util.Local;
 
@@ -52,8 +64,15 @@ public class EventDialog extends JDialog implements WindowListener {
     GridBagConstraints gbc;
     JLabel lblTime = new JLabel();
     public JSpinner timeSpin = new JSpinner(new SpinnerDateModel(new Date(), null, null, Calendar.MINUTE));
-    JLabel lblText = new JLabel();
+    JLabel lblEventTitle = new JLabel();
+    JLabel lblWhere = new JLabel();
+    JLabel lblAttendees = new JLabel();
+    JLabel lblDescription = new JLabel();
     public JTextField textField = new JTextField();
+    public JTextField whereField = new JTextField();
+    public JTextField attendeeField = new JTextField();
+    JTextArea descriptionArea = new JTextArea();
+    JScrollPane descriptionScrollPane = new JScrollPane(descriptionArea);
     TitledBorder repeatBorder;
     JPanel repeatPanel = new JPanel(new GridBagLayout());
     public JRadioButton noRepeatRB = new JRadioButton();
@@ -80,6 +99,9 @@ public class EventDialog extends JDialog implements WindowListener {
     CalendarFrame endCalFrame = new CalendarFrame();
     CalendarFrame startCalFrame = new CalendarFrame();
     private Date eventDate;
+    
+	static EventsLogList eventsLogList = null;
+	static JList logs = null;
     
     public EventDialog(Frame frame, String title) {
         super(frame, title, true);
@@ -119,14 +141,14 @@ public class EventDialog extends JDialog implements WindowListener {
         gbc.insets = new Insets(10, 0, 5, 0);
         gbc.anchor = GridBagConstraints.WEST;
         eventPanel.add(timeSpin, gbc);
-        lblText.setText(Local.getString("Text"));
-        lblText.setMinimumSize(new Dimension(120, 24));
+        lblEventTitle.setText(Local.getString("Event Title"));
+        lblEventTitle.setMinimumSize(new Dimension(120, 24));
         gbc = new GridBagConstraints();
         gbc.gridx = 0; gbc.gridy = 1;
         gbc.gridwidth = 3;
         gbc.insets = new Insets(5, 10, 5, 10);
         gbc.anchor = GridBagConstraints.WEST;
-        eventPanel.add(lblText, gbc);
+        eventPanel.add(lblEventTitle, gbc);
         textField.setMinimumSize(new Dimension(375, 24));
         textField.setPreferredSize(new Dimension(375, 24));
         gbc = new GridBagConstraints();
@@ -136,6 +158,59 @@ public class EventDialog extends JDialog implements WindowListener {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         eventPanel.add(textField, gbc);
+        lblWhere.setText(Local.getString("Where"));
+        lblWhere.setMinimumSize(new Dimension(120, 24));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0; gbc.gridy = 3;
+        gbc.gridwidth = 3;
+        gbc.insets = new Insets(5, 10, 5, 10);
+        gbc.anchor = GridBagConstraints.WEST;
+        eventPanel.add(lblWhere, gbc);
+        whereField.setMinimumSize(new Dimension(375, 24));
+        whereField.setPreferredSize(new Dimension(375, 24));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0; gbc.gridy = 4;
+        gbc.gridwidth = 6;
+        gbc.insets = new Insets(5, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        eventPanel.add(whereField, gbc);
+        lblAttendees.setText(Local.getString("Attendees"));
+        lblAttendees.setMinimumSize(new Dimension(120, 24));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0; gbc.gridy = 5;
+        gbc.gridwidth = 3;
+        gbc.insets = new Insets(5, 10, 5, 10);
+        gbc.anchor = GridBagConstraints.WEST;
+        eventPanel.add(lblAttendees, gbc);
+        attendeeField.setMinimumSize(new Dimension(375, 24));
+        attendeeField.setPreferredSize(new Dimension(375, 24));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0; gbc.gridy = 6;
+        gbc.gridwidth = 6;
+        gbc.insets = new Insets(5, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        eventPanel.add(attendeeField, gbc);
+        lblDescription.setText(Local.getString("Description"));
+        lblDescription.setMinimumSize(new Dimension(120, 24));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0; gbc.gridy = 7;
+        gbc.gridwidth = 3;
+        gbc.insets = new Insets(5, 10, 5, 10);
+        gbc.anchor = GridBagConstraints.WEST;
+        eventPanel.add(lblDescription, gbc);
+        descriptionArea.setPreferredSize(new Dimension(375, 387));
+        descriptionArea.setLineWrap(true);
+        descriptionArea.setWrapStyleWord(true);
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0; gbc.gridy = 8;
+        gbc.gridwidth = 6;
+        descriptionScrollPane.setPreferredSize(new Dimension(375,96));
+        gbc.insets = new Insets(5, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        eventPanel.add(descriptionScrollPane, gbc);
         
         // Build RepeatPanel
         repeatBorder = new TitledBorder(BorderFactory.createLineBorder(
@@ -181,7 +256,7 @@ public class EventDialog extends JDialog implements WindowListener {
         gbc.insets = new Insets(5, 5, 5, 40);
         gbc.anchor = GridBagConstraints.WEST;
         repeatPanel.add(lblDays, gbc);
-        lblSince.setText(Local.getString("Since"));
+        lblSince.setText(Local.getString("Start Repeating"));
         lblSince.setMinimumSize(new Dimension(70, 16));
         gbc = new GridBagConstraints();
         gbc.gridx = 4; gbc.gridy = 1;
@@ -253,7 +328,7 @@ public class EventDialog extends JDialog implements WindowListener {
         gbc.anchor = GridBagConstraints.WEST;
         repeatPanel.add(weekdaysCB, gbc);
         enableEndDateCB.setHorizontalAlignment(SwingConstants.RIGHT);
-        enableEndDateCB.setText(Local.getString("Till"));
+        enableEndDateCB.setText(Local.getString("Stop Repeating After"));
         enableEndDateCB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 enableEndDateCB_actionPerformed(e);
@@ -477,7 +552,7 @@ public class EventDialog extends JDialog implements WindowListener {
     void okB_actionPerformed(ActionEvent e) {
         this.dispose();
     }
-
+    
     void cancelB_actionPerformed(ActionEvent e) {
         CANCELLED = true;
         this.dispose();

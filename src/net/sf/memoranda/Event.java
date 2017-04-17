@@ -43,5 +43,15 @@ public interface Event {
     String getTimeString();
     
 	boolean getWorkingDays();
+	
+	//return string of where event is located
+	String getWhere();
+	
+	//return string of all attendees to an event
+	String getAttendees();
+	
+	//return the description of an event
+	String getDescription();
+	
     
 }

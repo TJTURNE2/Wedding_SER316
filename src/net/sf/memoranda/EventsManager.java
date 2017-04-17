@@ -115,11 +115,17 @@ public class EventsManager {
 		CalendarDate date,
 		int hh,
 		int mm,
-		String text) {
+		String text,
+		String where,
+		String attendees,
+		String description) {
 		Element el = new Element("event");
 		el.addAttribute(new Attribute("id", Util.generateId()));
 		el.addAttribute(new Attribute("hour", String.valueOf(hh)));
 		el.addAttribute(new Attribute("min", String.valueOf(mm)));
+		el.addAttribute(new Attribute("where", where));
+		el.addAttribute(new Attribute("attendees", attendees));
+		el.addAttribute(new Attribute("description", description));
 		el.appendChild(text);
 		Day d = getDay(date);
 		if (d == null)
@@ -136,6 +142,9 @@ public class EventsManager {
 		int hh,
 		int mm,
 		String text,
+		String where,
+		String attendees,
+		String description,
 		boolean workDays) {
 		Element el = new Element("event");
 		Element rep = _root.getFirstChildElement("repeatable");
@@ -153,6 +162,9 @@ public class EventsManager {
 		el.addAttribute(new Attribute("period", String.valueOf(period)));
 		// new attribute for wrkin days - ivanrise
 		el.addAttribute(new Attribute("workingDays",String.valueOf(workDays)));
+		el.addAttribute(new Attribute("where", where));
+		el.addAttribute(new Attribute("attendees", attendees));
+		el.addAttribute(new Attribute("description", description));
 		el.appendChild(text);
 		rep.appendChild(el);
 		return new EventImpl(el);
