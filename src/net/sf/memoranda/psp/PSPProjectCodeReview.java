@@ -10,7 +10,8 @@ import java.util.Date;
  * @author Terry Turner
  *
  */
-public class PSPProjectCodeReview {
+@SuppressWarnings("serial")
+public class PSPProjectCodeReview implements java.io.Serializable{
 	
 	private int ID;
 	private Date reviewDate;
@@ -26,7 +27,7 @@ public class PSPProjectCodeReview {
 		Description = "None";
 		Catagory = PSPDefectCatagory.CG;
 		Serverity = PSPDefectSeverity.LOW;
-		reviewDate.equals(Calendar.getInstance()); /// maybe??
+		//reviewDate = null; /// maybe??
 		
 	}
 	
@@ -46,6 +47,7 @@ public class PSPProjectCodeReview {
 		Description = description;
 		Catagory = catagory;
 		Serverity = serverity;
+		reviewDate = new Date();
 	}
 
 	/**

@@ -177,7 +177,7 @@ public class PSPProjectManager {
 			out = new ObjectOutputStream(new FileOutputStream(fileName));
 			out.writeObject(Projects);
 		} catch (Exception e) {
-			// e.printStackTrace();
+			//e.printStackTrace();
 			throw new IOException("Could not write file:" + fileName);
 		} finally {
 			if (out != null) {

@@ -25,7 +25,7 @@ public class TestEventsManager {
 		CalendarDate cDate3 = new CalendarDate(1,5,3343);
 		CalendarDate cDate4 = new CalendarDate(6,2,1942);
 		
-		EventsManager.createEvent(cDate1,1,0,"JUnit");
+		//EventsManager.createEvent(cDate1,1,0,"JUnit");
 		
 		assertTrue(EventsManager.isNREventsForDate(cDate1));
 		
