@@ -6,7 +6,7 @@ import java.sql.Time;
 
 import net.sf.memoranda.psp.PSPProject.PSPType;
 import net.sf.memoranda.psp.PSPProjectDefectEntry.PSPDefectType;
-import net.sf.memoranda.psp.PSPProjectDesignComponent.PSPProjectComponentType;
+import net.sf.memoranda.psp.PSPProjectCodeComponent.PSPProjectComponentType;
 import net.sf.memoranda.psp.PSPProjectRequirement.PSPRequirementType;
 import net.sf.memoranda.psp.PSPProjectTestCase;
 import net.sf.memoranda.psp.PSPProjectTestCase.PSPProjectTestCaseStatus;
@@ -138,7 +138,7 @@ public class main {
 			// Add Component
 			for (PSPProject P : Manager.getAllProjects()) {
 				for (int i1 = 0; i1 < 5; i1++) {
-					PSPProjectDesignComponent entry = new PSPProjectDesignComponent();
+					PSPProjectCodeComponent entry = new PSPProjectCodeComponent();
 					entry.setType(PSPProjectComponentType.CLASS);
 					P.addComponents(entry);
 				}
@@ -150,7 +150,7 @@ public class main {
 		}
 		{
 			for (PSPProject P : Manager.getAllProjects()) {
-				for (PSPProjectDesignComponent T : P.Components) {
+				for (PSPProjectCodeComponent T : P.Components) {
 					System.out.println(T.getID() + " " + T.getType());
 				}
 			}

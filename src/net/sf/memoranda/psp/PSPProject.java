@@ -24,7 +24,7 @@ public class PSPProject implements java.io.Serializable {
 	protected ArrayList<PSPProjectTimeLogEntry> TimeLog;
 	protected ArrayList<PSPProjectDefectEntry> DefectLog;
 	protected ArrayList<PSPProjectRequirement> Requirements;
-	protected ArrayList<PSPProjectDesignComponent> Components;
+	protected ArrayList<PSPProjectCodeComponent> Components;
 	protected ArrayList<PSPProjectTestCase> UserTests;
 
 	public PSPProject() {
@@ -38,7 +38,7 @@ public class PSPProject implements java.io.Serializable {
 		TimeLog = new ArrayList<PSPProjectTimeLogEntry>();
 		DefectLog = new ArrayList<PSPProjectDefectEntry>();
 		Requirements = new ArrayList<PSPProjectRequirement>();
-		Components = new ArrayList<PSPProjectDesignComponent>();
+		Components = new ArrayList<PSPProjectCodeComponent>();
 		UserTests = new ArrayList<PSPProjectTestCase>();
 	}
 
@@ -249,7 +249,7 @@ public class PSPProject implements java.io.Serializable {
 	/**
 	 * @return the components
 	 */
-	public List<PSPProjectDesignComponent> getComponents() {
+	public List<PSPProjectCodeComponent> getComponents() {
 		return Components;
 	}
 
@@ -257,12 +257,12 @@ public class PSPProject implements java.io.Serializable {
 	 * @param componets
 	 *            the components to set
 	 */
-	public void setComponents(ArrayList<PSPProjectDesignComponent> componets) {
+	public void setComponents(ArrayList<PSPProjectCodeComponent> componets) {
 		Components = componets;
 	}
 
-	public void addComponents(PSPProjectDesignComponent entry) {
-		for (PSPProjectDesignComponent E : Components) {
+	public void addComponents(PSPProjectCodeComponent entry) {
+		for (PSPProjectCodeComponent E : Components) {
 			if (entry.getID() <= E.getID()) {
 				entry.setID(E.getID() + 1);
 			}

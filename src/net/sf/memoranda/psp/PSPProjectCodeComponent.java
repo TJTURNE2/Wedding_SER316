@@ -1,7 +1,7 @@
 package net.sf.memoranda.psp;
 
 @SuppressWarnings("serial")
-public class PSPProjectDesignComponent implements java.io.Serializable{
+public class PSPProjectCodeComponent implements java.io.Serializable{
 	
 	private  int ID;
 	private String Module;
@@ -12,7 +12,7 @@ public class PSPProjectDesignComponent implements java.io.Serializable{
 
 	
 	
-	public PSPProjectDesignComponent(){
+	public PSPProjectCodeComponent(){
 		ID = 0;
 		Module = "PSPProject";
 		Type = PSPProjectComponentType.CLASS;
@@ -30,7 +30,7 @@ public class PSPProjectDesignComponent implements java.io.Serializable{
 	 * @param function
 	 * @param data
 	 */
-	public PSPProjectDesignComponent(int iD, String module, PSPProjectComponentType type, String purpose, String function,
+	public PSPProjectCodeComponent(int iD, String module, PSPProjectComponentType type, String purpose, String function,
 			String data) {
 		super();
 		ID = iD;
