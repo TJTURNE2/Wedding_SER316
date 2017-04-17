@@ -189,21 +189,4 @@ public class PSPProjectManager {
 			}
 		}
 	}
-
-	//////////////////////////////////////////// Defects
-	// /**
-	// * @return
-	// */
-	// public boolean newDefect(int ID) {
-	// Projects.get(ID).DefectLog.add(new PSPProjectDefectEntry());
-	// return true;
-	// }
-	//
-	// /**
-	// * @return
-	// */
-	// public List<PSPProjectDefectEntry> getAllDefects(int ID) {
-	// return Projects.get(ID).DefectLog;
-	// }
-
 }

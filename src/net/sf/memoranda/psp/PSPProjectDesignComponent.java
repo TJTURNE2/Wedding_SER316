@@ -1,15 +1,26 @@
 package net.sf.memoranda.psp;
 
-public class PSPProjectDesignComponent {
+@SuppressWarnings("serial")
+public class PSPProjectDesignComponent implements java.io.Serializable{
 	
 	private  int ID;
 	private String Module;
 	private PSPProjectComponentType Type;
 	private String Purpose;
-	private int Function;
+	private String Function;
 	private String Data;
 
 	
+	
+	public PSPProjectDesignComponent(){
+		ID = 0;
+		Module = "PSPProject";
+		Type = PSPProjectComponentType.CLASS;
+		Purpose = "Class to test";
+		Function = " Updating Fuctionality of Memoranda";
+		Data = "NONE";
+		
+	}
 	
 	/**
 	 * @param iD
@@ -19,7 +30,7 @@ public class PSPProjectDesignComponent {
 	 * @param function
 	 * @param data
 	 */
-	public PSPProjectDesignComponent(int iD, String module, PSPProjectComponentType type, String purpose, int function,
+	public PSPProjectDesignComponent(int iD, String module, PSPProjectComponentType type, String purpose, String function,
 			String data) {
 		super();
 		ID = iD;
@@ -107,7 +118,7 @@ public class PSPProjectDesignComponent {
 	/**
 	 * @return the function
 	 */
-	public int getFunction() {
+	public String getFunction() {
 		return Function;
 	}
 
@@ -116,7 +127,7 @@ public class PSPProjectDesignComponent {
 	/**
 	 * @param function the function to set
 	 */
-	public void setFunction(int function) {
+	public void setFunction(String function) {
 		Function = function;
 	}
 

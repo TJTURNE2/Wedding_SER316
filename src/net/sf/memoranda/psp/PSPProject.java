@@ -21,11 +21,11 @@ public class PSPProject implements java.io.Serializable {
 	private PSPProjectPhase Phase;
 
 	protected PSPPlanSummary Summary;
-	protected List<PSPProjectTimeLogEntry> TimeLog;
-	protected List<PSPProjectDefectEntry> DefectLog;
-	protected List<PSPProjectRequirement> Requirements;
-	protected List <PSPProjectDesignComponent> Components;
-	protected List <PSPProjectTestCase> UserTests;
+	protected ArrayList<PSPProjectTimeLogEntry> TimeLog;
+	protected ArrayList<PSPProjectDefectEntry> DefectLog;
+	protected ArrayList<PSPProjectRequirement> Requirements;
+	protected ArrayList<PSPProjectDesignComponent> Components;
+	protected ArrayList<PSPProjectTestCase> UserTests;
 
 	public PSPProject() {
 		ID = counter;
@@ -39,7 +39,7 @@ public class PSPProject implements java.io.Serializable {
 		DefectLog = new ArrayList<PSPProjectDefectEntry>();
 		Requirements = new ArrayList<PSPProjectRequirement>();
 		Components = new ArrayList<PSPProjectDesignComponent>();
-
+		UserTests = new ArrayList<PSPProjectTestCase>();
 	}
 
 	/**
@@ -158,7 +158,7 @@ public class PSPProject implements java.io.Serializable {
 	 * @param timeLog
 	 *            the timeLog to set
 	 */
-	public void setTimeLog(List<PSPProjectTimeLogEntry> timeLog) {
+	public void setTimeLog(ArrayList<PSPProjectTimeLogEntry> timeLog) {
 		TimeLog = timeLog;
 	}
 
@@ -171,7 +171,8 @@ public class PSPProject implements java.io.Serializable {
 		}
 		TimeLog.add(entry);
 	}
-	public void removeTimeEntry(int ID){
+
+	public void removeTimeEntry(int ID) {
 		for (int i = 0; i < TimeLog.size(); i++) {
 			if (TimeLog.get(i).getID() == ID) {
 				TimeLog.remove(i);
@@ -190,12 +191,12 @@ public class PSPProject implements java.io.Serializable {
 	 * @param defectLog
 	 *            the defectLog to set
 	 */
-	public void setDefectLog(List<PSPProjectDefectEntry> defectLog) {
+	public void setDefectLog(ArrayList<PSPProjectDefectEntry> defectLog) {
 		DefectLog = defectLog;
 	}
 
 	public void addDefectEntry(PSPProjectDefectEntry entry) {
-		
+
 		for (PSPProjectDefectEntry E : DefectLog) {
 			if (entry.getID() <= E.getID()) {
 				entry.setID(E.getID() + 1);
@@ -203,7 +204,8 @@ public class PSPProject implements java.io.Serializable {
 		}
 		DefectLog.add(entry);
 	}
-	public void removeDefectEntry(int ID){
+
+	public void removeDefectEntry(int ID) {
 		for (int i = 0; i < DefectLog.size(); i++) {
 			if (DefectLog.get(i).getID() == ID) {
 				DefectLog.remove(i);
@@ -222,7 +224,7 @@ public class PSPProject implements java.io.Serializable {
 	 * @param requirements
 	 *            the requirements to set
 	 */
-	public void setRequirements(List<PSPProjectRequirement> requirements) {
+	public void setRequirements(ArrayList<PSPProjectRequirement> requirements) {
 		Requirements = requirements;
 	}
 
@@ -236,21 +238,14 @@ public class PSPProject implements java.io.Serializable {
 
 	}
 
-	public void removeRequirement(int ID){
-//		for (PSPProjectRequirement E : Requirements) {
-//			if (E.getID() == ID) {
-//				Requirements.remove(E);
-//			}
-//		}
-//		
+	public void removeRequirement(int ID) {
 		for (int i = 0; i < Requirements.size(); i++) {
 			if (Requirements.get(i).getID() == ID) {
 				Requirements.remove(i);
 			}
 		}
 	}
-	
-	
+
 	/**
 	 * @return the components
 	 */
@@ -259,12 +254,29 @@ public class PSPProject implements java.io.Serializable {
 	}
 
 	/**
-	 * @param componets the components to set
+	 * @param componets
+	 *            the components to set
 	 */
-	public void setComponents(List<PSPProjectDesignComponent> componets) {
+	public void setComponents(ArrayList<PSPProjectDesignComponent> componets) {
 		Components = componets;
 	}
 
+	public void addComponents(PSPProjectDesignComponent entry) {
+		for (PSPProjectDesignComponent E : Components) {
+			if (entry.getID() <= E.getID()) {
+				entry.setID(E.getID() + 1);
+			}
+		}
+		Components.add(entry);
+	}
+
+	public void removeComponents(int ID) {
+		for (int i = 0; i < Components.size(); i++) {
+			if (Components.get(i).getID() == ID) {
+				Components.remove(i);
+			}
+		}
+	}
 
 	/**
 	 * @return the userTests
@@ -274,13 +286,30 @@ public class PSPProject implements java.io.Serializable {
 	}
 
 	/**
-	 * @param userTests the userTests to set
+	 * @param userTests
+	 *            the userTests to set
 	 */
-	public void setUserTests(List<PSPProjectTestCase> userTests) {
+	public void setUserTests(ArrayList<PSPProjectTestCase> userTests) {
 		UserTests = userTests;
 	}
 
+	public void addUserTests(PSPProjectTestCase entry) {
+		for (PSPProjectTestCase E : UserTests) {
+			if (entry.getID() <= E.getID()) {
+				entry.setID(E.getID() + 1);
+			}
+		}
+		UserTests.add(entry);
 
+	}
+
+	public void removeUserTests(int ID) {
+		for (int i = 0; i < UserTests.size(); i++) {
+			if (UserTests.get(i).getID() == ID) {
+				UserTests.remove(i);
+			}
+		}
+	}
 
 	/**
 	 * Class for PSP Type

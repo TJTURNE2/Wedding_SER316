@@ -1828,16 +1828,14 @@ public class PSPProjectsOverviewPanel extends JPanel {
 			}
 			if (col == 8){
 				return Manager.Projects.get(ProjectID).getUserTests().get(row).getExpectedResults();
-				
 			}
 			if (col == 9){
 				return Manager.Projects.get(ProjectID).getUserTests().get(row).getActualResults();
 			}
-			
-			if (col == 10){
+			{
 				return Manager.Projects.get(ProjectID).getUserTests().get(row).getStatus();
 			}
-			return "NAN";
+			
 			
 		}
 	}
