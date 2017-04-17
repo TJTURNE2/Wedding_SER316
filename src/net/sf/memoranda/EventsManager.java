@@ -44,6 +44,10 @@ public class EventsManager {
 	static Element _root = null;
 
 	static {
+		init();
+	}
+	
+	public static void init() {
 		CurrentStorage.get().openEventsManager();
 		if (_doc == null) {
 			_root = new Element("eventslist");
@@ -53,7 +57,6 @@ public class EventsManager {
 			_doc = new Document(_root);
 		} else
 			_root = _doc.getRootElement();
-
 	}
 
 	public static void createSticker(String text, int prior) {
