@@ -26,6 +26,7 @@ public class PSPProject implements java.io.Serializable {
 	protected ArrayList<PSPProjectRequirement> Requirements;
 	protected ArrayList<PSPProjectCodeComponent> Components;
 	protected ArrayList<PSPProjectTestCase> UserTests;
+	protected ArrayList<PSPProjectCodeReview> Reviews;
 
 	public PSPProject() {
 		ID = counter;
@@ -40,6 +41,8 @@ public class PSPProject implements java.io.Serializable {
 		Requirements = new ArrayList<PSPProjectRequirement>();
 		Components = new ArrayList<PSPProjectCodeComponent>();
 		UserTests = new ArrayList<PSPProjectTestCase>();
+		Reviews = new ArrayList<PSPProjectCodeReview>();
+		
 	}
 
 	/**
@@ -307,6 +310,39 @@ public class PSPProject implements java.io.Serializable {
 		for (int i = 0; i < UserTests.size(); i++) {
 			if (UserTests.get(i).getID() == ID) {
 				UserTests.remove(i);
+			}
+		}
+	}
+
+	
+	/**
+	 * @return the reviews
+	 */
+	public ArrayList<PSPProjectCodeReview> getReviews() {
+		return Reviews;
+	}
+
+	/**
+	 * @param reviews the reviews to set
+	 */
+	public void setReviews(ArrayList<PSPProjectCodeReview> reviews) {
+		Reviews = reviews;
+	}
+
+	public void addReviews(PSPProjectCodeReview entry) {
+		for (PSPProjectCodeReview E : Reviews) {
+			if (entry.getID() <= E.getID()) {
+				entry.setID(E.getID() + 1);
+			}
+		}
+		Reviews.add(entry);
+
+	}
+
+	public void removeReviews(int ID) {
+		for (int i = 0; i < Reviews.size(); i++) {
+			if (Reviews.get(i).getID() == ID) {
+				Reviews.remove(i);
 			}
 		}
 	}

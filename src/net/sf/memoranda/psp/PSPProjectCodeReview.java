@@ -3,6 +3,9 @@
  */
 package net.sf.memoranda.psp;
 
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * @author Terry Turner
  *
@@ -10,6 +13,7 @@ package net.sf.memoranda.psp;
 public class PSPProjectCodeReview {
 	
 	private int ID;
+	private Date reviewDate;
 	private String Location;
 	private String Description;
 	private PSPDefectCatagory Catagory;
@@ -22,6 +26,7 @@ public class PSPProjectCodeReview {
 		Description = "None";
 		Catagory = PSPDefectCatagory.CG;
 		Serverity = PSPDefectSeverity.LOW;
+		reviewDate.equals(Calendar.getInstance()); /// maybe??
 		
 	}
 	
@@ -112,6 +117,24 @@ public class PSPProjectCodeReview {
 	public void setServerity(PSPDefectSeverity serverity) {
 		Serverity = serverity;
 	}
+
+	
+	/**
+	 * @return the reviewDate
+	 */
+	public Date getReviewDate() {
+		return reviewDate;
+	}
+
+
+	/**
+	 * @param reviewDate the reviewDate to set
+	 */
+	public void setReviewDate(Date reviewDate) {
+		this.reviewDate = reviewDate;
+	}
+
+
 
 	public enum PSPDefectCatagory implements java.io.Serializable {
 		CS("Code Smell defect"),CG("Violation of a coding guideline"),FD("Functional defect"),MD("Miscellaneous defect");
