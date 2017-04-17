@@ -35,18 +35,22 @@ import javax.swing.UIManager;
 import javax.swing.text.html.HTMLDocument;
 
 import net.sf.memoranda.CurrentProject;
+import net.sf.memoranda.EventsManager;
 import net.sf.memoranda.History;
 import net.sf.memoranda.Note;
 import net.sf.memoranda.NoteList;
 import net.sf.memoranda.Project;
 import net.sf.memoranda.ProjectListener;
+import net.sf.memoranda.ProjectManager;
 import net.sf.memoranda.ResourcesList;
+import net.sf.memoranda.Start;
 import net.sf.memoranda.TaskList;
 import net.sf.memoranda.date.CurrentDate;
 import net.sf.memoranda.ui.htmleditor.HTMLEditor;
 import net.sf.memoranda.util.Configuration;
 import net.sf.memoranda.util.Context;
 import net.sf.memoranda.util.CurrentStorage;
+import net.sf.memoranda.util.FileStorage;
 import net.sf.memoranda.util.Local;
 import net.sf.memoranda.util.ProjectExporter;
 import net.sf.memoranda.util.ProjectPackager;
@@ -491,9 +495,16 @@ public class AppFrame extends JFrame {
                 new ActionListener(){
                     public void actionPerformed(ActionEvent e) {
                     		jMenuLogin.setText("Login");
-                    		menuBar.remove(jMenuLogout);
-                    		menuBar.revalidate();
-                    		menuBar.repaint();
+                            CurrentProject.save();
+                            CurrentStorage.set(new FileStorage());
+                            EventsManager.init();
+                            Configuration.setUser(null);
+                            Configuration.loadConfig();
+                            Context.init();
+                            ProjectManager.init();
+                            CurrentProject.init();
+                            dispose();
+                            Start.app = new App(true);
                     }
                 });
         
@@ -506,14 +517,28 @@ public class AppFrame extends JFrame {
                         if(loginDlg.isSucceeded()){
                             jMenuLogin.setText("Hi " + loginDlg.getUsername() + "!");
                             menuBar.add(jMenuLogout);
-                            menuBar.revalidate();
-                    		menuBar.repaint();
+                            //TODO:Change storage
+                            CurrentProject.save();
+                            CurrentStorage.set(new FileStorage(loginDlg.getUsername()));
+                            EventsManager.init();
+                            Configuration.setUser(loginDlg.getUsername());
+                            Configuration.loadConfig();
+                            Context.init();
+                            ProjectManager.init();
+                            CurrentProject.init();
+                            dispose();
+                            Start.app = new App(true);
                         }
                     }
                 });
         
         
         menuBar.add(jMenuLogin);
+        
+        if (Configuration.getUser() != null) {
+        	jMenuLogin.setText("Hi " + Configuration.getUser() + "!");
+        	menuBar.add(jMenuLogout);
+        }
         
         this.setJMenuBar(menuBar);
         //contentPane.add(toolBar, BorderLayout.NORTH);

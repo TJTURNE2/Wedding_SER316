@@ -56,6 +56,7 @@ public class FileStorage implements Storage {
           hacking the default location (Util.getEnvDir()) of the memoranda 
           storage dir. Note that memoranda.config file is always placed at fixed 
           location (Util.getEnvDir()) anyway */
+		JN_DOCPATH = Util.getEnvDir();
 		String mHome = (String) Configuration.get("MEMORANDA_HOME");
 		if (mHome.length() > 0) {
 			JN_DOCPATH = mHome;
@@ -63,6 +64,12 @@ public class FileStorage implements Storage {
 			System.out.println("[DEBUG]***Memoranda storage path has set to: " +
 					JN_DOCPATH);
 		}
+	}
+
+	public FileStorage(String profile) {
+		JN_DOCPATH += profile + File.separator;
+		Util.debug("***Memoranda storage path has set to: " +
+				JN_DOCPATH);
 	}
 
 	public static void saveDocument(Document doc, String filePath) {
@@ -513,20 +520,20 @@ public class FileStorage implements Storage {
 			Util.debug("Error writing Time Log to file for project " + prj.getTitle());
 		}
 	}
-	
+
 	/**
 	  Method: openUserProfileManager
 	  Returns: Document to .userprofile
 
 	  Description: Sets the _doc of UserProfile to the .userprofile file document.
-	*/
+	 */
 	public void openUserProfileManager() {
 		String fileName = JN_DOCPATH + ".userprofiles";
 		if (documentExists(fileName)) {
 			System.out.println(
 					"[DEBUG] Open user profile manager: " + JN_DOCPATH + ".userprofiles");
 			UserProfile._doc = openDocument(JN_DOCPATH + ".userprofiles");
-			
+
 			return;
 		}
 		/*DEBUG*/
@@ -534,12 +541,12 @@ public class FileStorage implements Storage {
 				"[DEBUG] New user profile manager: " + JN_DOCPATH + ".userprofiles");
 		UserProfile._doc = null;
 	}
-	
+
 	/**
 	  Method: storeUserProfileManager
 
 	  Description: Saves the current UserProfile class to .userprofiles.
-	*/
+	 */
 	public void storeUserProfileManager() {
 		/*DEBUG*/
 		System.out.println(
