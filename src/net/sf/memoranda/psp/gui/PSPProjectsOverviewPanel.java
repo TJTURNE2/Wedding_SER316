@@ -53,10 +53,16 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
-@SuppressWarnings("serial")
+
 public class PSPProjectsOverviewPanel extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static PSPProjectManager Manager = new PSPProjectManager();
 	private static int ProjectID = -1;
 	private static int requirementID;
@@ -65,7 +71,6 @@ public class PSPProjectsOverviewPanel extends JPanel {
 	private static int userTestID;
 	private static int codeModuleID;
 	private static int userReviewID;
-	private static Date today;
 	private static JTable projectsTable;
 	private static JTable requirementTable;
 	private static JTable codeReviewTable;
@@ -90,7 +95,6 @@ public class PSPProjectsOverviewPanel extends JPanel {
 	private JTabbedPane projectsTabbedPane;
 	private JTabbedPane summarytabbedPane;
 	private JPanel projectsPanel;
-	private JPanel projectSummaryPanel;
 	private JPanel locPanel;
 	private JPanel codeReviewPanel;
 	private JPanel timeLogPanel;
@@ -257,6 +261,11 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		projectsToolBar.add(btnNewProject);
 
 		JButton btnEditProject = new JButton("");
+		btnEditProject.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				disablePanels();
+			}
+		});
 		btnEditProject.setBorder(null);
 		btnEditProject.setMaximumSize(new Dimension(25, 25));
 		btnEditProject.setIcon(new ImageIcon(
@@ -264,16 +273,20 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		projectsToolBar.add(btnEditProject);
 
 		JButton btnDeleteProject = new JButton("");
-		btnDeleteProject.setMultiClickThreshhold(200);
 		btnDeleteProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				resetPanels();
 				ProjectID = (int) projectsTable.getValueAt(projectsTable.getSelectedRow(), 0);
-				if (ProjectID > -1) {
+				
+				try{
 					Manager.deleteProject(ProjectID);
 					pModel.fireTableDataChanged();
+					
+				}catch(Exception e){
+					
 				}
+				disablePanels();
 				ProjectID = -1;
+
 			}
 
 		});
@@ -284,6 +297,12 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		projectsToolBar.add(btnDeleteProject);
 
 		projectsTable = new JTable(pModel);
+		projectsTable.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				projectsTable.repaint();
+			}
+		});
 		projectsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		projectsTable.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		projectsTable.setFillsViewportHeight(true);
@@ -360,7 +379,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		startDateSpinner = new JSpinner();
 		startDateSpinner.setModel(new SpinnerDateModel(new Date(1484121600000L), null, null, Calendar.DAY_OF_YEAR));
 		startDateSpinner.setEditor(new JSpinner.DateEditor(startDateSpinner, "MM/dd/yyyy"));
-		today = ((Date) startDateSpinner.getValue()); // save today
+		// today = ((Date) startDateSpinner.getValue()); // save today
 
 		sumPanel.add(startDateSpinner, "cell 1 4,alignx left,aligny top");
 
@@ -1133,7 +1152,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				userTestID = (int) userTestTable.getValueAt(userTestTable.getSelectedRow(), 0);
 				try {
-					Manager.getProject(ProjectID).removeReviews(userTestID);
+					Manager.getProject(ProjectID).removeUserTests(userTestID);
 					Manager.saveProjects();
 					utModel.fireTableDataChanged();
 				} catch (IOException e1) {
@@ -1291,7 +1310,6 @@ public class PSPProjectsOverviewPanel extends JPanel {
 
 		projectsTabbedPane.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				resetPanels();
 			}
 		});
 	}
@@ -1421,7 +1439,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 			PSPProjectLogPhase PhaseDefects = Manager.getProject(ProjectID).getSummary().getPhaseDefects();
 			PSPProjectLogPhase DefectsRemoved = Manager.getProject(ProjectID).getSummary().getDefectsRemoved();
 
-			{
+			
 				basePlanSpinner.setValue(LOC.getBase().getPlanSize());
 				baseActualSpinner.setValue(LOC.getBase().getActualSize());
 				deletedPlanSpinner.setValue(LOC.getDeleted().getPlanSize());
@@ -1442,8 +1460,8 @@ public class PSPProjectsOverviewPanel extends JPanel {
 				nRPlanSpinner.setValue(LOC.getNewReused().getPlanSize());
 				nRActualSpinner.setValue(LOC.getNewReused().getActualSize());
 				nRToDateSpinner.setValue(LOC.getNewReused().getToDateSize());
-			}
-			{
+			
+			
 				tIPPlanPlanSpinner.setValue(phaseTime.getPlanning().getPlanSize());
 				tIPActualPlanSpinner.setValue(phaseTime.getPlanning().getActualSize());
 				tIPToDatePlanSpinner.setValue(phaseTime.getPlanning().getToDateSize());
@@ -1471,8 +1489,8 @@ public class PSPProjectsOverviewPanel extends JPanel {
 				tIPPlanTotalSpinner.setValue(phaseTime.getTotalPlan());
 				tIPActualTotalSpinner.setValue(phaseTime.getTotalAcutal());
 				tIPToDateTotalSpinner.setValue(phaseTime.getTotalTodate());
-			}
-			{
+			
+			
 				dIActualPlanSpinner.setValue(PhaseDefects.getPlanning().getActualSize());
 				dIToDatePlanSpinner.setValue(PhaseDefects.getPlanning().getToDateSize());
 				dIToDatePerPlanSpinner.setValue(PhaseDefects.getPlanning().getToDatePercent());
@@ -1484,7 +1502,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 				dIToDatePerCodeSpinner.setValue(PhaseDefects.getCode().getToDatePercent());
 				dIActualCompileSpinner.setValue(PhaseDefects.getCompile().getToDateSize());
 				dIToDateCompileSpinner.setValue(PhaseDefects.getCompile().getActualSize());
-				;
+				
 				dIToDatePerCompileSpinner.setValue(PhaseDefects.getCompile().getToDatePercent());
 				dIActualUTSpinner.setValue(PhaseDefects.getTesting().getActualSize());
 				dIToDateUTSpinner.setValue(PhaseDefects.getTesting().getToDateSize());
@@ -1494,8 +1512,8 @@ public class PSPProjectsOverviewPanel extends JPanel {
 				dIToDatePerPMSpinner.setValue(PhaseDefects.getPostmortem().getToDatePercent());
 				dIActualTotalSpinner.setValue(PhaseDefects.getTotalAcutal());
 				dIToDateTotalSpinner.setValue(PhaseDefects.getTotalTodate());
-			}
-			{
+			
+			
 				drToActualPlanSpinner.setValue(DefectsRemoved.getPlanning().getActualSize());
 				drToDatePlanSpinner.setValue(DefectsRemoved.getPlanning().getToDateSize());
 				drToDatePerPlanSpinner.setValue(DefectsRemoved.getPlanning().getToDatePercent());
@@ -1516,7 +1534,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 				drToDatePerPMSpinner.setValue(DefectsRemoved.getPostmortem().getToDatePercent());
 				drToActualTotalSpinner.setValue(DefectsRemoved.getTotalAcutal());
 				drToDateTotalSpinner.setValue(DefectsRemoved.getTotalTodate());
-			}
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
@@ -1586,8 +1604,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 
 	}
 
-	public void resetPanels() {
-		Manager.updateProject();
+	public void disablePanels() {
 		// disable all
 		projectsTabbedPane.setEnabledAt(8, !isEnabled());
 		projectsTabbedPane.setEnabledAt(7, !isEnabled());
@@ -1598,7 +1615,12 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		projectsTabbedPane.setEnabledAt(2, !isEnabled());
 		projectsTabbedPane.setEnabledAt(1, !isEnabled());
 
+	}
+
+	public void resetPanels() {
+		Manager.updateProject();
 		// eneable panels based off phase
+		disablePanels();
 		switch ((PSPProjectPhase) Manager.getProject(ProjectID).getPhase()) {
 		case POSTMORTEM:
 			projectsTabbedPane.setEnabledAt(8, isEnabled());

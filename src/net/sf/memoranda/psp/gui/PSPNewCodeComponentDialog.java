@@ -1,32 +1,29 @@
 package net.sf.memoranda.psp.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JToolBar;
-import java.awt.Dimension;
-import net.miginfocom.swing.MigLayout;
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.JToolBar;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 
-import net.sf.memoranda.psp.PSPProjectManager;
-import net.sf.memoranda.psp.PSPProjectRequirement;
+import net.miginfocom.swing.MigLayout;
 import net.sf.memoranda.psp.PSPProjectCodeComponent;
 import net.sf.memoranda.psp.PSPProjectCodeComponent.PSPProjectComponentType;
-import net.sf.memoranda.psp.PSPProjectRequirement.PSPRequirementType;
-
-import javax.swing.JTextField;
-import javax.swing.border.CompoundBorder;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.Color;
-import java.awt.Font;
+import net.sf.memoranda.psp.PSPProjectManager;
 
 @SuppressWarnings("serial")
 public class PSPNewCodeComponentDialog extends JDialog {

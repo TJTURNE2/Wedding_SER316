@@ -66,6 +66,11 @@ public class PSPProjectManager {
 		Project.setProjectName(ProjectName);
 		Project.setPhase(PSPProjectPhase.PLANNING);
 		try {
+			for (int i = 0; i < Projects.size(); i++) {
+				if (Projects.get(i).getID() == Project.getID()) {
+					Project.setID(Projects.get(i).getID()+1);;
+				}
+			}
 			Projects.add(Project);
 			this.saveProjects();
 		} catch (Exception exc) {
@@ -176,6 +181,7 @@ public class PSPProjectManager {
 		try {
 			out = new ObjectOutputStream(new FileOutputStream(fileName));
 			out.writeObject(Projects);
+			System.out.println("Project Saved");
 		} catch (Exception e) {
 			//e.printStackTrace();
 			throw new IOException("Could not write file:" + fileName);

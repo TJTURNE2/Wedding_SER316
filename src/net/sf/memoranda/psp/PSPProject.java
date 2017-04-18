@@ -29,8 +29,8 @@ public class PSPProject implements java.io.Serializable {
 	protected ArrayList<PSPProjectCodeReview> Reviews;
 
 	public PSPProject() {
-		ID = counter;
 		counter = counter + 1;
+		ID = 1;
 		PSP = PSPType.PSP0;
 		Phase = PSPProjectPhase.PLANNING;
 		ProjectName = "Project " + ID;
@@ -245,6 +245,7 @@ public class PSPProject implements java.io.Serializable {
 		for (int i = 0; i < Requirements.size(); i++) {
 			if (Requirements.get(i).getID() == ID) {
 				Requirements.remove(i);
+				System.out.println("Removed Requirment "+ i);
 			}
 		}
 	}

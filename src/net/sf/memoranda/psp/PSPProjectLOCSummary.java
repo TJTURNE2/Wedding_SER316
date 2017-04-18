@@ -31,7 +31,7 @@ public class PSPProjectLOCSummary implements java.io.Serializable{
 	 * @param deleted
 	 * @param modified
 	 * @param added
-	 * @param reused
+	 * @param Reused
 	 * @param addedModified
 	 * @param total
 	 * @param newReused
