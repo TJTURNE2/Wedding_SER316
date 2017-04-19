@@ -14,7 +14,7 @@ public class PSPProjectRequirement implements java.io.Serializable{
 
 	public PSPProjectRequirement() {
 
-		ID = 0;
+		ID = 1;
 		RequirmentType = PSPRequirementType.FUNCTIONAL;
 		Description = "None";
 		Priority = 1;

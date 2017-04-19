@@ -3,6 +3,8 @@ package net.sf.memoranda.psp.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.io.IOException;
 
 import javax.swing.DefaultComboBoxModel;
@@ -19,6 +21,7 @@ import javax.swing.border.EmptyBorder;
 import net.miginfocom.swing.MigLayout;
 import net.sf.memoranda.psp.PSPProjectCodeReview.PSPDefectCatagory;
 import net.sf.memoranda.psp.PSPProjectCodeReview.PSPDefectSeverity;
+import java.awt.Color;
 
 @SuppressWarnings("serial")
 public class PSPNewCodeReviewDialog extends JDialog {
@@ -44,9 +47,19 @@ public class PSPNewCodeReviewDialog extends JDialog {
 	 * Create the dialog.
 	 */
 	public PSPNewCodeReviewDialog() {
+		setAlwaysOnTop(true);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		addWindowFocusListener(new WindowFocusListener() {
+			public void windowGainedFocus(WindowEvent arg0) {
+			}
+			public void windowLostFocus(WindowEvent arg0) {
+				dispose();
+			}
+		});
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 500, 350);
 		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setBackground(Color.WHITE);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new MigLayout("", "[][][grow]", "[][][][grow][][]"));

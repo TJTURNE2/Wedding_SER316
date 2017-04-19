@@ -31,29 +31,7 @@ public class PSPProjectManager {
 	 */
 	@SuppressWarnings("unchecked")
 	public PSPProjectManager() {
-		File file = new File(fileName);
-		ObjectInputStream in = null;
-		try {
-			if (file.createNewFile())
-				System.out.println("file created");
-			if (file.exists()) {
-				System.out.println("Reading from file " + fileName + "...");
-				System.out.println(file.getAbsolutePath());
-				in = new ObjectInputStream(new FileInputStream(file));
-				Projects = (List<PSPProject>) in.readObject();
-				PSPProject.setCounter(Projects.size());
-			}
-		} catch (Exception e) {
-			// e.printStackTrace();
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (Throwable t) {
-					// t.printStackTrace();
-				}
-			}
-		}
+		loadProjects();
 	}
 
 	/**
@@ -72,7 +50,7 @@ public class PSPProjectManager {
 				}
 			}
 			Projects.add(Project);
-			this.saveProjects();
+			saveProjects();
 		} catch (Exception exc) {
 			return false;
 		}
@@ -88,7 +66,7 @@ public class PSPProjectManager {
 				if (ID == P.getID())
 					Projects.remove(P);
 			}
-			this.saveProjects();
+			saveProjects();
 		} catch (Exception e) {
 			return false;
 		}
@@ -155,7 +133,7 @@ public class PSPProjectManager {
 		try {
 
 			for (PSPProject P : Projects) {
-				if (ID == P.getID())
+				if ( P.getID() ==ID)
 					return P;
 			}
 		} catch (Exception e) {
@@ -191,6 +169,32 @@ public class PSPProjectManager {
 					out.close();
 				} catch (Throwable t) {
 					t.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public void loadProjects(){
+		File file = new File(fileName);
+		ObjectInputStream in = null;
+		try {
+			if (file.createNewFile())
+				System.out.println("file created");
+			if (file.exists()) {
+				System.out.println("Reading from file " + fileName + "...");
+				System.out.println(file.getAbsolutePath());
+				in = new ObjectInputStream(new FileInputStream(file));
+				Projects = (List<PSPProject>) in.readObject();
+				PSPProject.setCounter(Projects.size());
+			}
+		} catch (Exception e) {
+			// e.printStackTrace();
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (Throwable t) {
+					// t.printStackTrace();
 				}
 			}
 		}

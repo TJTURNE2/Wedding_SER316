@@ -13,6 +13,8 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import java.awt.ComponentOrientation;
 import java.awt.Font;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.io.IOException;
 import java.awt.Color;
 import javax.swing.ImageIcon;
@@ -42,7 +44,15 @@ public class PSPNewTimeLogDialog extends JDialog {
 	 * Create the dialog.
 	 */
 	public PSPNewTimeLogDialog() {
+		setAlwaysOnTop(true);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		addWindowFocusListener(new WindowFocusListener() {
+			public void windowGainedFocus(WindowEvent arg0) {
+			}
+			public void windowLostFocus(WindowEvent arg0) {
+				dispose();
+			}
+		});
 		setBounds(100, 100, 500, 250);
 		getContentPane().setLayout(new BorderLayout());
 		{
@@ -59,6 +69,7 @@ public class PSPNewTimeLogDialog extends JDialog {
 				topPanel.add(lblLogTitle);
 			}
 		}
+		contentPanel.setBackground(Color.WHITE);
 		contentPanel.setLayout(new FlowLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);

@@ -13,7 +13,7 @@ public class PSPProjectCodeComponent implements java.io.Serializable{
 	
 	
 	public PSPProjectCodeComponent(){
-		ID = 0;
+		ID = 1;
 		Module = "PSPProject";
 		Type = PSPProjectComponentType.CLASS;
 		Purpose = "Class to test";

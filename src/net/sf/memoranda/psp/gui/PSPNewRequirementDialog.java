@@ -21,6 +21,8 @@ import javax.swing.JTextField;
 import javax.swing.JSpinner;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
 import java.awt.Dimension;
@@ -40,8 +42,11 @@ import javax.swing.SpinnerNumberModel;
 @SuppressWarnings("serial")
 public class PSPNewRequirementDialog extends JDialog {
 	private JTextField textDescription;
-	private PSPProjectManager Manager;
+	private static PSPProjectManager Manager;
 	private static int ProjectID = 0;
+	private JComboBox comboBoxRequirementType;
+	private JSpinner prioritySpinner;
+	private PSPProjectRequirement entry;
 	
 	public static void NewDialog() throws IOException {
 		// TODO Auto-generated method stub
@@ -54,8 +59,18 @@ public class PSPNewRequirementDialog extends JDialog {
 	}
 
 	public PSPNewRequirementDialog(int pID) {
-		ProjectID =pID;
-		
+		setAlwaysOnTop(true);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		addWindowFocusListener(new WindowFocusListener() {
+			public void windowGainedFocus(WindowEvent arg0) {
+			}
+
+			public void windowLostFocus(WindowEvent arg0) {
+				dispose();
+			}
+		});
+		ProjectID = pID;
+
 		setMinimumSize(new Dimension(500, 250));
 		getContentPane().setMinimumSize(new Dimension(500, 500));
 		setResizable(false);
@@ -91,17 +106,17 @@ public class PSPNewRequirementDialog extends JDialog {
 		lblRequirementType.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		ContentPanel.add(lblRequirementType, "cell 0 1,alignx right");
 
-		final JComboBox comboBoxRequirementType = new JComboBox();
+		comboBoxRequirementType = new JComboBox();
 		comboBoxRequirementType.setModel(new DefaultComboBoxModel(PSPRequirementType.values()));
 		comboBoxRequirementType.setMaximumRowCount(6);
 		ContentPanel.add(comboBoxRequirementType, "cell 2 1,alignx left");
-		
+
 		JLabel lblPriorityLabel = new JLabel("Priority");
 		lblPriorityLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPriorityLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		ContentPanel.add(lblPriorityLabel, "cell 0 2,alignx right");
-		
-		JSpinner prioritySpinner = new JSpinner();
+
+		prioritySpinner = new JSpinner();
 		prioritySpinner.setModel(new SpinnerNumberModel(1, 1, 10, 1));
 		prioritySpinner.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		ContentPanel.add(prioritySpinner, "cell 2 2");
@@ -115,17 +130,11 @@ public class PSPNewRequirementDialog extends JDialog {
 		btnOK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Manager = new PSPProjectManager();
-				PSPProjectRequirement entry = new PSPProjectRequirement();
+				entry = new PSPProjectRequirement();
 				entry.setDescription(textDescription.getText());
-				entry.setRequirmentType((PSPRequirementType)comboBoxRequirementType.getSelectedItem());
+				entry.setRequirmentType((PSPRequirementType) comboBoxRequirementType.getSelectedItem());
 				entry.setPriority((int) prioritySpinner.getValue());
 				Manager.getProject(pID).addRequirementEntry(entry);
-				try {
-					Manager.saveProjects();
-				} catch (IOException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
-				}
 				try {
 					Manager.saveProjects();
 				} catch (IOException e1) {
@@ -135,7 +144,6 @@ public class PSPNewRequirementDialog extends JDialog {
 				dispose();
 			}
 		});
-		
 
 		btnOK.setMinimumSize(new Dimension(65, 23));
 		btnOK.setMaximumSize(new Dimension(65, 23));
@@ -153,9 +161,20 @@ public class PSPNewRequirementDialog extends JDialog {
 		BottomPanel.add(btnCancel, "cell 16 0,alignx left,aligny top");
 
 	}
-	
-	public void setProjectID(int pID){
+
+	public void setProjectID(int pID) {
 		ProjectID = pID;
 	}
 
+	public JTextField getTextDescription() {
+		return textDescription;
+	}
+
+	public JComboBox getComboBoxRequirementType() {
+		return comboBoxRequirementType;
+	}
+
+	public JSpinner getPrioritySpinner() {
+		return prioritySpinner;
+	}
 }

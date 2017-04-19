@@ -36,6 +36,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.border.LineBorder;
 
 @SuppressWarnings("serial")
 public class PSPNewDefectDialog extends JDialog {
@@ -91,7 +92,8 @@ public class PSPNewDefectDialog extends JDialog {
 				topPanel.add(lblNewLabel);
 			}
 		}
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPanel.setBackground(Color.WHITE);
+		contentPanel.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		{
 			dateFound= new JDateChooser();

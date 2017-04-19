@@ -60,9 +60,7 @@ public class PSPNewProjectDialog extends JDialog {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		addWindowFocusListener(new WindowFocusListener() {
 			public void windowGainedFocus(WindowEvent arg0) {
-
 			}
-
 			public void windowLostFocus(WindowEvent arg0) {
 				dispose();
 			}

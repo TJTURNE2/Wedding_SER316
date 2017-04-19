@@ -1,82 +1,64 @@
 package net.sf.memoranda.psp.gui;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.JToolBar;
-import java.awt.ComponentOrientation;
-import javax.swing.JScrollPane;
-import java.awt.Dimension;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.ComponentOrientation;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
-import javax.swing.UIManager;
+import javax.swing.JTextField;
+import javax.swing.JToolBar;
+import javax.swing.ListSelectionModel;
+import javax.swing.SpinnerDateModel;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 
+import net.miginfocom.swing.MigLayout;
 import net.sf.memoranda.psp.PSPPlanSummary;
 import net.sf.memoranda.psp.PSPProjectLOCSummary;
 import net.sf.memoranda.psp.PSPProjectLogPhase;
 import net.sf.memoranda.psp.PSPProjectManager;
 import net.sf.memoranda.psp.PSPProjectPhase;
+import net.sf.memoranda.psp.PSPProjectRequirement;
 
-import java.awt.Color;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Component;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.ImageIcon;
-import javax.swing.border.BevelBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.awt.event.ActionEvent;
-import java.awt.GridBagLayout;
-import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.SwingConstants;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-import javax.swing.SpinnerDateModel;
-import javax.swing.SpinnerModel;
-
-import java.util.Date;
-import java.util.Calendar;
-import javax.swing.SpringLayout;
-import javax.swing.SpinnerNumberModel;
-import java.awt.GridLayout;
-import net.miginfocom.swing.MigLayout;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-
-
+@SuppressWarnings("serial")
 public class PSPProjectsOverviewPanel extends JPanel {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 	private static PSPProjectManager Manager = new PSPProjectManager();
 	private static int ProjectID = -1;
-	private static int requirementID;
-	private static int defectID;
-	private static int timeID;
-	private static int userTestID;
-	private static int codeModuleID;
-	private static int userReviewID;
-
+	private static int requirementID = -1;
+	private static int defectID= -1;
+	private static int timeID= -1;
+	private static int userTestID= -1;
+	private static int codeModuleID= -1;
+	private static int userReviewID= -1;
 	private static JTable projectsTable;
 	private static JTable requirementTable;
 	private static JTable codeReviewTable;
 	private static JTable timeLogTable;
 	private static JTable defectLogTable;
-	private static JTable notesTable;
+	private static JTable userReviewTable;
 	private static JTable componentsTable;
 	private static JTable userTestTable;
 	private static ProjectTableModel pModel;
@@ -85,6 +67,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 	private static RequirementTableModel rModel;
 	private static ComponentTableModel cModel;
 	private static UserTestTableModel utModel;
+	private static UserReviewTableModel urModel;
 	private PSPNewProjectDialog newProject;
 	private PSPNewTimeEntryDialog newTimeLog;
 	private PSPNewRequirementDialog newRequirement;
@@ -201,12 +184,13 @@ public class PSPProjectsOverviewPanel extends JPanel {
 	private JPanel testPanel;
 	private JToolBar testToolBar;
 	private JScrollPane testScrollPane;
-	private JButton btnNewButton;
-	private JButton btnNewButton_1;
-	private JButton btnNewButton_2;
-	private JButton btnNewButton_3;
-	private JButton btnNewButton_4;
+	private JButton btnNewUserTest;
+	private JButton btnEditUserTest;
+	private JButton btnNewCodeModule;
+	private JButton btnEditCodeModule;
+	private JButton btnDeleteCodeModule;
 	private JButton button;
+	private JButton btnDeleteUserTest_1;
 
 	/**
 	 * Create the panel.
@@ -249,6 +233,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				newProject = new PSPNewProjectDialog();
 				newProject.setVisible(true);
+				newProject.isAlwaysOnTop();
 			}
 		});
 		btnNewProject.setMaximumSize(new Dimension(25, 25));
@@ -272,18 +257,19 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		JButton btnDeleteProject = new JButton("");
 		btnDeleteProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ProjectID = (int) projectsTable.getValueAt(projectsTable.getSelectedRow(), 0);			
-				
-				// ProjectID = (int)
-				// projectsTable.getValueAt(projectsTable.getSelectedRow(), 0);
-				if (ProjectID > -1) {
-					System.out.println("This is working kinda - delete " + ProjectID);
-					Manager.deleteProject(ProjectID);
-					pModel.fireTableDataChanged();
+				ProjectID = (int) projectsTable.getValueAt(projectsTable.getSelectedRow(), 0);
+
+				System.out.println("This is working kinda - delete " + ProjectID);
+				Manager.deleteProject(ProjectID);
+				try {
+					Manager.saveProjects();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
+				pModel.fireTableDataChanged();
 				disablePanels();
 				ProjectID = -1;
-
 			}
 
 		});
@@ -308,6 +294,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 			public void valueChanged(ListSelectionEvent event) {
 				btnDeleteProject.setEnabled(true);
 				ProjectID = (int) projectsTable.getValueAt(projectsTable.getSelectedRow(), 0);
+				System.out.println("Project Selected "+ ProjectID);
 				resetPanels();
 			}
 		});
@@ -938,16 +925,28 @@ public class PSPProjectsOverviewPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				newRequirement = new PSPNewRequirementDialog(ProjectID);
 				newRequirement.setVisible(true);
-				try {
-					if (Manager.getProject(ProjectID).getRequirements().size() > 0
-							&& Manager.getProject(ProjectID).getPhase().equals(PSPProjectPhase.DESIGN)) {
-						Manager.getProject(ProjectID).setPhase(PSPProjectPhase.CODE);
-						Manager.saveProjects();
-					}
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+
+				for (PSPProjectRequirement R : Manager.getProject(ProjectID).getRequirements()) {
+					System.out.println("R " + R.getID());
+
 				}
+				// newRequirement.getComboBoxRequirementType();
+				//
+				// System.out.println("Requirent " +
+				// newRequirement.getTextDescription().getText());
+				// try {
+				// if (Manager.getProject(ProjectID).getRequirements().size() >
+				// 0
+				// &&
+				// Manager.getProject(ProjectID).getPhase().equals(PSPProjectPhase.DESIGN))
+				// {
+				// Manager.getProject(ProjectID).setPhase(PSPProjectPhase.CODE);
+				// Manager.saveProjects();
+				// }
+				// } catch (IOException e1) {
+				// // TODO Auto-generated catch block
+				// e1.printStackTrace();
+				// }
 			}
 
 		});
@@ -964,6 +963,16 @@ public class PSPProjectsOverviewPanel extends JPanel {
 				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editproject.png")));
 		requirementToolBar.add(btnEditRequirement);
 
+		requirementTable = new JTable(rModel);
+		requirementTable.setFillsViewportHeight(true);
+		requirementTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent event) {
+				requirementID = (int) requirementTable.getValueAt(requirementTable.getSelectedRow(), 0);
+				System.out.println("Reuirment ID "+ requirementID+ " for project " +ProjectID);
+				resetPanels();
+			}
+		});		
+		
 		JButton btnDeleteRequirement = new JButton("");
 		btnDeleteRequirement.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -984,10 +993,13 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		btnDeleteRequirement.setBorder(null);
 		requirementToolBar.add(btnDeleteRequirement);
 
-		requirementTable = new JTable(rModel);
-		requirementTable.setFillsViewportHeight(true);
-
 		JScrollPane requirementScrollPane = new JScrollPane(requirementTable);
+		requirementScrollPane.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				requirementTable.repaint();
+			}
+		});
 		requirementPanel.add(requirementScrollPane, BorderLayout.CENTER);
 
 		codePanel = new JPanel();
@@ -1001,26 +1013,26 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		codeToolBar.setPreferredSize(new Dimension(13, 25));
 		codePanel.add(codeToolBar, BorderLayout.NORTH);
 
-		btnNewButton_2 = new JButton("");
-		btnNewButton_2.setMaximumSize(new Dimension(25, 25));
-		btnNewButton_2.setIcon(new ImageIcon(
+		btnNewCodeModule = new JButton("");
+		btnNewCodeModule.setMaximumSize(new Dimension(25, 25));
+		btnNewCodeModule.setIcon(new ImageIcon(
 				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/filenew.png")));
-		btnNewButton_2.setPreferredSize(new Dimension(25, 25));
-		btnNewButton_2.setBorder(null);
-		codeToolBar.add(btnNewButton_2);
+		btnNewCodeModule.setPreferredSize(new Dimension(25, 25));
+		btnNewCodeModule.setBorder(null);
+		codeToolBar.add(btnNewCodeModule);
 
-		btnNewButton_3 = new JButton("");
-		btnNewButton_3.setMaximumSize(new Dimension(25, 25));
-		btnNewButton_3.setIcon(new ImageIcon(
+		btnEditCodeModule = new JButton("");
+		btnEditCodeModule.setMaximumSize(new Dimension(25, 25));
+		btnEditCodeModule.setIcon(new ImageIcon(
 				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editproject.png")));
-		btnNewButton_3.setBorder(null);
-		codeToolBar.add(btnNewButton_3);
+		btnEditCodeModule.setBorder(null);
+		codeToolBar.add(btnEditCodeModule);
 
-		btnNewButton_4 = new JButton("");
-		btnNewButton_4.setIcon(new ImageIcon(
+		btnDeleteCodeModule = new JButton("");
+		btnDeleteCodeModule.setIcon(new ImageIcon(
 				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editdelete.png")));
-		btnNewButton_4.setMaximumSize(new Dimension(25, 25));
-		codeToolBar.add(btnNewButton_4);
+		btnDeleteCodeModule.setMaximumSize(new Dimension(25, 25));
+		codeToolBar.add(btnDeleteCodeModule);
 
 		componentsTable = new JTable(cModel);
 		componentsTable.setFillsViewportHeight(true);
@@ -1080,19 +1092,12 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		testToolBar.setPreferredSize(new Dimension(13, 25));
 		testPanel.add(testToolBar, BorderLayout.NORTH);
 
-		btnNewButton = new JButton("");
-		btnNewButton.setMaximumSize(new Dimension(25, 25));
-		btnNewButton.setBorder(null);
-		btnNewButton.setIcon(new ImageIcon(
+		btnNewUserTest = new JButton("");
+		btnNewUserTest.setMaximumSize(new Dimension(25, 25));
+		btnNewUserTest.setBorder(null);
+		btnNewUserTest.setIcon(new ImageIcon(
 				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/filenew.png")));
-		testToolBar.add(btnNewButton);
-
-		btnNewButton_1 = new JButton("");
-		btnNewButton_1.setMaximumSize(new Dimension(25, 25));
-		btnNewButton_1.setBorder(null);
-		btnNewButton_1.setIcon(new ImageIcon(
-				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editproject.png")));
-		testToolBar.add(btnNewButton_1);
+		testToolBar.add(btnNewUserTest);
 
 		JButton btnDeleteUserTest = new JButton("");
 		btnDeleteUserTest.addActionListener(new ActionListener() {
@@ -1101,7 +1106,6 @@ public class PSPProjectsOverviewPanel extends JPanel {
 				try {
 					Manager.getProject(ProjectID).removeUserTests(userTestID);
 					Manager.saveProjects();
-					utModel.fireTableDataChanged();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -1109,12 +1113,21 @@ public class PSPProjectsOverviewPanel extends JPanel {
 				userTestID = -1;
 			}
 		});
-		
+
 		btnDeleteUserTest.setBorder(null);
 		btnDeleteUserTest.setIcon(new ImageIcon(
 				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editdelete.png")));
-		button.setMaximumSize(new Dimension(25, 25));
-		testToolBar.add(button);
+		btnEditUserTest = new JButton("");
+		btnEditUserTest.setMaximumSize(new Dimension(25, 25));
+		btnEditUserTest.setBorder(null);
+		btnEditUserTest.setIcon(new ImageIcon(
+				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editproject.png")));
+		testToolBar.add(btnEditUserTest);
+
+		btnDeleteUserTest_1 = new JButton("");
+		btnDeleteUserTest_1.setIcon(new ImageIcon(
+				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editdelete.png")));
+		testToolBar.add(btnDeleteUserTest_1);
 
 		userTestTable = new JTable(utModel);
 		userTestTable.setFillsViewportHeight(true);
@@ -1183,7 +1196,6 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		projectsTabbedPane.setEnabledAt(7, false);
 
 		defectLogPanel = new JPanel();
-		notesTable = new JTable();
 		projectsTabbedPane.addTab("Defect Log", null, defectLogPanel, null);
 		defectLogPanel.setLayout(new BorderLayout(0, 0));
 
@@ -1257,10 +1269,6 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		JScrollPane postMortemScrollPane = new JScrollPane();
 		postMortemPanel.add(postMortemScrollPane);
 
-		projectsTabbedPane.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
-			}
-		});
 	}
 
 	public void saveLOC() {
@@ -1388,102 +1396,98 @@ public class PSPProjectsOverviewPanel extends JPanel {
 			PSPProjectLogPhase PhaseDefects = Manager.getProject(ProjectID).getSummary().getPhaseDefects();
 			PSPProjectLogPhase DefectsRemoved = Manager.getProject(ProjectID).getSummary().getDefectsRemoved();
 
-			
-				basePlanSpinner.setValue(LOC.getBase().getPlanSize());
-				baseActualSpinner.setValue(LOC.getBase().getActualSize());
-				deletedPlanSpinner.setValue(LOC.getDeleted().getPlanSize());
-				deletedActualSpinner.setValue(LOC.getDeleted().getActualSize());
-				modifiedPlanSpinner.setValue(LOC.getModified().getPlanSize());
-				modifiedActualSpinner.setValue(LOC.getModified().getActualSize());
-				addedPlanSpinner.setValue(LOC.getAdded().getPlanSize());
-				addedActualSpinner.setValue(LOC.getAdded().getActualSize());
-				reusedPlanSpinner.setValue(LOC.getReused().getPlanSize());
-				reusedActualSpinner.setValue(LOC.getReused().getActualSize());
-				reusedToDateSpinner.setValue(LOC.getReused().getToDateSize());
-				aMPlanSpinner.setValue(LOC.getAddedModified().getPlanSize());
-				aMActualSpinner.setValue(LOC.getAddedModified().getActualSize());
-				aMToDateSpinner.setValue(LOC.getAddedModified().getToDateSize());
-				totalPlanSpinner.setValue(LOC.getTotal().getPlanSize());
-				totalActualSpinner.setValue(LOC.getTotal().getActualSize());
-				totalToDateSpinner.setValue(LOC.getTotal().getToDateSize());
-				nRPlanSpinner.setValue(LOC.getNewReused().getPlanSize());
-				nRActualSpinner.setValue(LOC.getNewReused().getActualSize());
-				nRToDateSpinner.setValue(LOC.getNewReused().getToDateSize());
-			
-			
-				tIPPlanPlanSpinner.setValue(phaseTime.getPlanning().getPlanSize());
-				tIPActualPlanSpinner.setValue(phaseTime.getPlanning().getActualSize());
-				tIPToDatePlanSpinner.setValue(phaseTime.getPlanning().getToDateSize());
-				tIPToDatePerPlanSpinner.setValue(phaseTime.getPlanning().getToDatePercent());
-				tIPPlanDLDSpinner.setValue(phaseTime.getDesign().getPlanSize());
-				tIPActualDLDSpinner.setValue(phaseTime.getDesign().getActualSize());
-				tIPToDateDLDSpinner.setValue(phaseTime.getDesign().getToDateSize());
-				tIPToDatePerDLDSpinner.setValue(phaseTime.getDesign().getToDatePercent());
-				tIPPlanCodeSpinner.setValue(phaseTime.getCode().getPlanSize());
-				tIPActualCodeSpinner.setValue(phaseTime.getCode().getActualSize());
-				tIPToDateCodeSpinner.setValue(phaseTime.getCode().getToDateSize());
-				tIPToDatePerCodeSpinner.setValue(phaseTime.getCode().getToDatePercent());
-				tIPPlanCompileSpinner.setValue(phaseTime.getCompile().getPlanSize());
-				tIPActualCompileSpinner.setValue(phaseTime.getCompile().getActualSize());
-				tIPToDateCompileSpinner.setValue(phaseTime.getCompile().getToDateSize());
-				tIPToDatePerCompileSpinner.setValue(phaseTime.getCompile().getToDatePercent());
-				tIPPlanUTSpinner.setValue(phaseTime.getTesting().getPlanSize());
-				tIPActualUTSpinner.setValue(phaseTime.getTesting().getActualSize());
-				tIPToDateUTSpinner.setValue(phaseTime.getTesting().getToDateSize());
-				tIPToDatePerUTSpinner.setValue(phaseTime.getTesting().getToDatePercent());
-				tIPPlanPMSpinner.setValue(phaseTime.getPostmortem().getPlanSize());
-				tIPActualPMSpinner.setValue(phaseTime.getPostmortem().getActualSize());
-				tIPToDatePMSpinner.setValue(phaseTime.getPostmortem().getToDateSize());
-				tIPToDatePerPMSpinner.setValue(phaseTime.getPostmortem().getToDatePercent());
-				tIPPlanTotalSpinner.setValue(phaseTime.getTotalPlan());
-				tIPActualTotalSpinner.setValue(phaseTime.getTotalAcutal());
-				tIPToDateTotalSpinner.setValue(phaseTime.getTotalTodate());
-			
-			
-				dIActualPlanSpinner.setValue(PhaseDefects.getPlanning().getActualSize());
-				dIToDatePlanSpinner.setValue(PhaseDefects.getPlanning().getToDateSize());
-				dIToDatePerPlanSpinner.setValue(PhaseDefects.getPlanning().getToDatePercent());
-				dIActualDLDSpinner.setValue(PhaseDefects.getDesign().getActualSize());
-				dIToDateDLDSpinner.setValue(PhaseDefects.getDesign().getToDateSize());
-				dIToDatePerDLDSpinner.setValue(PhaseDefects.getDesign().getToDatePercent());
-				dIActualCodeSpinner.setValue(PhaseDefects.getCode().getActualSize());
-				dIToDateCodeSpinner.setValue(PhaseDefects.getCode().getToDateSize());
-				dIToDatePerCodeSpinner.setValue(PhaseDefects.getCode().getToDatePercent());
-				dIActualCompileSpinner.setValue(PhaseDefects.getCompile().getToDateSize());
-				dIToDateCompileSpinner.setValue(PhaseDefects.getCompile().getActualSize());
-				
-				dIToDatePerCompileSpinner.setValue(PhaseDefects.getCompile().getToDatePercent());
-				dIActualUTSpinner.setValue(PhaseDefects.getTesting().getActualSize());
-				dIToDateUTSpinner.setValue(PhaseDefects.getTesting().getToDateSize());
-				dIToDatePerUTSpinner.setValue(PhaseDefects.getTesting().getToDatePercent());
-				dIActualPMSpinner.setValue(PhaseDefects.getPostmortem().getActualSize());
-				dIToDatePMSpinner.setValue(PhaseDefects.getPostmortem().getToDateSize());
-				dIToDatePerPMSpinner.setValue(PhaseDefects.getPostmortem().getToDatePercent());
-				dIActualTotalSpinner.setValue(PhaseDefects.getTotalAcutal());
-				dIToDateTotalSpinner.setValue(PhaseDefects.getTotalTodate());
-			
-			
-				drToActualPlanSpinner.setValue(DefectsRemoved.getPlanning().getActualSize());
-				drToDatePlanSpinner.setValue(DefectsRemoved.getPlanning().getToDateSize());
-				drToDatePerPlanSpinner.setValue(DefectsRemoved.getPlanning().getToDatePercent());
-				drToActualDLDSpinner.setValue(DefectsRemoved.getDesign().getActualSize());
-				drToDatePerDLDSpinner.setValue(DefectsRemoved.getDesign().getToDateSize());
-				drToDatePerDLDSpinner.setValue(DefectsRemoved.getDesign().getToDatePercent());
-				drToActualCodeSpinner.setValue(DefectsRemoved.getCode().getActualSize());
-				drToDateCodeSpinner.setValue(DefectsRemoved.getCode().getToDateSize());
-				drToDatePerCodeSpinner.setValue(DefectsRemoved.getCode().getToDatePercent());
-				drToActualCompileSpinner.setValue(DefectsRemoved.getCompile().getActualSize());
-				drToDateCompileSpinner.setValue(DefectsRemoved.getCompile().getToDateSize());
-				drToDatePerCompileSpinner.setValue(DefectsRemoved.getCompile().getToDatePercent());
-				drToActualUTSpinner.setValue(DefectsRemoved.getTesting().getActualSize());
-				drToDateUTSpinner.setValue(DefectsRemoved.getTesting().getToDateSize());
-				drToDatePerUTSpinner.setValue(DefectsRemoved.getTesting().getToDatePercent());
-				drToActualPMSpinner.setValue(DefectsRemoved.getPostmortem().getActualSize());
-				drToDatePMSpinner.setValue(DefectsRemoved.getPostmortem().getToDateSize());
-				drToDatePerPMSpinner.setValue(DefectsRemoved.getPostmortem().getToDatePercent());
-				drToActualTotalSpinner.setValue(DefectsRemoved.getTotalAcutal());
-				drToDateTotalSpinner.setValue(DefectsRemoved.getTotalTodate());
-			
+			basePlanSpinner.setValue(LOC.getBase().getPlanSize());
+			baseActualSpinner.setValue(LOC.getBase().getActualSize());
+			deletedPlanSpinner.setValue(LOC.getDeleted().getPlanSize());
+			deletedActualSpinner.setValue(LOC.getDeleted().getActualSize());
+			modifiedPlanSpinner.setValue(LOC.getModified().getPlanSize());
+			modifiedActualSpinner.setValue(LOC.getModified().getActualSize());
+			addedPlanSpinner.setValue(LOC.getAdded().getPlanSize());
+			addedActualSpinner.setValue(LOC.getAdded().getActualSize());
+			reusedPlanSpinner.setValue(LOC.getReused().getPlanSize());
+			reusedActualSpinner.setValue(LOC.getReused().getActualSize());
+			reusedToDateSpinner.setValue(LOC.getReused().getToDateSize());
+			aMPlanSpinner.setValue(LOC.getAddedModified().getPlanSize());
+			aMActualSpinner.setValue(LOC.getAddedModified().getActualSize());
+			aMToDateSpinner.setValue(LOC.getAddedModified().getToDateSize());
+			totalPlanSpinner.setValue(LOC.getTotal().getPlanSize());
+			totalActualSpinner.setValue(LOC.getTotal().getActualSize());
+			totalToDateSpinner.setValue(LOC.getTotal().getToDateSize());
+			nRPlanSpinner.setValue(LOC.getNewReused().getPlanSize());
+			nRActualSpinner.setValue(LOC.getNewReused().getActualSize());
+			nRToDateSpinner.setValue(LOC.getNewReused().getToDateSize());
+
+			tIPPlanPlanSpinner.setValue(phaseTime.getPlanning().getPlanSize());
+			tIPActualPlanSpinner.setValue(phaseTime.getPlanning().getActualSize());
+			tIPToDatePlanSpinner.setValue(phaseTime.getPlanning().getToDateSize());
+			tIPToDatePerPlanSpinner.setValue(phaseTime.getPlanning().getToDatePercent());
+			tIPPlanDLDSpinner.setValue(phaseTime.getDesign().getPlanSize());
+			tIPActualDLDSpinner.setValue(phaseTime.getDesign().getActualSize());
+			tIPToDateDLDSpinner.setValue(phaseTime.getDesign().getToDateSize());
+			tIPToDatePerDLDSpinner.setValue(phaseTime.getDesign().getToDatePercent());
+			tIPPlanCodeSpinner.setValue(phaseTime.getCode().getPlanSize());
+			tIPActualCodeSpinner.setValue(phaseTime.getCode().getActualSize());
+			tIPToDateCodeSpinner.setValue(phaseTime.getCode().getToDateSize());
+			tIPToDatePerCodeSpinner.setValue(phaseTime.getCode().getToDatePercent());
+			tIPPlanCompileSpinner.setValue(phaseTime.getCompile().getPlanSize());
+			tIPActualCompileSpinner.setValue(phaseTime.getCompile().getActualSize());
+			tIPToDateCompileSpinner.setValue(phaseTime.getCompile().getToDateSize());
+			tIPToDatePerCompileSpinner.setValue(phaseTime.getCompile().getToDatePercent());
+			tIPPlanUTSpinner.setValue(phaseTime.getTesting().getPlanSize());
+			tIPActualUTSpinner.setValue(phaseTime.getTesting().getActualSize());
+			tIPToDateUTSpinner.setValue(phaseTime.getTesting().getToDateSize());
+			tIPToDatePerUTSpinner.setValue(phaseTime.getTesting().getToDatePercent());
+			tIPPlanPMSpinner.setValue(phaseTime.getPostmortem().getPlanSize());
+			tIPActualPMSpinner.setValue(phaseTime.getPostmortem().getActualSize());
+			tIPToDatePMSpinner.setValue(phaseTime.getPostmortem().getToDateSize());
+			tIPToDatePerPMSpinner.setValue(phaseTime.getPostmortem().getToDatePercent());
+			tIPPlanTotalSpinner.setValue(phaseTime.getTotalPlan());
+			tIPActualTotalSpinner.setValue(phaseTime.getTotalAcutal());
+			tIPToDateTotalSpinner.setValue(phaseTime.getTotalTodate());
+
+			dIActualPlanSpinner.setValue(PhaseDefects.getPlanning().getActualSize());
+			dIToDatePlanSpinner.setValue(PhaseDefects.getPlanning().getToDateSize());
+			dIToDatePerPlanSpinner.setValue(PhaseDefects.getPlanning().getToDatePercent());
+			dIActualDLDSpinner.setValue(PhaseDefects.getDesign().getActualSize());
+			dIToDateDLDSpinner.setValue(PhaseDefects.getDesign().getToDateSize());
+			dIToDatePerDLDSpinner.setValue(PhaseDefects.getDesign().getToDatePercent());
+			dIActualCodeSpinner.setValue(PhaseDefects.getCode().getActualSize());
+			dIToDateCodeSpinner.setValue(PhaseDefects.getCode().getToDateSize());
+			dIToDatePerCodeSpinner.setValue(PhaseDefects.getCode().getToDatePercent());
+			dIActualCompileSpinner.setValue(PhaseDefects.getCompile().getToDateSize());
+			dIToDateCompileSpinner.setValue(PhaseDefects.getCompile().getActualSize());
+
+			dIToDatePerCompileSpinner.setValue(PhaseDefects.getCompile().getToDatePercent());
+			dIActualUTSpinner.setValue(PhaseDefects.getTesting().getActualSize());
+			dIToDateUTSpinner.setValue(PhaseDefects.getTesting().getToDateSize());
+			dIToDatePerUTSpinner.setValue(PhaseDefects.getTesting().getToDatePercent());
+			dIActualPMSpinner.setValue(PhaseDefects.getPostmortem().getActualSize());
+			dIToDatePMSpinner.setValue(PhaseDefects.getPostmortem().getToDateSize());
+			dIToDatePerPMSpinner.setValue(PhaseDefects.getPostmortem().getToDatePercent());
+			dIActualTotalSpinner.setValue(PhaseDefects.getTotalAcutal());
+			dIToDateTotalSpinner.setValue(PhaseDefects.getTotalTodate());
+
+			drToActualPlanSpinner.setValue(DefectsRemoved.getPlanning().getActualSize());
+			drToDatePlanSpinner.setValue(DefectsRemoved.getPlanning().getToDateSize());
+			drToDatePerPlanSpinner.setValue(DefectsRemoved.getPlanning().getToDatePercent());
+			drToActualDLDSpinner.setValue(DefectsRemoved.getDesign().getActualSize());
+			drToDatePerDLDSpinner.setValue(DefectsRemoved.getDesign().getToDateSize());
+			drToDatePerDLDSpinner.setValue(DefectsRemoved.getDesign().getToDatePercent());
+			drToActualCodeSpinner.setValue(DefectsRemoved.getCode().getActualSize());
+			drToDateCodeSpinner.setValue(DefectsRemoved.getCode().getToDateSize());
+			drToDatePerCodeSpinner.setValue(DefectsRemoved.getCode().getToDatePercent());
+			drToActualCompileSpinner.setValue(DefectsRemoved.getCompile().getActualSize());
+			drToDateCompileSpinner.setValue(DefectsRemoved.getCompile().getToDateSize());
+			drToDatePerCompileSpinner.setValue(DefectsRemoved.getCompile().getToDatePercent());
+			drToActualUTSpinner.setValue(DefectsRemoved.getTesting().getActualSize());
+			drToDateUTSpinner.setValue(DefectsRemoved.getTesting().getToDateSize());
+			drToDatePerUTSpinner.setValue(DefectsRemoved.getTesting().getToDatePercent());
+			drToActualPMSpinner.setValue(DefectsRemoved.getPostmortem().getActualSize());
+			drToDatePMSpinner.setValue(DefectsRemoved.getPostmortem().getToDateSize());
+			drToDatePerPMSpinner.setValue(DefectsRemoved.getPostmortem().getToDatePercent());
+			drToActualTotalSpinner.setValue(DefectsRemoved.getTotalAcutal());
+			drToDateTotalSpinner.setValue(DefectsRemoved.getTotalTodate());
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
@@ -1552,6 +1556,19 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		}
 
 	}
+	public void resetTables() {
+		// disable all
+	projectsTable.repaint();
+	requirementTable.repaint();
+	codeReviewTable.repaint();
+	timeLogTable.repaint();
+	defectLogTable.repaint();
+	userReviewTable.repaint();
+	componentsTable.repaint();
+	userTestTable.repaint();
+	
+
+	}
 
 	public void disablePanels() {
 		// disable all
@@ -1566,8 +1583,8 @@ public class PSPProjectsOverviewPanel extends JPanel {
 
 	}
 
-	public void resetPanels(){
-		Manager.updateProject();
+	public void resetPanels() {
+		Manager.loadProjects();
 		// eneable panels based off phase
 		disablePanels();
 		switch ((PSPProjectPhase) Manager.getProject(ProjectID).getPhase()) {
@@ -1609,31 +1626,31 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		@Override
 		public int getRowCount() {
 			// TODO Auto-generated method stub
-			return Manager.Projects.size();
+			return Manager.getAllProjects().size();
 		}
 
 		@Override
 		public Object getValueAt(int row, int col) {
 
 			if (col == 0) {
-				return Manager.Projects.get(row).getID();
+				return Manager.getAllProjects().get(row).getID();
 			}
 			if (col == 1) {
-				return Manager.Projects.get(row).getProjectName();
+				return Manager.getAllProjects().get(row).getProjectName();
 			}
 			if (col == 2) {
-				return Manager.Projects.get(row).getDescription();
+				return Manager.getAllProjects().get(row).getDescription();
 			}
 			if (col == 3) {
-				return Manager.Projects.get(row).getPSP();
+				return Manager.getAllProjects().get(row).getPSP();
 			}
 
-			return Manager.Projects.get(row).getPhase();
+			return Manager.getAllProjects().get(row).getPhase();
 		}
 	}
 
-	protected class RequirementTableModel extends AbstractTableModel {
-		protected String[] columnNames = new String[] { "ID", "Type", "Description", "Priority" };
+	public class RequirementTableModel extends AbstractTableModel {
+		protected String[] columnNames = new String[] { "Requirement ID", "Type", "Description", "Priority" };
 
 		@Override
 		public String getColumnName(int col) {
@@ -1652,7 +1669,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 			// TODO Auto-generated method stub
 
 			try {
-				return Manager.Projects.get(ProjectID).getRequirements().size();
+				return Manager.getProject(ProjectID).getRequirements().size();
 			} catch (Exception e) {
 				return 0;
 			}
@@ -1661,24 +1678,25 @@ public class PSPProjectsOverviewPanel extends JPanel {
 
 		@Override
 		public Object getValueAt(int row, int col) {
+			System.out.println("Getting requirment table data for project " + ProjectID);
 			if (col == 0) {
-				return Manager.Projects.get(ProjectID).getRequirements().get(row).getID();
+				return Manager.getProject(ProjectID).getRequirements().get(row).getID();
 			}
 			if (col == 1) {
-				return Manager.Projects.get(ProjectID).getRequirements().get(row).getRequirmentType();
+				return Manager.getProject(ProjectID).getRequirements().get(row).getRequirmentType();
 			}
 			if (col == 2) {
-				return Manager.Projects.get(ProjectID).getRequirements().get(row).getDescription();
+				return Manager.getProject(ProjectID).getRequirements().get(row).getDescription();
 			}
 			{
-				return Manager.Projects.get(ProjectID).getRequirements().get(row).getPriority();
+				return Manager.getProject(ProjectID).getRequirements().get(row).getPriority();
 			}
 
 		}
 	}
 
 	protected class TimeLogTableModel extends AbstractTableModel {
-		protected String[] columnNames = new String[] { "ID", "Entry Date", "Comments", "Phase", "Start Time",
+		protected String[] columnNames = new String[] { "Log ID", "Entry Date", "Comments", "Phase", "Start Time",
 				"Stopping Time" };
 
 		@Override
@@ -1697,7 +1715,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		public int getRowCount() {
 			// TODO Auto-generated method stub;
 			try {
-				return Manager.Projects.get(ProjectID).getTimeLog().size();
+				return Manager.getProject(ProjectID).getTimeLog().size();
 			} catch (Exception e) {
 				return 0;
 			}
@@ -1708,22 +1726,22 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		public Object getValueAt(int row, int col) {
 
 			if (col == 0) {
-				return Manager.Projects.get(ProjectID).getTimeLog().get(row).getID();
+				return Manager.getProject(ProjectID).getTimeLog().get(row).getID();
 			}
 			if (col == 1) {
-				return Manager.Projects.get(ProjectID).getTimeLog().get(row).getEntryDate();
+				return Manager.getProject(ProjectID).getTimeLog().get(row).getEntryDate();
 			}
 			if (col == 2) {
-				return Manager.Projects.get(ProjectID).getTimeLog().get(row).getComments();
+				return Manager.getProject(ProjectID).getTimeLog().get(row).getComments();
 			}
 			if (col == 3) {
-				return Manager.Projects.get(ProjectID).getTimeLog().get(row).getPhase();
+				return Manager.getProject(ProjectID).getTimeLog().get(row).getPhase();
 			}
 			if (col == 4) {
-				return Manager.Projects.get(ProjectID).getTimeLog().get(row).getStartingTime();
+				return Manager.getProject(ProjectID).getTimeLog().get(row).getStartingTime();
 			}
 			{
-				return Manager.Projects.get(ProjectID).getTimeLog().get(row).getStoppingTime();
+				return Manager.getProject(ProjectID).getTimeLog().get(row).getStoppingTime();
 			}
 		}
 	}
@@ -1748,7 +1766,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		public int getRowCount() {
 			// TODO Auto-generated method stub
 			try {
-				return Manager.Projects.get(ProjectID).getDefectLog().size();
+				return Manager.getProject(ProjectID).getDefectLog().size();
 			} catch (Exception e) {
 				return 0;
 			}
@@ -1759,28 +1777,28 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		public Object getValueAt(int row, int col) {
 
 			if (col == 0) {
-				return Manager.Projects.get(ProjectID).getDefectLog().get(row).getID();
+				return Manager.getProject(ProjectID).getDefectLog().get(row).getID();
 			}
 			if (col == 1) {
-				return Manager.Projects.get(ProjectID).getDefectLog().get(row).getDateFound();
+				return Manager.getProject(ProjectID).getDefectLog().get(row).getDateFound();
 			}
 			if (col == 2) {
-				return Manager.Projects.get(ProjectID).getDefectLog().get(row).getDefectType();
+				return Manager.getProject(ProjectID).getDefectLog().get(row).getDefectType();
 			}
 			if (col == 3) {
-				return Manager.Projects.get(ProjectID).getDefectLog().get(row).getPhaseInjected();
+				return Manager.getProject(ProjectID).getDefectLog().get(row).getPhaseInjected();
 			}
 			if (col == 4) {
-				return Manager.Projects.get(ProjectID).getDefectLog().get(row).getDescription();
+				return Manager.getProject(ProjectID).getDefectLog().get(row).getDescription();
 			}
 			{
-				return Manager.Projects.get(ProjectID).getDefectLog().get(row).getSeverity();
+				return Manager.getProject(ProjectID).getDefectLog().get(row).getSeverity();
 			}
 		}
 	}
 
 	protected class ComponentTableModel extends AbstractTableModel {
-		protected String[] columnNames = new String[] { "ID", "Module", "Type", "Purpose", "Fuction" };
+		protected String[] columnNames = new String[] { "Module ID", "Module", "Type", "Purpose", "Fuction" };
 
 		@Override
 		public String getColumnName(int col) {
@@ -1798,7 +1816,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		public int getRowCount() {
 			// TODO Auto-generated method stub
 			try {
-				return Manager.Projects.get(ProjectID).getComponents().size();
+				return Manager.getProject(ProjectID).getComponents().size();
 			} catch (Exception e) {
 				return 0;
 			}
@@ -1809,19 +1827,19 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		public Object getValueAt(int row, int col) {
 
 			if (col == 0) {
-				return Manager.Projects.get(ProjectID).getComponents().get(row).getID();
+				return Manager.getProject(ProjectID).getComponents().get(row).getID();
 			}
 			if (col == 1) {
-				return Manager.Projects.get(ProjectID).getComponents().get(row).getModule();
+				return Manager.getProject(ProjectID).getComponents().get(row).getModule();
 			}
 			if (col == 2) {
-				return Manager.Projects.get(ProjectID).getComponents().get(row).getType();
+				return Manager.getProject(ProjectID).getComponents().get(row).getType();
 			}
 			if (col == 3) {
-				return Manager.Projects.get(ProjectID).getComponents().get(row).getPurpose();
+				return Manager.getProject(ProjectID).getComponents().get(row).getPurpose();
 			}
 			if (col == 4) {
-				return Manager.Projects.get(ProjectID).getComponents().get(row).getFunction();
+				return Manager.getProject(ProjectID).getComponents().get(row).getFunction();
 			}
 
 			return "NAN";
@@ -1829,7 +1847,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 	}
 
 	protected class UserTestTableModel extends AbstractTableModel {
-		protected String[] columnNames = new String[] { "ID", "Module", "Title", "Expected Results", "Actual Results",
+		protected String[] columnNames = new String[] { "Test ID", "Module", "Title", "Expected Results", "Actual Results",
 				"Status" };
 
 		@Override
@@ -1849,7 +1867,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 			// TODO Auto-generated method stub
 
 			try {
-				return Manager.Projects.get(ProjectID).getUserTests().size();
+				return Manager.getProject(ProjectID).getUserTests().size();
 			} catch (Exception e) {
 				return 0;
 			}
@@ -1859,22 +1877,74 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		@Override
 		public Object getValueAt(int row, int col) {
 			if (col == 0) {
-				return Manager.Projects.get(ProjectID).getUserTests().get(row).getID();
+				return Manager.getProject(ProjectID).getUserTests().get(row).getID();
 			}
 			if (col == 1) {
-				return Manager.Projects.get(ProjectID).getUserTests().get(row).getModuleName();
+				return Manager.getProject(ProjectID).getUserTests().get(row).getModuleName();
 			}
 			if (col == 2) {
-				return Manager.Projects.get(ProjectID).getUserTests().get(row).getTestTitle();
+				return Manager.getProject(ProjectID).getUserTests().get(row).getTestTitle();
 			}
-			if (col == 8) {
-				return Manager.Projects.get(ProjectID).getUserTests().get(row).getExpectedResults();
+			if (col == 3) {
+				return Manager.getProject(ProjectID).getUserTests().get(row).getExpectedResults();
 			}
-			if (col == 9) {
-				return Manager.Projects.get(ProjectID).getUserTests().get(row).getActualResults();
+			if (col == 4) {
+				return Manager.getProject(ProjectID).getUserTests().get(row).getActualResults();
 			}
 			{
-				return Manager.Projects.get(ProjectID).getUserTests().get(row).getStatus();
+				return Manager.getProject(ProjectID).getUserTests().get(row).getStatus();
+			}
+
+		}
+	}
+	
+	protected class UserReviewTableModel extends AbstractTableModel {
+		protected String[] columnNames = new String[] { "Review ID", "Module", "Title", "Expected Results", "Actual Results",
+				"Status" };
+
+		@Override
+		public String getColumnName(int col) {
+
+			return columnNames[col];
+		}
+
+		@Override
+		public int getColumnCount() {
+			// TODO Auto-generated method stub
+			return 6;
+		}
+
+		@Override
+		public int getRowCount() {
+			// TODO Auto-generated method stub
+
+			try {
+				return Manager.getProject(ProjectID).getUserTests().size();
+			} catch (Exception e) {
+				return 0;
+			}
+
+		}
+
+		@Override
+		public Object getValueAt(int row, int col) {
+			if (col == 0) {
+				return Manager.getProject(ProjectID).getUserTests().get(row).getID();
+			}
+			if (col == 1) {
+				return Manager.getProject(ProjectID).getUserTests().get(row).getModuleName();
+			}
+			if (col == 2) {
+				return Manager.getProject(ProjectID).getUserTests().get(row).getTestTitle();
+			}
+			if (col == 3) {
+				return Manager.getProject(ProjectID).getUserTests().get(row).getExpectedResults();
+			}
+			if (col == 4) {
+				return Manager.getProject(ProjectID).getUserTests().get(row).getActualResults();
+			}
+			{
+				return Manager.getProject(ProjectID).getUserTests().get(row).getStatus();
 			}
 
 		}
@@ -1894,6 +1964,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		frame.setSize(600, 500);
 		frame.pack();
 		frame.setVisible(true);
+
 	}
 
 }

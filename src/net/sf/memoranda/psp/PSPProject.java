@@ -26,6 +26,7 @@ public class PSPProject implements java.io.Serializable {
 	protected ArrayList<PSPProjectRequirement> Requirements;
 	protected ArrayList<PSPProjectCodeComponent> Components;
 	protected ArrayList<PSPProjectTestCase> UserTests;
+	protected ArrayList<PSPProjectCodeReview> Reviews;
 
 	public PSPProject() {
 		counter = counter + 1;
@@ -40,6 +41,8 @@ public class PSPProject implements java.io.Serializable {
 		Requirements = new ArrayList<PSPProjectRequirement>();
 		Components = new ArrayList<PSPProjectCodeComponent>();
 		UserTests = new ArrayList<PSPProjectTestCase>();
+		Reviews = new ArrayList<PSPProjectCodeReview>();
+		
 	}
 
 	/**
@@ -216,7 +219,7 @@ public class PSPProject implements java.io.Serializable {
 	/**
 	 * @return the requirements
 	 */
-	public List<PSPProjectRequirement> getRequirements() {
+	public ArrayList<PSPProjectRequirement> getRequirements() {
 		return Requirements;
 	}
 
@@ -235,14 +238,12 @@ public class PSPProject implements java.io.Serializable {
 			}
 		}
 		Requirements.add(entry);
-
 	}
 
 	public void removeRequirement(int ID) {
 		for (int i = 0; i < Requirements.size(); i++) {
 			if (Requirements.get(i).getID() == ID) {
 				Requirements.remove(i);
-				System.out.println("Removed Requirment "+ i);
 			}
 		}
 	}
@@ -312,6 +313,38 @@ public class PSPProject implements java.io.Serializable {
 		}
 	}
 
+	
+	/**
+	 * @return the reviews
+	 */
+	public ArrayList<PSPProjectCodeReview> getReviews() {
+		return Reviews;
+	}
+
+	/**
+	 * @param reviews the reviews to set
+	 */
+	public void setReviews(ArrayList<PSPProjectCodeReview> reviews) {
+		Reviews = reviews;
+	}
+
+	public void addReviews(PSPProjectCodeReview entry) {
+		for (PSPProjectCodeReview E : Reviews) {
+			if (entry.getID() <= E.getID()) {
+				entry.setID(E.getID() + 1);
+			}
+		}
+		Reviews.add(entry);
+	}
+
+	public void removeReviews(int ID) {
+		for (int i = 0; i < Reviews.size(); i++) {
+			if (Reviews.get(i).getID() == ID) {
+				Reviews.remove(i);
+			}
+		}
+	}
+	
 	/**
 	 * Class for PSP Type
 	 */

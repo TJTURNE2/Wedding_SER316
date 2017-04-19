@@ -32,7 +32,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class PSPNewTimeEntryDialog extends JDialog {
-	private PSPProjectManager Manager;
+	private static PSPProjectManager Manager;
 	private static int ProjectID = 0;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField commentsTextField;
@@ -41,18 +41,7 @@ public class PSPNewTimeEntryDialog extends JDialog {
 	private JSpinner stoppingTimeSpinner;
 	private JComboBox phaseComboBox;
 	
-	/**
-	 * Launch the application.
-	 */
-	public static void NewDialog() throws IOException {
-		// TODO Auto-generated method stub
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				PSPNewRequirementDialog nd = new PSPNewRequirementDialog(ProjectID);
-				nd.setVisible(true);
-			}
-		});
-	}
+
 
 	/**
 	 * Create the dialog.
@@ -166,5 +155,17 @@ public class PSPNewTimeEntryDialog extends JDialog {
 			}
 		}
 	}
-
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void NewDialog() throws IOException {
+		// TODO Auto-generated method stub
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+			 PSPNewTimeEntryDialog nd = new PSPNewTimeEntryDialog(ProjectID);
+				nd.setVisible(true);
+			}
+		});
+	}
 }

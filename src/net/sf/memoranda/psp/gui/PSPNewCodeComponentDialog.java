@@ -7,6 +7,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.io.IOException;
 
 import javax.swing.DefaultComboBoxModel;
@@ -59,6 +61,15 @@ public class PSPNewCodeComponentDialog extends JDialog {
 	 * Create the dialog.
 	 */
 	public PSPNewCodeComponentDialog() {
+		setAlwaysOnTop(true);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		addWindowFocusListener(new WindowFocusListener() {
+			public void windowGainedFocus(WindowEvent arg0) {
+			}
+			public void windowLostFocus(WindowEvent arg0) {
+				dispose();
+			}
+		});
 		setBounds(100, 100, 500, 350);
 		getContentPane().setLayout(new BorderLayout());
 		{
@@ -67,6 +78,7 @@ public class PSPNewCodeComponentDialog extends JDialog {
 			toolBar.setFloatable(false);
 			getContentPane().add(toolBar, BorderLayout.NORTH);
 		}
+		contentPanel.setBackground(Color.WHITE);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new MigLayout("", "[][:350px:350px,grow]", "[][][][][][][][][]"));

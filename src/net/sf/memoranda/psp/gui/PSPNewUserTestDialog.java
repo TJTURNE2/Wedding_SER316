@@ -3,6 +3,8 @@ package net.sf.memoranda.psp.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.io.IOException;
 
 import javax.swing.DefaultComboBoxModel;
@@ -17,6 +19,7 @@ import javax.swing.border.EmptyBorder;
 
 import net.miginfocom.swing.MigLayout;
 import net.sf.memoranda.psp.PSPProjectTestCase.PSPProjectTestCaseStatus;
+import java.awt.Color;
 
 @SuppressWarnings("serial")
 public class PSPNewUserTestDialog extends JDialog {
@@ -48,6 +51,15 @@ public class PSPNewUserTestDialog extends JDialog {
 	 * Create the dialog.
 	 */
 	public PSPNewUserTestDialog() {
+		setAlwaysOnTop(true);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		addWindowFocusListener(new WindowFocusListener() {
+			public void windowGainedFocus(WindowEvent arg0) {
+			}
+			public void windowLostFocus(WindowEvent arg0) {
+				dispose();
+			}
+		});
 		setBounds(100, 100, 550, 400);
 		getContentPane().setLayout(new BorderLayout());
 		{
@@ -56,7 +68,12 @@ public class PSPNewUserTestDialog extends JDialog {
 			FlowLayout flowLayout = (FlowLayout) panel.getLayout();
 			flowLayout.setAlignment(FlowLayout.LEFT);
 			getContentPane().add(panel, BorderLayout.NORTH);
+			{
+				JLabel lblNewLabel_9 = new JLabel("New label");
+				panel.add(lblNewLabel_9);
+			}
 		}
+		contentPanel.setBackground(Color.WHITE);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new MigLayout("", "[][grow]", "[][][][][][][][][grow]"));
