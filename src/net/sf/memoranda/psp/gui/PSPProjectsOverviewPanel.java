@@ -13,7 +13,6 @@ import javax.swing.UIManager;
 import javax.swing.table.AbstractTableModel;
 
 import net.sf.memoranda.psp.PSPPlanSummary;
-import net.sf.memoranda.psp.PSPProjectCodeComponent;
 import net.sf.memoranda.psp.PSPProjectLOCSummary;
 import net.sf.memoranda.psp.PSPProjectLogPhase;
 import net.sf.memoranda.psp.PSPProjectManager;
@@ -68,14 +67,20 @@ public class PSPProjectsOverviewPanel extends JPanel {
 	private static int requirementID;
 	private static int defectID;
 	private static int timeID;
+<<<<<<< HEAD
 	private static int userTestID;
 	private static int codeModuleID;
 	private static int userReviewID;
+=======
+	private static int noteID;
+	private static Date today;
+>>>>>>> parent of 0874d8c... Updated Delete - Add on GUI
 	private static JTable projectsTable;
 	private static JTable requirementTable;
 	private static JTable codeReviewTable;
 	private static JTable timeLogTable;
 	private static JTable defectLogTable;
+	private static JTable notesTable;
 	private static JTable componentsTable;
 	private static JTable userTestTable;
 	private static ProjectTableModel pModel;
@@ -84,14 +89,10 @@ public class PSPProjectsOverviewPanel extends JPanel {
 	private static RequirementTableModel rModel;
 	private static ComponentTableModel cModel;
 	private static UserTestTableModel utModel;
-	private static UserReviewTableModel urModel;
 	private PSPNewProjectDialog newProject;
 	private PSPNewTimeEntryDialog newTimeLog;
 	private PSPNewRequirementDialog newRequirement;
 	private PSPNewDefectDialog newDefect;
-	private PSPNewCodeComponentDialog newCodeModule;
-	private PSPNewCodeReviewDialog newCodeReview;
-	private PSPNewUserTestDialog newUserTest;
 	private JTabbedPane projectsTabbedPane;
 	private JTabbedPane summarytabbedPane;
 	private JPanel projectsPanel;
@@ -204,12 +205,12 @@ public class PSPProjectsOverviewPanel extends JPanel {
 	private JPanel testPanel;
 	private JToolBar testToolBar;
 	private JScrollPane testScrollPane;
-	private JButton btnNewUserTest;
-	private JButton btnEditUserTest;
-	private JButton btnNewCodeModule;
-	private JButton btnEditCodeModule;
-	private JButton btnDeleteCodeModule;
-	private JButton btnDeleteUserTest;
+	private JButton btnNewButton;
+	private JButton btnNewButton_1;
+	private JButton btnNewButton_2;
+	private JButton btnNewButton_3;
+	private JButton btnNewButton_4;
+	private JButton button;
 
 	/**
 	 * Create the panel.
@@ -226,7 +227,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		rModel = new RequirementTableModel();
 		cModel = new ComponentTableModel();
 		utModel = new UserTestTableModel();
-		urModel = new UserReviewTableModel();
+
 		setLayout(new BorderLayout(0, 0));
 
 		projectsTabbedPane = new JTabbedPane(JTabbedPane.LEFT);
@@ -275,12 +276,14 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		JButton btnDeleteProject = new JButton("");
 		btnDeleteProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ProjectID = (int) projectsTable.getValueAt(projectsTable.getSelectedRow(), 0);
-				
+				ProjectID = (int) projectsTable.getValueAt(projectsTable.getSelectedRow(), 0);			
 				try{
+				// ProjectID = (int)
+				// projectsTable.getValueAt(projectsTable.getSelectedRow(), 0);
+				if (ProjectID > -1) {
+					System.out.println("This is working kinda - delete " + ProjectID);
 					Manager.deleteProject(ProjectID);
 					pModel.fireTableDataChanged();
-					
 				}catch(Exception e){
 					
 				}
@@ -979,8 +982,6 @@ public class PSPProjectsOverviewPanel extends JPanel {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-
-				requirementID = -1;
 			}
 		});
 		btnDeleteRequirement.setMaximumSize(new Dimension(25, 25));
@@ -1006,48 +1007,26 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		codeToolBar.setPreferredSize(new Dimension(13, 25));
 		codePanel.add(codeToolBar, BorderLayout.NORTH);
 
-		btnNewCodeModule = new JButton("");
-		btnNewCodeModule.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				newCodeModule = new PSPNewCodeComponentDialog(ProjectID);
-				newCodeModule.setVisible(true);
-
-			}
-		});
-		btnNewCodeModule.setMaximumSize(new Dimension(25, 25));
-		btnNewCodeModule.setIcon(new ImageIcon(
+		btnNewButton_2 = new JButton("");
+		btnNewButton_2.setMaximumSize(new Dimension(25, 25));
+		btnNewButton_2.setIcon(new ImageIcon(
 				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/filenew.png")));
-		btnNewCodeModule.setPreferredSize(new Dimension(25, 25));
-		btnNewCodeModule.setBorder(null);
-		codeToolBar.add(btnNewCodeModule);
+		btnNewButton_2.setPreferredSize(new Dimension(25, 25));
+		btnNewButton_2.setBorder(null);
+		codeToolBar.add(btnNewButton_2);
 
-		btnEditCodeModule = new JButton("");
-		btnEditCodeModule.setMaximumSize(new Dimension(25, 25));
-		btnEditCodeModule.setIcon(new ImageIcon(
+		btnNewButton_3 = new JButton("");
+		btnNewButton_3.setMaximumSize(new Dimension(25, 25));
+		btnNewButton_3.setIcon(new ImageIcon(
 				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editproject.png")));
-		btnEditCodeModule.setBorder(null);
-		codeToolBar.add(btnEditCodeModule);
+		btnNewButton_3.setBorder(null);
+		codeToolBar.add(btnNewButton_3);
 
-		btnDeleteCodeModule = new JButton("");
-		btnDeleteCodeModule.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				codeModuleID = (int) componentsTable.getValueAt(componentsTable.getSelectedRow(), 0);
-				try {
-					Manager.getProject(ProjectID).removeComponents(codeModuleID);
-					Manager.saveProjects();
-					cModel.fireTableDataChanged();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-				codeModuleID = -1;
-			}
-		});
-		btnDeleteCodeModule.setIcon(new ImageIcon(
+		btnNewButton_4 = new JButton("");
+		btnNewButton_4.setIcon(new ImageIcon(
 				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editdelete.png")));
-		btnDeleteCodeModule.setMaximumSize(new Dimension(25, 25));
-		codeToolBar.add(btnDeleteCodeModule);
+		btnNewButton_4.setMaximumSize(new Dimension(25, 25));
+		codeToolBar.add(btnNewButton_4);
 
 		componentsTable = new JTable(cModel);
 		componentsTable.setFillsViewportHeight(true);
@@ -1069,9 +1048,6 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		JButton btnNewCodeReview = new JButton("");
 		btnNewCodeReview.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				newCodeReview = new PSPNewCodeReviewDialog(ProjectID);
-				newCodeReview.isAlwaysOnTop();
-				newCodeReview.setVisible(true);
 			}
 		});
 		btnNewCodeReview.setMaximumSize(new Dimension(25, 25));
@@ -1088,28 +1064,13 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		codeReviewToolBar.add(btnEditCodeReview);
 
 		JButton btnDeleteCodeReview = new JButton("");
-		btnDeleteCodeReview.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				userReviewID = (int) codeReviewTable.getValueAt(codeReviewTable.getSelectedRow(), 0);
-				try {
-					Manager.getProject(ProjectID).removeReviews(userReviewID);
-					Manager.saveProjects();
-					urModel.fireTableDataChanged();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				userReviewID = -1;
-
-			}
-		});
 		btnDeleteCodeReview.setMaximumSize(new Dimension(25, 25));
 		btnDeleteCodeReview.setIcon(new ImageIcon(
 				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editdelete.png")));
 		btnDeleteCodeReview.setBorder(null);
 		codeReviewToolBar.add(btnDeleteCodeReview);
 
-		codeReviewTable = new JTable(urModel);
+		codeReviewTable = new JTable(cModel);
 		codeReviewTable.setFillsViewportHeight(true);
 
 		JScrollPane codeReviewScrollPane = new JScrollPane(codeReviewTable);
@@ -1125,27 +1086,19 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		testToolBar.setPreferredSize(new Dimension(13, 25));
 		testPanel.add(testToolBar, BorderLayout.NORTH);
 
-		btnNewUserTest = new JButton("");
-		btnNewUserTest.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				newUserTest = new PSPNewUserTestDialog(ProjectID);
-				newUserTest.isAlwaysOnTop();
-				newUserTest.setVisible(true);
-
-			}
-		});
-		btnNewUserTest.setMaximumSize(new Dimension(25, 25));
-		btnNewUserTest.setBorder(null);
-		btnNewUserTest.setIcon(new ImageIcon(
+		btnNewButton = new JButton("");
+		btnNewButton.setMaximumSize(new Dimension(25, 25));
+		btnNewButton.setBorder(null);
+		btnNewButton.setIcon(new ImageIcon(
 				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/filenew.png")));
-		testToolBar.add(btnNewUserTest);
+		testToolBar.add(btnNewButton);
 
-		btnEditUserTest = new JButton("");
-		btnEditUserTest.setMaximumSize(new Dimension(25, 25));
-		btnEditUserTest.setBorder(null);
-		btnEditUserTest.setIcon(new ImageIcon(
+		btnNewButton_1 = new JButton("");
+		btnNewButton_1.setMaximumSize(new Dimension(25, 25));
+		btnNewButton_1.setBorder(null);
+		btnNewButton_1.setIcon(new ImageIcon(
 				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editproject.png")));
-		testToolBar.add(btnEditUserTest);
+		testToolBar.add(btnNewButton_1);
 
 		btnDeleteUserTest = new JButton("");
 		btnDeleteUserTest.addActionListener(new ActionListener() {
@@ -1165,8 +1118,8 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		btnDeleteUserTest.setBorder(null);
 		btnDeleteUserTest.setIcon(new ImageIcon(
 				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editdelete.png")));
-		btnDeleteUserTest.setMaximumSize(new Dimension(25, 25));
-		testToolBar.add(btnDeleteUserTest);
+		button.setMaximumSize(new Dimension(25, 25));
+		testToolBar.add(button);
 
 		userTestTable = new JTable(utModel);
 		userTestTable.setFillsViewportHeight(true);
@@ -1235,6 +1188,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		projectsTabbedPane.setEnabledAt(7, false);
 
 		defectLogPanel = new JPanel();
+		notesTable = new JTable();
 		projectsTabbedPane.addTab("Defect Log", null, defectLogPanel, null);
 		defectLogPanel.setLayout(new BorderLayout(0, 0));
 
@@ -1926,54 +1880,6 @@ public class PSPProjectsOverviewPanel extends JPanel {
 			}
 			{
 				return Manager.Projects.get(ProjectID).getUserTests().get(row).getStatus();
-			}
-
-		}
-	}
-
-	protected class UserReviewTableModel extends AbstractTableModel {
-		protected String[] columnNames = new String[] { "ID", "Location", "Description", "Category", "Severity" };
-
-		@Override
-		public String getColumnName(int col) {
-
-			return columnNames[col];
-		}
-
-		@Override
-		public int getColumnCount() {
-			// TODO Auto-generated method stub
-			return 5;
-		}
-
-		@Override
-		public int getRowCount() {
-			// TODO Auto-generated method stub
-
-			try {
-				return Manager.Projects.get(ProjectID).getReviews().size();
-			} catch (Exception e) {
-				return 0;
-			}
-
-		}
-
-		@Override
-		public Object getValueAt(int row, int col) {
-			if (col == 0) {
-				return Manager.Projects.get(ProjectID).getReviews().get(row).getID();
-			}
-			if (col == 1) {
-				return Manager.Projects.get(ProjectID).getReviews().get(row).getLocation();
-			}
-			if (col == 2) {
-				return Manager.Projects.get(ProjectID).getReviews().get(row).getDescription();
-			}
-			if (col == 3) {
-				return Manager.Projects.get(ProjectID).getReviews().get(row).getCatagory();
-			}
-			{
-				return Manager.Projects.get(ProjectID).getReviews().get(row).getServerity();
 			}
 
 		}

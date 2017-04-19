@@ -13,11 +13,11 @@ import java.util.Date;
 public class PSPProjectCodeReview implements java.io.Serializable{
 	
 	private int ID;
-	private Date reviewDate;
 	private String Location;
 	private String Description;
 	private PSPDefectCatagory Catagory;
 	private PSPDefectSeverity Serverity;
+	private Date reviewDate;
 	
 	
 	public PSPProjectCodeReview(){
@@ -26,7 +26,8 @@ public class PSPProjectCodeReview implements java.io.Serializable{
 		Description = "None";
 		Catagory = PSPDefectCatagory.CG;
 		Serverity = PSPDefectSeverity.LOW;
-		//reviewDate = null; /// maybe??
+		reviewDate = null; /// maybe??
+
 		
 	}
 	
@@ -118,24 +119,6 @@ public class PSPProjectCodeReview implements java.io.Serializable{
 	public void setServerity(PSPDefectSeverity serverity) {
 		Serverity = serverity;
 	}
-
-	
-	/**
-	 * @return the reviewDate
-	 */
-	public Date getReviewDate() {
-		return reviewDate;
-	}
-
-
-	/**
-	 * @param reviewDate the reviewDate to set
-	 */
-	public void setReviewDate(Date reviewDate) {
-		this.reviewDate = reviewDate;
-	}
-
-
 
 	public enum PSPDefectCatagory implements java.io.Serializable {
 		CS("Code Smell defect"),CG("Violation of a coding guideline"),FD("Functional defect"),MD("Miscellaneous defect");
