@@ -67,14 +67,10 @@ public class PSPProjectsOverviewPanel extends JPanel {
 	private static int requirementID;
 	private static int defectID;
 	private static int timeID;
-<<<<<<< HEAD
 	private static int userTestID;
 	private static int codeModuleID;
 	private static int userReviewID;
-=======
-	private static int noteID;
-	private static Date today;
->>>>>>> parent of 0874d8c... Updated Delete - Add on GUI
+
 	private static JTable projectsTable;
 	private static JTable requirementTable;
 	private static JTable codeReviewTable;
@@ -277,15 +273,13 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		btnDeleteProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ProjectID = (int) projectsTable.getValueAt(projectsTable.getSelectedRow(), 0);			
-				try{
+				
 				// ProjectID = (int)
 				// projectsTable.getValueAt(projectsTable.getSelectedRow(), 0);
 				if (ProjectID > -1) {
 					System.out.println("This is working kinda - delete " + ProjectID);
 					Manager.deleteProject(ProjectID);
 					pModel.fireTableDataChanged();
-				}catch(Exception e){
-					
 				}
 				disablePanels();
 				ProjectID = -1;
@@ -1100,7 +1094,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editproject.png")));
 		testToolBar.add(btnNewButton_1);
 
-		btnDeleteUserTest = new JButton("");
+		JButton btnDeleteUserTest = new JButton("");
 		btnDeleteUserTest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				userTestID = (int) userTestTable.getValueAt(userTestTable.getSelectedRow(), 0);
@@ -1115,6 +1109,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 				userTestID = -1;
 			}
 		});
+		
 		btnDeleteUserTest.setBorder(null);
 		btnDeleteUserTest.setIcon(new ImageIcon(
 				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editdelete.png")));
@@ -1571,7 +1566,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 
 	}
 
-	public void resetPanels() {
+	public void resetPanels(){
 		Manager.updateProject();
 		// eneable panels based off phase
 		disablePanels();

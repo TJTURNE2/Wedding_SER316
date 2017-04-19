@@ -1,25 +1,24 @@
 package net.sf.memoranda.psp.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.io.IOException;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JToolBar;
-import net.miginfocom.swing.MigLayout;
-import java.awt.Dimension;
-import java.awt.ComponentOrientation;
-import javax.swing.JLabel;
-import javax.swing.ImageIcon;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JToolBar;
+import javax.swing.border.EmptyBorder;
+
+import net.miginfocom.swing.MigLayout;
 import net.sf.memoranda.psp.PSPProjectCodeReview.PSPDefectCatagory;
 import net.sf.memoranda.psp.PSPProjectCodeReview.PSPDefectSeverity;
-import javax.swing.JTextArea;
 
 @SuppressWarnings("serial")
 public class PSPNewCodeReviewDialog extends JDialog {
