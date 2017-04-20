@@ -23,6 +23,17 @@
 	<property name="debuglevel" value="lines,vars,source"/>
 	<property name="optimize" value="off"/>
 	<property name="deprecation" value="off"/>
+	
+	<property name="tests.dir" value="${build.dir}/tests" />
+	<property name="tests.findbugs.dir" value="${tests.dir}/findbugs"/>
+	<taskdef name="findbugs"
+		 classname="edu.umd.cs.findbugs.anttask.FindBugsTask"
+		 classpath="${lib.dir}/findbugs-ant.jar"/>
+	
+	<property name="tests.checkstyle.dir" value="${tests.dir}/checkstyle"/>
+	<taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-anttask.properties"
+		classpath="${lib.dir}/checkstyle-7.6.1-all.jar"/>
+	<!--Make sure the jar version is correct in the classpath above -->
 
 	<target name="init">
 		<!-- Create the time stamp -->
@@ -174,5 +185,37 @@
 		<java jar="${build.dir}/${jarname}" fork="yes">
 			<classpath refid="classpath"/>
 		</java> -->
+	</target>
+	
+	<!-- =================================================================== -->
+	<!-- Runs FindBugs -->
+	<!-- =================================================================== -->
+	<target name="findbugs" depends="compile">
+		<mkdir dir="${tests.findbugs.dir}"/>
+		<findbugs home="${lib.dir}"
+			 reportLevel="high"
+			 output="html"
+			 outputFile="${tests.findbugs.dir}/findbugs.html">
+			<auxClasspath refid="classpath"/>
+			<sourcePath path="${source.dir}"/>
+			<class location="${build.classes.dir}"/>
+		</findbugs>
+	</target>
+	
+	<!-- =================================================================== -->
+	<!-- Runs CheckStyle -->
+	<!-- =================================================================== -->
+	<target name="checkstyle" depends="compile">
+		<mkdir dir="${tests.checkstyle.dir}"/>
+		<checkstyle config="${lib.dir}/CheckstyleConfig.xml"
+			failureProperty="checkstyle.failure"
+			 failOnViolation="false">
+			<classpath>
+			<path refid="classpath"/>
+			</classpath>
+			<formatter type="xml"
+			tofile="${tests.checkstyle.dir}/checkstyleReport.xml"/>
+			<fileset dir="${source.dir}" includes="**/*.java"/>
+		</checkstyle>
 	</target>
 </project>
