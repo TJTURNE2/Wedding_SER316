@@ -71,7 +71,7 @@ public class PSPNewProjectDialog extends JDialog {
 		setResizable(false);
 		getContentPane().setLayout(new BorderLayout(5, 5));
 		JPanel TopPanel = new JPanel();
-		TopPanel.setBorder(null);
+		TopPanel.setBorder(new LineBorder(new Color(192, 192, 192)));
 		getContentPane().add(TopPanel, BorderLayout.NORTH);
 		TopPanel.setBackground(Color.WHITE);
 		TopPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));

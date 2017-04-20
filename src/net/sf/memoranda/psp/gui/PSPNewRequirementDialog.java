@@ -36,8 +36,11 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.ImageIcon;
 import net.sf.memoranda.psp.PSPProjectRequirement.PSPRequirementType;
+import net.sf.memoranda.psp.gui.PSPProjectsOverviewPanel.RequirementTableModel;
+
 import javax.swing.JSlider;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.border.LineBorder;
 
 @SuppressWarnings("serial")
 public class PSPNewRequirementDialog extends JDialog {
@@ -47,18 +50,21 @@ public class PSPNewRequirementDialog extends JDialog {
 	private JComboBox comboBoxRequirementType;
 	private JSpinner prioritySpinner;
 	private PSPProjectRequirement entry;
-	
+	private static RequirementTableModel Model = null;
+
 	public static void NewDialog() throws IOException {
+
 		// TODO Auto-generated method stub
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				PSPNewRequirementDialog nd = new PSPNewRequirementDialog(ProjectID);
+				PSPNewRequirementDialog nd = new PSPNewRequirementDialog(ProjectID, Model);
 				nd.setVisible(true);
 			}
 		});
 	}
 
-	public PSPNewRequirementDialog(int pID) {
+	public PSPNewRequirementDialog(int pID, RequirementTableModel model) {
+		Model = model;
 		setAlwaysOnTop(true);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		addWindowFocusListener(new WindowFocusListener() {
@@ -76,6 +82,7 @@ public class PSPNewRequirementDialog extends JDialog {
 		setResizable(false);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		JPanel TopPanel = new JPanel();
+		TopPanel.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		TopPanel.setPreferredSize(new Dimension(500, 50));
 		TopPanel.setBackground(Color.WHITE);
 		getContentPane().add(TopPanel, BorderLayout.NORTH);
@@ -135,12 +142,8 @@ public class PSPNewRequirementDialog extends JDialog {
 				entry.setRequirmentType((PSPRequirementType) comboBoxRequirementType.getSelectedItem());
 				entry.setPriority((int) prioritySpinner.getValue());
 				Manager.getProject(pID).addRequirementEntry(entry);
-				try {
-					Manager.saveProjects();
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				Manager.saveProjects();
+				model.fireTableDataChanged();
 				dispose();
 			}
 		});
