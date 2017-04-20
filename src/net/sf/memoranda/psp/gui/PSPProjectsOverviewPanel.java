@@ -48,17 +48,16 @@ public class PSPProjectsOverviewPanel extends JPanel {
 	private static PSPProjectManager Manager = new PSPProjectManager();
 	private static int ProjectID = -1;
 	private static int requirementID = -1;
-	private static int defectID= -1;
-	private static int timeID= -1;
-	private static int userTestID= -1;
-	private static int codeModuleID= -1;
-	private static int userReviewID= -1;
+	private static int defectID = -1;
+	private static int timeID = -1;
+	private static int userTestID = -1;
+	private static int codeModuleID = -1;
+	private static int userReviewID = -1;
 	private static JTable projectsTable;
 	private static JTable requirementTable;
 	private static JTable codeReviewTable;
 	private static JTable timeLogTable;
 	private static JTable defectLogTable;
-	private static JTable userReviewTable;
 	private static JTable componentsTable;
 	private static JTable userTestTable;
 	private static ProjectTableModel pModel;
@@ -190,7 +189,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 	private JButton btnEditCodeModule;
 	private JButton btnDeleteCodeModule;
 	private JButton button;
-	private JButton btnDeleteUserTest_1;
+	private JButton btnDeleteUserTest;
 
 	/**
 	 * Create the panel.
@@ -207,6 +206,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		rModel = new RequirementTableModel();
 		cModel = new ComponentTableModel();
 		utModel = new UserTestTableModel();
+		urModel = new UserReviewTableModel();
 
 		setLayout(new BorderLayout(0, 0));
 
@@ -257,17 +257,14 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		JButton btnDeleteProject = new JButton("");
 		btnDeleteProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ProjectID = (int) projectsTable.getValueAt(projectsTable.getSelectedRow(), 0);
-
-				System.out.println("This is working kinda - delete " + ProjectID);
-				Manager.deleteProject(ProjectID);
 				try {
-					Manager.saveProjects();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					if (ProjectID != -1) {
+						Manager.deleteProject(ProjectID);
+						Manager.saveProjects();
+					}
+				} catch (Exception e) {
+					System.out.println("CLick");
 				}
-				pModel.fireTableDataChanged();
 				disablePanels();
 				ProjectID = -1;
 			}
@@ -292,10 +289,13 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		projectsTable.setBorder(null);
 		projectsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
-				btnDeleteProject.setEnabled(true);
-				ProjectID = (int) projectsTable.getValueAt(projectsTable.getSelectedRow(), 0);
-				System.out.println("Project Selected "+ ProjectID);
-				resetPanels();
+				if(projectsTable.getSelectedRow() > -1){
+					ProjectID = (int) projectsTable.getValueAt(projectsTable.getSelectedRow(), 0);
+				}
+				if (ProjectID != -1) {
+					resetTables();
+					resetPanels();
+				}
 			}
 		});
 
@@ -925,30 +925,10 @@ public class PSPProjectsOverviewPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				newRequirement = new PSPNewRequirementDialog(ProjectID);
 				newRequirement.setVisible(true);
-
 				for (PSPProjectRequirement R : Manager.getProject(ProjectID).getRequirements()) {
 					System.out.println("R " + R.getID());
-
 				}
-				// newRequirement.getComboBoxRequirementType();
-				//
-				// System.out.println("Requirent " +
-				// newRequirement.getTextDescription().getText());
-				// try {
-				// if (Manager.getProject(ProjectID).getRequirements().size() >
-				// 0
-				// &&
-				// Manager.getProject(ProjectID).getPhase().equals(PSPProjectPhase.DESIGN))
-				// {
-				// Manager.getProject(ProjectID).setPhase(PSPProjectPhase.CODE);
-				// Manager.saveProjects();
-				// }
-				// } catch (IOException e1) {
-				// // TODO Auto-generated catch block
-				// e1.printStackTrace();
-				// }
 			}
-
 		});
 		btnNewRequirement.setMaximumSize(new Dimension(25, 25));
 		btnNewRequirement.setBorder(null);
@@ -964,27 +944,38 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		requirementToolBar.add(btnEditRequirement);
 
 		requirementTable = new JTable(rModel);
+		requirementTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		requirementTable.setAutoCreateRowSorter(true);
+		requirementTable.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				requirementTable.repaint();
+			}
+		});
 		requirementTable.setFillsViewportHeight(true);
+
+		//Update Requirement ID on click
 		requirementTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
+				if(requirementTable.getSelectedRow() > -1){
 				requirementID = (int) requirementTable.getValueAt(requirementTable.getSelectedRow(), 0);
-				System.out.println("Reuirment ID "+ requirementID+ " for project " +ProjectID);
-				resetPanels();
+				}
+				if (requirementID != -1) {
+					resetTables();
+				}
 			}
-		});		
+		});
 		
+		//Delete Select requirement on  click
 		JButton btnDeleteRequirement = new JButton("");
 		btnDeleteRequirement.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				requirementID = (int) requirementTable.getValueAt(requirementTable.getSelectedRow(), 0);
-				try {
-					Manager.getProject(ProjectID).removeRequirement(requirementID);
-					Manager.saveProjects();
-					rModel.fireTableDataChanged();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+					if (requirementID != -1) {
+						Manager.getProject(ProjectID).removeRequirement(requirementID);
+						Manager.saveProjects();
+						resetTables();
+						requirementID = -1;
+					}
 			}
 		});
 		btnDeleteRequirement.setMaximumSize(new Dimension(25, 25));
@@ -994,12 +985,6 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		requirementToolBar.add(btnDeleteRequirement);
 
 		JScrollPane requirementScrollPane = new JScrollPane(requirementTable);
-		requirementScrollPane.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				requirementTable.repaint();
-			}
-		});
 		requirementPanel.add(requirementScrollPane, BorderLayout.CENTER);
 
 		codePanel = new JPanel();
@@ -1029,12 +1014,39 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		codeToolBar.add(btnEditCodeModule);
 
 		btnDeleteCodeModule = new JButton("");
+		btnDeleteCodeModule.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (codeModuleID != -1) {
+					Manager.getProject(ProjectID).removeComponents(codeModuleID);
+					Manager.saveProjects();
+					resetTables();
+					codeModuleID = -1;
+				}
+			}
+		});
+		
 		btnDeleteCodeModule.setIcon(new ImageIcon(
 				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editdelete.png")));
 		btnDeleteCodeModule.setMaximumSize(new Dimension(25, 25));
 		codeToolBar.add(btnDeleteCodeModule);
 
 		componentsTable = new JTable(cModel);
+		componentsTable.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				componentsTable.repaint();
+			}
+		});
+		componentsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent event) {
+				if(componentsTable.getSelectedRow() > -1){
+				codeModuleID = (int) componentsTable.getValueAt(componentsTable.getSelectedRow(), 0);
+				}
+				if (codeModuleID != -1) {
+					resetTables();
+				}
+			}
+		});
 		componentsTable.setFillsViewportHeight(true);
 
 		JScrollPane codeScrollPane = new JScrollPane(componentsTable);
@@ -1070,15 +1082,37 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		codeReviewToolBar.add(btnEditCodeReview);
 
 		JButton btnDeleteCodeReview = new JButton("");
+		btnDeleteCodeReview.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (userReviewID != -1) {
+					System.out.println("remove "+ userReviewID + " from project " + ProjectID);
+					Manager.getProject(ProjectID).removeReviews(userReviewID);
+					Manager.saveProjects();
+					codeReviewTable.repaint();
+					userReviewID = -1;
+				}
+			}
+		});
 		btnDeleteCodeReview.setMaximumSize(new Dimension(25, 25));
 		btnDeleteCodeReview.setIcon(new ImageIcon(
 				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editdelete.png")));
 		btnDeleteCodeReview.setBorder(null);
 		codeReviewToolBar.add(btnDeleteCodeReview);
 
-		codeReviewTable = new JTable(cModel);
+		codeReviewTable = new JTable(urModel);
+		codeReviewTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent event) {
+				if(codeReviewTable.getSelectedRow() > -1){
+				userReviewID = (int) codeReviewTable.getValueAt(codeReviewTable.getSelectedRow(), 0);
+				}
+				if (userReviewID != -1) {
+					resetTables();
+				}
+			}
+		});
+		
 		codeReviewTable.setFillsViewportHeight(true);
-
+		
 		JScrollPane codeReviewScrollPane = new JScrollPane(codeReviewTable);
 		codeReviewPanel.add(codeReviewScrollPane);
 
@@ -1099,24 +1133,6 @@ public class PSPProjectsOverviewPanel extends JPanel {
 				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/filenew.png")));
 		testToolBar.add(btnNewUserTest);
 
-		JButton btnDeleteUserTest = new JButton("");
-		btnDeleteUserTest.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				userTestID = (int) userTestTable.getValueAt(userTestTable.getSelectedRow(), 0);
-				try {
-					Manager.getProject(ProjectID).removeUserTests(userTestID);
-					Manager.saveProjects();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				userTestID = -1;
-			}
-		});
-
-		btnDeleteUserTest.setBorder(null);
-		btnDeleteUserTest.setIcon(new ImageIcon(
-				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editdelete.png")));
 		btnEditUserTest = new JButton("");
 		btnEditUserTest.setMaximumSize(new Dimension(25, 25));
 		btnEditUserTest.setBorder(null);
@@ -1124,12 +1140,39 @@ public class PSPProjectsOverviewPanel extends JPanel {
 				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editproject.png")));
 		testToolBar.add(btnEditUserTest);
 
-		btnDeleteUserTest_1 = new JButton("");
-		btnDeleteUserTest_1.setIcon(new ImageIcon(
+		btnDeleteUserTest = new JButton("");
+		btnDeleteUserTest.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (userTestID != -1) {
+					Manager.getProject(ProjectID).removeUserTests(userTestID);
+					Manager.saveProjects();
+					resetTables();
+					userTestID = -1;
+				}
+			}
+		});
+		btnDeleteUserTest.setIcon(new ImageIcon(
 				PSPProjectsOverviewPanel.class.getResource("/net/sf/memoranda/ui/resources/icons/editdelete.png")));
-		testToolBar.add(btnDeleteUserTest_1);
+		testToolBar.add(btnDeleteUserTest);
 
 		userTestTable = new JTable(utModel);
+		userTestTable.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				userTestTable.repaint();
+			}
+		});
+		userTestTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent event) {
+				if(userTestTable.getSelectedRow() > -1){
+				userTestID = (int) userTestTable.getValueAt(userTestTable.getSelectedRow(), 0);
+				}
+				if (userTestID != -1) {
+					resetTables();
+				}
+			}
+		});
+		
 		userTestTable.setFillsViewportHeight(true);
 
 		testScrollPane = new JScrollPane(userTestTable);
@@ -1167,18 +1210,12 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		JButton btnDeleteTimeEntry = new JButton("");
 		btnDeleteTimeEntry.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				timeID = (int) timeLogTable.getValueAt(timeLogTable.getSelectedRow(), 0);
-				try {
-					System.out.println("Deleting a time entry " + timeID);
+				if (timeID != -1) {
 					Manager.getProject(ProjectID).removeTimeEntry(timeID);
 					Manager.saveProjects();
-					tModel.fireTableDataChanged();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					resetTables();
+					timeID = -1;
 				}
-				timeID = -1;
 
 			}
 		});
@@ -1189,6 +1226,24 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		timeLogToolBar.add(btnDeleteTimeEntry);
 
 		timeLogTable = new JTable(tModel);
+		timeLogTable.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				timeLogTable.repaint();
+			}
+		});
+		
+		timeLogTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent event) {
+				if(timeLogTable.getSelectedRow() > -1){
+				timeID = (int) timeLogTable.getValueAt(timeLogTable.getSelectedRow(), 0);
+				}
+				if (timeID != -1) {
+					resetTables();
+				}
+			}
+		});
+		
 		timeLogTable.setFillsViewportHeight(true);
 
 		JScrollPane timeLogScrollPane = new JScrollPane(timeLogTable);
@@ -1228,18 +1283,12 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		JButton btnDeleteDefect = new JButton("");
 		btnDeleteDefect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					defectID = (int) defectLogTable.getValueAt(defectLogTable.getSelectedRow(), 0);
-					System.out.println("Try to remove a defect " + defectID);
+				if (defectID != -1) {
 					Manager.getProject(ProjectID).removeDefectEntry(defectID);
 					Manager.saveProjects();
-					dModel.fireTableDataChanged();
-					// pModel.fireTableDataChanged();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					// e1.printStackTrace();
+					resetTables();
+					defectID = -1;
 				}
-				defectID = -1;
 
 			}
 		});
@@ -1250,6 +1299,23 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		defectLogToolBar.add(btnDeleteDefect);
 
 		defectLogTable = new JTable(dModel);
+		defectLogTable.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				defectLogTable.repaint();
+			}
+		});
+		defectLogTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent event) {
+				if(defectLogTable.getSelectedRow() > -1){
+				defectID = (int) defectLogTable.getValueAt(defectLogTable.getSelectedRow(), 0);
+				}
+				if (defectID != -1) {
+					resetTables();
+				}
+			}
+		});
+		
 		defectLogTable.setFillsViewportHeight(true);
 
 		JScrollPane defectLogScrollPane = new JScrollPane(defectLogTable);
@@ -1512,13 +1578,10 @@ public class PSPProjectsOverviewPanel extends JPanel {
 			Manager.getProject(ProjectID).setPhase(PSPProjectPhase.DESIGN);
 		}
 
-		try {
 			Manager.saveProjects();
-			System.out.println("Saving summary");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			// e.printStackTrace();
-		}
+
+
+	
 		resetPanels();
 
 	}
@@ -1556,18 +1619,26 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		}
 
 	}
+
 	public void resetTables() {
 		// disable all
-	projectsTable.repaint();
-	requirementTable.repaint();
-	codeReviewTable.repaint();
-	timeLogTable.repaint();
-	defectLogTable.repaint();
-	userReviewTable.repaint();
-	componentsTable.repaint();
-	userTestTable.repaint();
-	
-
+		if (ProjectID != -1) {
+//			pModel.fireTableDataChanged();
+//			rModel.fireTableDataChanged();
+//			utModel.fireTableDataChanged();
+//			urModel.fireTableDataChanged();
+//			cModel.fireTableDataChanged();
+//			dModel.fireTableDataChanged();
+//			tModel.fireTableDataChanged();
+//			
+			projectsTable.repaint();
+			requirementTable.repaint();
+			codeReviewTable.repaint();
+			timeLogTable.repaint();
+			defectLogTable.repaint();
+			componentsTable.repaint();
+			userTestTable.repaint();
+		}
 	}
 
 	public void disablePanels() {
@@ -1584,28 +1655,32 @@ public class PSPProjectsOverviewPanel extends JPanel {
 	}
 
 	public void resetPanels() {
-		Manager.loadProjects();
+
+		Manager.saveProjects();
+		   Manager.loadProjects();
 		// eneable panels based off phase
 		disablePanels();
-		switch ((PSPProjectPhase) Manager.getProject(ProjectID).getPhase()) {
-		case POSTMORTEM:
-			projectsTabbedPane.setEnabledAt(8, isEnabled());
-		case TEST:
-		case COMPILE:
-		case CODEREVIEW:
-		case CODE:
-			projectsTabbedPane.setEnabledAt(6, isEnabled());
-		case DESIGNREVIEW:
-			projectsTabbedPane.setEnabledAt(7, isEnabled());
-		case DESIGN:
-			projectsTabbedPane.setEnabledAt(5, isEnabled());
-			projectsTabbedPane.setEnabledAt(4, isEnabled());
-			projectsTabbedPane.setEnabledAt(3, isEnabled());
-		case PLANNING:
-			projectsTabbedPane.setEnabledAt(2, isEnabled());
-			projectsTabbedPane.setEnabledAt(1, isEnabled());
+		if (ProjectID != -1) {
+			switch ((PSPProjectPhase) Manager.getProject(ProjectID).getPhase()) {
+			case POSTMORTEM:
+				projectsTabbedPane.setEnabledAt(8, isEnabled());
+			case TEST:
+			case COMPILE:
+			case CODEREVIEW:
+			case CODE:
+				projectsTabbedPane.setEnabledAt(6, isEnabled());
+			case DESIGNREVIEW:
+				projectsTabbedPane.setEnabledAt(7, isEnabled());
+			case DESIGN:
+				projectsTabbedPane.setEnabledAt(5, isEnabled());
+				projectsTabbedPane.setEnabledAt(4, isEnabled());
+				projectsTabbedPane.setEnabledAt(3, isEnabled());
+			case PLANNING:
+				projectsTabbedPane.setEnabledAt(2, isEnabled());
+				projectsTabbedPane.setEnabledAt(1, isEnabled());
+			}
+			setLOC();
 		}
-		setLOC();
 	}
 
 	protected class ProjectTableModel extends AbstractTableModel {
@@ -1633,19 +1708,19 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		public Object getValueAt(int row, int col) {
 
 			if (col == 0) {
-				return Manager.getAllProjects().get(row).getID();
+				return Manager.Projects.get(row).getID();
 			}
 			if (col == 1) {
-				return Manager.getAllProjects().get(row).getProjectName();
+				return Manager.Projects.get(row).getProjectName();
 			}
 			if (col == 2) {
-				return Manager.getAllProjects().get(row).getDescription();
+				return Manager.Projects.get(row).getDescription();
 			}
 			if (col == 3) {
-				return Manager.getAllProjects().get(row).getPSP();
+				return Manager.Projects.get(row).getPSP();
 			}
 
-			return Manager.getAllProjects().get(row).getPhase();
+			return Manager.Projects.get(row).getPhase();
 		}
 	}
 
@@ -1667,7 +1742,6 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		@Override
 		public int getRowCount() {
 			// TODO Auto-generated method stub
-
 			try {
 				return Manager.getProject(ProjectID).getRequirements().size();
 			} catch (Exception e) {
@@ -1678,20 +1752,19 @@ public class PSPProjectsOverviewPanel extends JPanel {
 
 		@Override
 		public Object getValueAt(int row, int col) {
-			System.out.println("Getting requirment table data for project " + ProjectID);
-			if (col == 0) {
-				return Manager.getProject(ProjectID).getRequirements().get(row).getID();
-			}
-			if (col == 1) {
-				return Manager.getProject(ProjectID).getRequirements().get(row).getRequirmentType();
-			}
-			if (col == 2) {
-				return Manager.getProject(ProjectID).getRequirements().get(row).getDescription();
-			}
-			{
-				return Manager.getProject(ProjectID).getRequirements().get(row).getPriority();
-			}
-
+			
+				if (col == 0) {
+					return Manager.getProject(ProjectID).getRequirements().get(row).getID();
+				}
+				if (col == 1) {
+					return Manager.getProject(ProjectID).getRequirements().get(row).getRequirmentType();
+				}
+				if (col == 2) {
+					return Manager.getProject(ProjectID).getRequirements().get(row).getDescription();
+				}
+				{
+					return Manager.getProject(ProjectID).getRequirements().get(row).getPriority();
+				}
 		}
 	}
 
@@ -1847,8 +1920,8 @@ public class PSPProjectsOverviewPanel extends JPanel {
 	}
 
 	protected class UserTestTableModel extends AbstractTableModel {
-		protected String[] columnNames = new String[] { "Test ID", "Module", "Title", "Expected Results", "Actual Results",
-				"Status" };
+		protected String[] columnNames = new String[] { "Test ID", "Module", "Title", "Expected Results",
+				"Actual Results", "Status" };
 
 		@Override
 		public String getColumnName(int col) {
@@ -1897,10 +1970,10 @@ public class PSPProjectsOverviewPanel extends JPanel {
 
 		}
 	}
-	
+
 	protected class UserReviewTableModel extends AbstractTableModel {
-		protected String[] columnNames = new String[] { "Review ID", "Module", "Title", "Expected Results", "Actual Results",
-				"Status" };
+		protected String[] columnNames = new String[] { "Review ID", "Location", "Description", "Catagory",
+				"Severity"};
 
 		@Override
 		public String getColumnName(int col) {
@@ -1911,7 +1984,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 		@Override
 		public int getColumnCount() {
 			// TODO Auto-generated method stub
-			return 6;
+			return 5;
 		}
 
 		@Override
@@ -1919,7 +1992,7 @@ public class PSPProjectsOverviewPanel extends JPanel {
 			// TODO Auto-generated method stub
 
 			try {
-				return Manager.getProject(ProjectID).getUserTests().size();
+				return Manager.getProject(ProjectID).getReviews().size();
 			} catch (Exception e) {
 				return 0;
 			}
@@ -1928,25 +2001,23 @@ public class PSPProjectsOverviewPanel extends JPanel {
 
 		@Override
 		public Object getValueAt(int row, int col) {
-			if (col == 0) {
-				return Manager.getProject(ProjectID).getUserTests().get(row).getID();
-			}
-			if (col == 1) {
-				return Manager.getProject(ProjectID).getUserTests().get(row).getModuleName();
-			}
-			if (col == 2) {
-				return Manager.getProject(ProjectID).getUserTests().get(row).getTestTitle();
-			}
-			if (col == 3) {
-				return Manager.getProject(ProjectID).getUserTests().get(row).getExpectedResults();
-			}
-			if (col == 4) {
-				return Manager.getProject(ProjectID).getUserTests().get(row).getActualResults();
-			}
-			{
-				return Manager.getProject(ProjectID).getUserTests().get(row).getStatus();
-			}
-
+		
+				if (col == 0) {
+					return Manager.getProject(ProjectID).getReviews().get(row).getID();
+				}
+				if (col == 1) {
+					return Manager.getProject(ProjectID).getReviews().get(row).getLocation();
+				}
+				if (col == 2) {
+					return Manager.getProject(ProjectID).getReviews().get(row).getDescription();
+				}
+				if (col == 3) {
+					return Manager.getProject(ProjectID).getReviews().get(row).getCatagory();
+				}
+				{
+					return Manager.getProject(ProjectID).getReviews().get(row).getServerity();
+				}
+		
 		}
 	}
 

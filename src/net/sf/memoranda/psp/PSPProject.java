@@ -239,7 +239,19 @@ public class PSPProject implements java.io.Serializable {
 		}
 		Requirements.add(entry);
 	}
-
+	/**
+	 * @param requirements
+	 *            the requirements to set
+	 */
+	public PSPProjectRequirement getRequirement(int id) {
+		for(PSPProjectRequirement R: Requirements){
+			if(id == R.getID()){
+				return R;
+			}
+		}
+		return null;
+	}
+	
 	public void removeRequirement(int ID) {
 		for (int i = 0; i < Requirements.size(); i++) {
 			if (Requirements.get(i).getID() == ID) {

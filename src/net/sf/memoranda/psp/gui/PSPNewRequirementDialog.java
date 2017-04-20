@@ -137,7 +137,7 @@ public class PSPNewRequirementDialog extends JDialog {
 				Manager.getProject(pID).addRequirementEntry(entry);
 				try {
 					Manager.saveProjects();
-				} catch (IOException e1) {
+				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}

@@ -132,7 +132,7 @@ public class PSPNewTimeEntryDialog extends JDialog {
 							Manager.getAllProjects().get(ProjectID).addTimeEntry(entry);
 							Manager.saveProjects();
 							dispose();
-						} catch (IOException e1) {
+						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 							dispose();

@@ -63,8 +63,9 @@ public class PSPProjectManager {
 	public boolean deleteProject(int ID) {
 		try {
 			for (PSPProject P : Projects) {
-				if (ID == P.getID())
+				if (ID == P.getID()){
 					Projects.remove(P);
+				}
 			}
 			saveProjects();
 		} catch (Exception e) {
@@ -92,7 +93,7 @@ public class PSPProjectManager {
 	public void updateProject() {
 		try {
 			saveProjects();
-		} catch (IOException e1) {
+		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			// e1.printStackTrace();
 			System.out.println("Could not save projects");
@@ -154,7 +155,7 @@ public class PSPProjectManager {
 	/**
 	 * Save Projects to File
 	 */
-	public void saveProjects() throws IOException {
+	public void saveProjects() {
 		ObjectOutputStream out = null;
 		try {
 			out = new ObjectOutputStream(new FileOutputStream(fileName));
@@ -162,7 +163,8 @@ public class PSPProjectManager {
 			System.out.println("Project Saved");
 		} catch (Exception e) {
 			// e.printStackTrace();
-			throw new IOException("Could not write file:" + fileName);
+//			throw new IOException("Could not write file:" + fileName);
+			System.out.println("Could not write file:" + fileName);
 		} finally {
 			if (out != null) {
 				try {

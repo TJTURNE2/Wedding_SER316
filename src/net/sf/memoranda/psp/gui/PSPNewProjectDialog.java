@@ -129,7 +129,7 @@ public class PSPNewProjectDialog extends JDialog {
 							(PSPType) comboBoxPSPType.getSelectedItem());
 					Manager.saveProjects();
 					dispose();
-				} catch (IOException e1) {
+				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 					dispose();
