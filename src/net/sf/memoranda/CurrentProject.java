@@ -36,6 +36,10 @@ public class CurrentProject {
 
         
     static {
+    	init();
+    }
+    
+    public static void init() {
         String prjId = (String)Context.get("LAST_OPENED_PROJECT_ID");
         if (prjId == null) {
             prjId = "__default";
@@ -68,7 +72,6 @@ public class CurrentProject {
             }
         });
     }
-        
 
     public static Project get() {
         return _project;

@@ -137,7 +137,7 @@ public class ProjectImpl implements Project {
         Attribute ta = _root.getAttribute("title");
         if (ta != null)
             return ta.getValue();
-        return "";
+        return "123";
     }
     /**
      * @see net.sf.memoranda.Project#setTitle(java.lang.String)
