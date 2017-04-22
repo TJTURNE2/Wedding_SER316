@@ -2,48 +2,28 @@ package net.sf.memoranda.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Date;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JList;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
-import net.sf.memoranda.CurrentNote;
 import net.sf.memoranda.CurrentProject;
 import net.sf.memoranda.DefectLog;
 import net.sf.memoranda.DefectLogList;
-import net.sf.memoranda.Note;
 import net.sf.memoranda.TimeLog;
 import net.sf.memoranda.TimeLogList;
 import net.sf.memoranda.date.CalendarDate;
-import net.sf.memoranda.date.CurrentDate;
-import net.sf.memoranda.ui.NotesControlPanel.PopupListener;
-import net.sf.memoranda.util.Configuration;
-import net.sf.memoranda.util.CurrentStorage;
 import net.sf.memoranda.util.Local;
-import net.sf.memoranda.util.Util;
 
 public class TasksControlPanel extends JPanel {
     
@@ -208,7 +188,7 @@ public class TasksControlPanel extends JPanel {
  		else
  			l.setIsActive(false);
  		l.setDefectNum(dlg.defectNum);
-        l.setDate(d.toString());
+        l.setDate(d);
         l.setDescription(dlg.descriptionField.getText());
         l.setType(dlg.typeCB.getSelectedItem().toString());
         l.setSeverity(dlg.severityCB.getSelectedItem().toString());
@@ -254,7 +234,7 @@ public class TasksControlPanel extends JPanel {
     	
     	
         dlg.descriptionField.setText(l.getDescription());
-       // dlg.date.setValue(CurrentProject.get().getStartDate());
+        dlg.date.setValue(l.getDate().getCalendar().getTime());
         dlg.typeCB.setSelectedItem(l.getType()); 
         dlg.severityCB.setSelectedItem(l.getSeverity());
         dlg.injectCB.setSelectedItem(l.getInject());
@@ -272,7 +252,7 @@ public class TasksControlPanel extends JPanel {
  		else
  			l.setIsActive(false);
  		l.setDefectNum(dlg.defectNum);
-        l.setDate(d.toString());
+        l.setDate(d);
         l.setDescription(dlg.descriptionField.getText());
         l.setType(dlg.typeCB.getSelectedItem().toString());
         l.setSeverity(dlg.severityCB.getSelectedItem().toString());

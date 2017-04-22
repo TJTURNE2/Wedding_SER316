@@ -14,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.Vector;
 
+import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.date.CurrentDate;
 import net.sf.memoranda.util.Util;
 
@@ -37,13 +38,14 @@ public class DefectLogList {
 			Scanner fileScan = new Scanner(defectListDoc);
 
 			while (fileScan.hasNextLine()) {
-				String temp, date = CurrentDate.get().toString(), type = "None",  inject = "Default", remove = "Default", severity = "Low", description = "";
+				CalendarDate date = CurrentDate.get();
+				String temp, type = "None",  inject = "Default", remove = "Default", severity = "Low", description = "";
 				int defectNum = 0, fixTime = 0, refNum = 0;
 				boolean isActive = false;
 
 				Scanner lineScan = new Scanner(fileScan.nextLine());
 				if (lineScan.hasNext()) {
-					date = lineScan.next();
+					date = new CalendarDate(lineScan.next());
 				}
 				if (lineScan.hasNext()) {
 					temp = lineScan.next();

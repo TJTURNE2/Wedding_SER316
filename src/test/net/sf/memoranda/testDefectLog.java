@@ -8,14 +8,18 @@
 
 package test.net.sf.memoranda;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import net.sf.memoranda.DefectLog;
+import net.sf.memoranda.date.CalendarDate;
 
 public class testDefectLog {
-	private static DefectLog dl = new DefectLog("4/15/2017",1, "Build","DESIGN", "TEST","BLOCKER",0,0,false,"This is a test description");
+	private static CalendarDate cd = new CalendarDate("15/3/2017"); // Month starts at 0.
+	private static DefectLog dl = new DefectLog(cd,1, "Build","DESIGN", "TEST","BLOCKER",0,0,false,"This is a test description");
 	private static DefectLog invalidDL;
 	
 	@Test 
@@ -34,14 +38,8 @@ public class testDefectLog {
 	@Test 
 	public void testToFile(){
 		String actual = dl.toFile();
-		String expected = "4/15/2017 1 BUILD DESIGN TEST BLOCKER 0 0 false This is a test description";
-		assertEquals(expected, actual);
-	}
-
-	@Test
-	public void testGetValuesArray(){
-		String[] actual = dl.getValuesArray();
-		String[] expected = {"4/15/2017", "1", "Build", "Design", "Test", "Blocker", "0", "0", "This is a test description", "false"};
+		// CalendarDate toString() returns formatted d/m/y, where month is off by 1 (Month index starts at 0)
+		String expected = "15/3/2017 1 BUILD DESIGN TEST BLOCKER 0 0 false This is a test description";
 		assertEquals(expected, actual);
 	}
 }

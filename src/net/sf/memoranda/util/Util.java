@@ -46,9 +46,9 @@ public class Util {
     }
 
     public static String getDateStamp(Calendar cal) {
-        return cal.get(Calendar.MONTH) + 1
+        return cal.get(Calendar.DAY_OF_MONTH)
             + "/"
-            + cal.get(Calendar.DAY_OF_MONTH)
+            + cal.get(Calendar.MONTH)
             + "/"
             + new Integer(cal.get(Calendar.YEAR)).toString();
 

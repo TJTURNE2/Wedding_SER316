@@ -9,7 +9,7 @@
  */
 package net.sf.memoranda;
 
-import java.util.Locale;
+import net.sf.memoranda.date.CalendarDate;
 
 /**
  * @class DefectLog
@@ -113,7 +113,7 @@ public class DefectLog {
 		}
 	};
 
-	private String _date;
+	private CalendarDate _date;
 	private int _defectNum;
 	private Type _type;
 	private Phase _inject;
@@ -137,7 +137,7 @@ public class DefectLog {
 		_isActive = false;
 	}
 
-	public DefectLog(String date, int defectNum, String type, String inject, String remove, String severity,
+	public DefectLog(CalendarDate date, int defectNum, String type, String inject, String remove, String severity,
 			int fixTime, int refNum, boolean isActive, String description) {
 		_date = date;
 		_defectNum = defectNum;
@@ -151,11 +151,11 @@ public class DefectLog {
 		_description = description;
 	}
 
-	public String getDate() {
+	public CalendarDate getDate() {
 		return _date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(CalendarDate date) {
 		_date = date;
 	}
 
@@ -230,26 +230,10 @@ public class DefectLog {
 	public boolean isActive() {
 		return _isActive;
 	}
-
+	
 	@Override
 	public String toString() {
-		return _defectNum + " " + _date + " " + _type + " " + (_isActive ? "Active" : "Fixed");
-	}
-
-	/**
-	 * @method: getValuesArray
-	 * @inputs: none
-	 * @returns: String[] containing all attributes
-	 * 
-	 * @description: method converts all attributes to string and then
-	 * adds them to an array to be used for populating the dialog box
-	 * when editing a defect log
-	 */
-	public String[] getValuesArray() {
-		String[] array = {_date, String.valueOf(_defectNum), _type.toString(),
-				_inject.toString(), _remove.toString(), _severity.toString(), String.valueOf(_fixTime), String.valueOf(_refNum),
-				_description, String.valueOf(_isActive)};
-		return array;
+		return _defectNum + " " + dateString() + " " + _type + " " + (_isActive ? "Active" : "Fixed");
 	}
 
 	/**
@@ -263,9 +247,22 @@ public class DefectLog {
 	 * when the parser reaches the description it just reads to the end of the line.
 	 */
 	public String toFile() {
-		return (_date + " " + _defectNum + " " + _type.name() + " " +
+		return (_date.toString() + " " + _defectNum + " " + _type.name() + " " +
 				_inject.name() + " " + _remove.name() + " " +
 				_severity.name() + " " + _fixTime + " " + _refNum + " " +
 				_isActive + " " + _description);
-	}	
+	}
+	
+	/**
+	 * @method: dateString
+	 * @inputs: none
+	 * @returns: Formatted string to display
+	 * 
+	 * @description: Arranges the sections of the date object to match the format
+	 * month/day/year to be displayed in the Defect Log List. The month part of the
+	 * date object starts at index 0, so 1 must be added so the proper date is displayed.
+	 */
+	private String dateString() {
+		return (_date.getMonth() + 1) + "/" + _date.getDay() + "/" + _date.getYear();
+	}
 }

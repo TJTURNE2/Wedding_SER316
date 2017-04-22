@@ -14,6 +14,7 @@ import java.util.Calendar;
 
 import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.date.CurrentDate;
+import net.sf.memoranda.util.Util;
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Elements;
@@ -46,6 +47,7 @@ public class TaskImpl implements Task, Comparable {
 
     public void setStartDate(CalendarDate date) {
            setAttr("startDate", date.toString());
+           Util.debug("Set attribute to: " + date.toString());
     }
 
     public CalendarDate getEndDate() {
@@ -82,9 +84,12 @@ public class TaskImpl implements Task, Comparable {
     }
 
     public void setEndDate(CalendarDate date) {
-		if (date == null)
+		if (date == null) {
 			setAttr("endDate", "");
-		setAttr("endDate", date.toString());
+		}
+		else {
+			setAttr("endDate", date.toString());
+		}
     }
 
     public long getEffort() {
