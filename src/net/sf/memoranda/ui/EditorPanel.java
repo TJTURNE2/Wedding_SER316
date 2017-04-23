@@ -71,6 +71,7 @@ public class EditorPanel extends JPanel {
 	JButton undoB = new JButton();
 
 	JButton cutB = new JButton();
+	
 
 	BorderLayout borderLayout2 = new BorderLayout();
 
@@ -81,6 +82,8 @@ public class EditorPanel extends JPanel {
 	public JTextField titleField = new JTextField();
 
 	JButton newB = new JButton();
+	
+	JButton saveB = new JButton();
 
 	JButton previewB = new JButton();
 
@@ -127,6 +130,14 @@ public class EditorPanel extends JPanel {
 		}
 	};
 
+	public Action saveAction = new AbstractAction(Local.getString("Save note"),
+			new ImageIcon(net.sf.memoranda.ui.AppFrame.class
+					.getResource("resources/icons/Save-icon.png"))) {
+		public void actionPerformed(ActionEvent e) {
+			saveB_actionPerformed(e);
+		}
+	};
+	
 	public Action exportAction = new AbstractAction(Local
 			.getString("Export note to file"), new ImageIcon(
 			net.sf.memoranda.ui.AppFrame.class
@@ -173,6 +184,16 @@ public class EditorPanel extends JPanel {
 		newB.setBorderPainted(false);
 		newB.setFocusable(false);
 		newB.setText("");
+		
+		saveB.setAction(saveAction);
+		saveB.setMaximumSize(new Dimension(24, 24));
+		saveB.setMinimumSize(new Dimension(24, 24));
+		saveB.setPreferredSize(new Dimension(24, 24));
+		saveB.setRequestFocusEnabled(false);
+		saveB.setToolTipText(Local.getString("Save note"));
+		saveB.setBorderPainted(false);
+		saveB.setFocusable(false);
+		saveB.setText("");
 
 		importB.setAction(importAction);
 		importB.setBorderPainted(false);
@@ -313,6 +334,7 @@ public class EditorPanel extends JPanel {
 		titleBar.setFloatable(false);
 		this.add(jPanel1, BorderLayout.CENTER);
 		editorToolBar.add(newB, null);
+		editorToolBar.add(saveB, null);
 		editorToolBar.addSeparator(new Dimension(8, 24));
 		editorToolBar.add(historyBackB, null);
 		editorToolBar.add(historyForwardB, null);
@@ -571,9 +593,15 @@ public class EditorPanel extends JPanel {
 	}
 
 	void newB_actionPerformed(ActionEvent e) {
+		setDocument(null);
+		this.titleField.requestFocus();
+	}
+	
+	void saveB_actionPerformed(ActionEvent e) {
 		CurrentNote.set(null, true);
 		setDocument(null);
 		this.titleField.requestFocus();
+		
 	}
 
 	void previewB_actionPerformed(ActionEvent e) {
